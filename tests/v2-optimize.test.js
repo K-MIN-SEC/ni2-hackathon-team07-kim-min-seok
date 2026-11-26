@@ -6,7 +6,7 @@ const path = require('node:path');
 const AB = require('../v2/engine.js');
 const O = require('../v2/optimize.js');
 
-const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+const html = fs.readFileSync(path.join(__dirname, '..', 'v1', 'index.html'), 'utf8');
 const code = html.split('// ===== ENGINE START =====')[1].split('// ===== ENGINE END =====')[0];
 const V1 = new Function(code + '\nreturn { Engine, SAMPLE };')();
 const DAY = 1440;
