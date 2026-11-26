@@ -1,0 +1,1 @@
+# ni2-hackathon-team07-kim-min-seok
