@@ -5,203 +5,224 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>달토끼 리뷰 분석</title>
 <style>
+/* 색 대비 (WCAG 2.2 AA): 본문 글자 4.5:1 이상, 차트 막대(비텍스트)는 배경 대비 3:1 이상이 되도록 고른 값 */
 :root {
   color-scheme: light;
   --page: #f9f9f7; --surface: #fcfcfb; --surface-2: #f3f2ee;
-  --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
-  --grid: #e1e0d9; --axis: #c3c2b7; --ring: rgba(11,11,11,0.10);
-  --pos: #2a78d6; --mix: #eda100; --neu: #b9b8b2; --neg: #e34948;
-  --accent: #2a78d6; --accent-wash: rgba(42,120,214,0.10);
-  --good-text: #006300;
+  --ink: #0b0b0b; --ink-2: #52514e; --muted: #6b6a64;
+  --grid: #e1e0d9; --axis: #8f8e88; --ring: rgba(11,11,11,0.10);
+  --pos: #2870cc; --mix: #bd7d00; --neu: #8a8983; --neg: #e34948;
+  --accent: #2870cc; --accent-wash: rgba(40,112,204,0.12);
+  --good-text: #006300; --focus: #2870cc;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
     --page: #0d0d0d; --surface: #1a1a19; --surface-2: #232321;
-    --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
-    --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+    --ink: #f0efec; --ink-2: #c3c2b7; --muted: #939290;
+    --grid: #2c2c2a; --axis: #6b6a64; --ring: rgba(255,255,255,0.14);
     --pos: #3987e5; --mix: #c98500; --neu: #6b6a64; --neg: #e66767;
-    --accent: #3987e5; --accent-wash: rgba(57,135,229,0.14);
-    --good-text: #0ca30c;
+    --accent: #3987e5; --accent-wash: rgba(57,135,229,0.18);
+    --good-text: #0ca30c; --focus: #6aa8f0;
   }
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
   --page: #0d0d0d; --surface: #1a1a19; --surface-2: #232321;
-  --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
-  --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+  --ink: #f0efec; --ink-2: #c3c2b7; --muted: #939290;
+  --grid: #2c2c2a; --axis: #6b6a64; --ring: rgba(255,255,255,0.14);
   --pos: #3987e5; --mix: #c98500; --neu: #6b6a64; --neg: #e66767;
-  --accent: #3987e5; --accent-wash: rgba(57,135,229,0.14);
-  --good-text: #0ca30c;
+  --accent: #3987e5; --accent-wash: rgba(57,135,229,0.18);
+  --good-text: #0ca30c; --focus: #6aa8f0;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
-body { background: var(--page); color: var(--ink); font: 14px/1.55 system-ui, -apple-system, "Segoe UI", "Malgun Gothic", sans-serif; }
+/* 글자 크기는 rem 단위: 브라우저의 '글꼴 크기' 설정을 따른다 */
+body { background: var(--page); color: var(--ink); font: 0.875rem/1.55 system-ui, -apple-system, "Segoe UI", "Malgun Gothic", sans-serif; }
 .wrap { max-width: 1180px; margin: 0 auto; padding: 24px 16px 64px; }
-header h1 { font-size: 24px; margin: 0 0 4px; font-weight: 650; letter-spacing: -0.01em; }
-header p { margin: 0; color: var(--ink-2); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.skip { position: absolute; left: 8px; top: -48px; background: var(--surface); color: var(--ink); padding: 8px 12px; border-radius: 6px; border: 2px solid var(--focus); z-index: 100; }
+.skip:focus { top: 8px; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+main:focus { outline: none; }
+.site-header h1 { font-size: 1.5rem; margin: 0 0 4px; font-weight: 650; letter-spacing: -0.01em; }
+.site-header p { margin: 0; color: var(--ink-2); }
 .toolbar { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 18px; }
 nav { display: flex; gap: 4px; flex-wrap: wrap; margin: 18px 0 8px; position: sticky; top: 0; background: var(--page); padding: 8px 0; z-index: 5; border-bottom: 1px solid var(--grid); }
-nav a { color: var(--ink-2); text-decoration: none; padding: 4px 10px; border-radius: 6px; font-size: 13px; }
+nav a { color: var(--ink-2); text-decoration: none; padding: 4px 10px; border-radius: 6px; font-size: 0.8125rem; }
 nav a:hover { background: var(--surface-2); color: var(--ink); }
-button.theme { background: var(--surface); color: var(--ink-2); border: 1px solid var(--ring); border-radius: 6px; padding: 4px 10px; cursor: pointer; font: inherit; font-size: 13px; }
+button.theme { background: var(--surface); color: var(--ink-2); border: 1px solid var(--ring); border-radius: 6px; padding: 4px 10px; cursor: pointer; font: inherit; font-size: 0.8125rem; }
+/* 고정 내비게이션에 가리지 않도록 스크롤·포커스 여백 확보 */
 section { margin-top: 28px; scroll-margin-top: 104px; }
-h2 { font-size: 18px; margin: 0 0 4px; font-weight: 650; }
-.sub { color: var(--ink-2); margin: 0 0 14px; font-size: 13px; }
+section :focus { scroll-margin-top: 110px; }
+h2 { font-size: 1.125rem; margin: 0 0 4px; font-weight: 650; }
+.sub { color: var(--ink-2); margin: 0 0 14px; font-size: 0.8125rem; }
 .card { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 16px; }
 .grid { display: grid; gap: 12px; }
+.grid > *, .sm-grid > * { min-width: 0; }  /* 안의 넓은 표가 칸을 밀어내지 않고, 표 영역 안에서 가로 스크롤되게 */
 .g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 @media (max-width: 860px) { .g4 { grid-template-columns: repeat(2, minmax(0,1fr)); } .g2, .g3 { grid-template-columns: 1fr; } }
-.tile .label { color: var(--ink-2); font-size: 13px; }
-.tile .value { font-size: 28px; font-weight: 650; margin-top: 2px; }
-.tile .note { color: var(--muted); font-size: 12px; }
-.hero .value { font-size: 48px; line-height: 1.1; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.tile .label { color: var(--ink-2); font-size: 0.8125rem; }
+.tile .value { font-size: 1.75rem; font-weight: 650; margin-top: 2px; }
+.tile .note { color: var(--muted); font-size: 0.75rem; }
+.hero .value { font-size: 3rem; line-height: 1.1; }
+table { width: 100%; border-collapse: collapse; font-size: 0.8125rem; }
+caption { text-align: left; color: var(--ink-2); font-size: 0.75rem; padding: 2px 0 6px; }
 th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--grid); vertical-align: top; }
-th { color: var(--ink-2); font-weight: 600; font-size: 12px; }
+thead th, tr:first-child > th[scope="col"] { color: var(--ink-2); font-weight: 600; font-size: 0.75rem; }
+tbody th[scope="row"] { font-weight: 400; color: var(--ink); }
 td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .scroll { overflow-x: auto; }
-#prioTable { min-width: 560px; } #prioTable tr:not(.qrow) td { border-bottom: 0; } #verTable { min-width: 720px; } #prioTopicTable, #topicTable table { min-width: 460px; }
-td.item { min-width: 130px; }
-.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--ink-2); margin: 4px 0 10px; }
+.scroll[hidden] { display: none; }
+#prioTable { min-width: 560px; } #prioTable tr:not(.qrow) td, #prioTable tr:not(.qrow) th { border-bottom: 0; } #verTable { min-width: 720px; } #prioTopicTable, .scroll table { min-width: 460px; }
+td.item, th.item { min-width: 130px; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 0.75rem; color: var(--ink-2); margin: 4px 0 10px; padding: 0; list-style: none; }
 .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
 .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
-.chart text { fill: var(--ink-2); font-size: 11px; font-family: inherit; }
+.chart text { fill: var(--ink-2); font-size: 0.75rem; font-family: inherit; }
 .chart .axis-label { fill: var(--muted); }
-.chart .val { fill: var(--ink); font-size: 11px; }
+.chart .val { fill: var(--ink); font-size: 0.75rem; }
 .chart .gridline { stroke: var(--grid); stroke-width: 1; }
 .chart .baseline { stroke: var(--axis); stroke-width: 1; }
-.tip { position: fixed; pointer-events: none; background: var(--surface); color: var(--ink); border: 1px solid var(--ring); border-radius: 8px; padding: 8px 10px; font-size: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); z-index: 50; max-width: 300px; display: none; }
+.tip { position: fixed; pointer-events: none; background: var(--surface); color: var(--ink); border: 1px solid var(--ring); border-radius: 8px; padding: 8px 10px; font-size: 0.75rem; box-shadow: 0 4px 16px rgba(0,0,0,0.12); z-index: 50; max-width: 300px; display: none; }
 .tip b { font-weight: 600; }
 .tip .row { display: flex; justify-content: space-between; gap: 14px; }
-.tip i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 5px; }
 .controls { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
 .seg { display: inline-flex; border: 1px solid var(--ring); border-radius: 7px; overflow: hidden; flex-wrap: wrap; }
-.seg button { background: var(--surface); color: var(--ink-2); border: 0; padding: 5px 10px; font: inherit; font-size: 12px; cursor: pointer; border-right: 1px solid var(--ring); }
+.seg button { background: var(--surface); color: var(--ink-2); border: 0; padding: 5px 10px; font: inherit; font-size: 0.75rem; cursor: pointer; border-right: 1px solid var(--ring); }
 .seg button:last-child { border-right: 0; }
-.seg button.on { background: var(--accent-wash); color: var(--ink); font-weight: 600; }
-.quote { border-left: 3px solid var(--grid); padding: 4px 0 4px 10px; margin: 8px 0; color: var(--ink); font-size: 13px; }
-.quote .meta { color: var(--muted); font-size: 11px; margin-top: 2px; }
-.pill { display: inline-block; padding: 1px 7px; border-radius: 999px; background: var(--surface-2); color: var(--ink-2); font-size: 11px; margin: 0 4px 4px 0; }
-.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
-details > summary { cursor: pointer; color: var(--ink-2); font-size: 12px; margin-top: 6px; }
+.seg button:focus-visible { outline-offset: -3px; }
+/* 선택 상태는 색만이 아니라 굵기·밑줄로도 표시 (aria-pressed로 스크린리더에도 전달) */
+.seg button[aria-pressed="true"] { background: var(--accent-wash); color: var(--ink); font-weight: 650; text-decoration: underline; text-underline-offset: 3px; }
+.quote { border-left: 3px solid var(--grid); padding: 4px 0 4px 10px; margin: 8px 0; color: var(--ink); font-size: 0.8125rem; }
+.quote .meta { color: var(--muted); font-size: 0.75rem; margin-top: 2px; }
+.pill { display: inline-block; padding: 1px 7px; border-radius: 999px; background: var(--surface-2); color: var(--ink-2); font-size: 0.75rem; margin: 0 4px 4px 0; }
+details > summary { cursor: pointer; color: var(--ink-2); font-size: 0.75rem; margin-top: 6px; }
 .rank { font-weight: 650; color: var(--ink-2); }
 .bar-inline { display: inline-block; height: 8px; border-radius: 4px; background: var(--neg); vertical-align: 0; }
 .bar-track { display: inline-block; width: 70px; height: 8px; border-radius: 4px; background: var(--surface-2); margin-right: 6px; vertical-align: 0; overflow: hidden; }
 .muted { color: var(--muted); }
-.small { font-size: 12px; }
-.callout { background: var(--surface-2); border-radius: 8px; padding: 10px 12px; font-size: 13px; color: var(--ink-2); }
-.toggle-table { font-size: 12px; color: var(--ink-2); background: none; border: 0; cursor: pointer; padding: 0; text-decoration: underline; margin-top: 6px; }
+.small { font-size: 0.75rem; }
+.callout { background: var(--surface-2); border-radius: 8px; padding: 10px 12px; font-size: 0.8125rem; color: var(--ink-2); }
+.toggle-table { font-size: 0.75rem; color: var(--ink-2); background: none; border: 0; cursor: pointer; padding: 2px 0; text-decoration: underline; margin-top: 6px; font-family: inherit; }
 .sm-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 @media (max-width: 860px) { .sm-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
-.sm-title { font-size: 12px; color: var(--ink-2); font-weight: 600; margin-bottom: 2px; }
+.sm-title { font-size: 0.75rem; color: var(--ink-2); font-weight: 600; margin: 0 0 2px; }
 </style>
 </head>
 <body>
+<a class="skip" href="#main">본문 바로가기</a>
 <div class="wrap">
   <div class="toolbar">
-    <header>
+    <header class="site-header">
       <h1>달토끼 키우기 스토어 리뷰 분석</h1>
       <p id="scope"></p>
     </header>
     <button class="theme" id="themeBtn" type="button">테마 전환</button>
   </div>
 
-  <div class="grid g4" id="kpis"></div>
-
-  <nav>
-    <a href="#s-topic">주제별 감성</a><a href="#s-kw">키워드</a><a href="#s-prio">개선 우선순위</a>
+  <nav aria-label="섹션 바로가기">
+    <a href="#s-summary">요약</a><a href="#s-topic">주제별 감성</a><a href="#s-kw">키워드</a><a href="#s-prio">개선 우선순위</a>
     <a href="#s-good">지켜야 할 장점</a><a href="#s-trend">추이</a><a href="#s-ver">버전별</a><a href="#s-method">방법·검수</a>
   </nav>
 
-  <section id="s-topic">
-    <h2>주제별 긍정·부정 비율</h2>
-    <p class="sub">각 리뷰가 언급한 주제마다 따로 매긴 감성입니다. 리뷰 하나가 여러 주제에 들어갈 수 있습니다. 막대 오른쪽 숫자는 그 주제를 언급한 리뷰 수와 전체 대비 비중입니다.</p>
+  <main id="main" tabindex="-1">
+  <section id="s-summary" aria-labelledby="h-summary">
+    <h2 id="h-summary" class="sr-only">핵심 수치</h2>
+    <div class="grid g4" id="kpis"></div>
+  </section>
+
+  <section id="s-topic" aria-labelledby="h-topic">
+    <h2 id="h-topic">주제별 긍정·부정 비율</h2>
+    <p class="sub">각 리뷰가 언급한 주제마다 따로 매긴 감성입니다. 리뷰 하나가 여러 주제에 들어갈 수 있습니다. 막대 오른쪽 숫자는 그 주제를 언급한 리뷰 수와 전체 대비 비중입니다. 모든 차트는 아래 '표로 보기'로 정확한 수치를 확인할 수 있습니다.</p>
     <div class="card">
-      <div class="legend" id="sentLegend"></div>
+      <ul class="legend" id="sentLegend" aria-label="색 범례"></ul>
       <div class="chart" id="topicChart"></div>
-      <button class="toggle-table" data-target="topicTable">표로 보기</button>
-      <div class="scroll" id="topicTable" hidden></div>
     </div>
     <div class="grid g2" style="margin-top:12px">
       <div class="card">
-        <div class="sm-title">리뷰 전체 감성 (내용 기준)</div>
+        <h3 class="sm-title">리뷰 전체 감성 (내용 기준)</h3>
         <div class="chart" id="overallChart"></div>
       </div>
       <div class="card">
-        <div class="sm-title">별점과 내용 감성의 차이</div>
+        <h3 class="sm-title">별점과 내용 감성의 차이</h3>
         <div id="ratingNote" class="small"></div>
       </div>
     </div>
   </section>
 
-  <section id="s-kw">
-    <h2>감성 × 주제별 키워드 분포</h2>
+  <section id="s-kw" aria-labelledby="h-kw">
+    <h2 id="h-kw">감성 × 주제별 키워드 분포</h2>
     <p class="sub">선택한 주제·감성 리뷰 중 각 키워드를 언급한 리뷰의 비율입니다(한 리뷰가 여러 키워드를 언급할 수 있어 합계가 100%를 넘을 수 있음). 키워드는 커뮤니티 표현을 묶은 대표어입니다. 예를 들어 '튕김'에는 튕김·팅김·강제종료가 들어갑니다.</p>
     <div class="card">
-      <div class="controls"><div class="seg" id="kwTopic"></div><div class="seg" id="kwSent"></div></div>
-      <div id="kwHead" class="small muted" style="margin-bottom:6px"></div>
+      <div class="controls">
+        <div class="seg" id="kwTopic" role="group" aria-label="주제 선택"></div>
+        <div class="seg" id="kwSent" role="group" aria-label="감성 선택"></div>
+      </div>
+      <p id="kwHead" class="small muted" style="margin:0 0 6px" aria-live="polite"></p>
       <div class="grid g2">
-        <div><div class="sm-title">대표 키워드</div><div class="chart" id="kwChart"></div></div>
-        <div><div class="sm-title">자주 나온 표현 (원문 단어)</div><div class="chart" id="termChart"></div></div>
+        <div><h3 class="sm-title">대표 키워드</h3><div class="chart" id="kwChart"></div></div>
+        <div><h3 class="sm-title">자주 나온 표현 (원문 단어)</h3><div class="chart" id="termChart"></div></div>
       </div>
     </div>
   </section>
 
-  <section id="s-prio">
-    <h2>고쳐야 할 우선순위</h2>
+  <section id="s-prio" aria-labelledby="h-prio">
+    <h2 id="h-prio">고쳐야 할 우선순위</h2>
     <p class="sub" id="prioSub"></p>
     <div class="card">
       <div class="callout small" id="formula"></div>
-      <div class="scroll" style="margin-top:10px"><table id="prioTable"></table></div>
+      <div class="scroll" style="margin-top:10px" tabindex="0" role="region" aria-label="키워드 단위 우선순위 표 (가로 스크롤)"><table id="prioTable"></table></div>
     </div>
     <div class="card" style="margin-top:12px">
-      <div class="sm-title">주제 단위 요약 점수 (같은 산식, 주제 전체 기준)</div>
-      <div class="scroll"><table id="prioTopicTable"></table></div>
+      <h3 class="sm-title">주제 단위 요약 점수 (같은 산식, 주제 전체 기준)</h3>
+      <div class="scroll" tabindex="0" role="region" aria-label="주제 단위 우선순위 표 (가로 스크롤)"><table id="prioTopicTable"></table></div>
     </div>
   </section>
 
-  <section id="s-good">
-    <h2>지켜야 할 장점</h2>
+  <section id="s-good" aria-labelledby="h-good">
+    <h2 id="h-good">지켜야 할 장점</h2>
     <p class="sub" id="goodSub"></p>
     <div class="grid g3" id="goodCards"></div>
   </section>
 
-  <section id="s-trend">
-    <h2>월별 추이</h2>
-    <p class="sub">2022년 이후 리뷰 수가 크게 줄어서, 후반부 비율은 표본이 작은 점을 감안해야 합니다(막대에 마우스를 올리면 건수가 보입니다).</p>
+  <section id="s-trend" aria-labelledby="h-trend">
+    <h2 id="h-trend">월별 추이</h2>
+    <p class="sub">2022년 이후 리뷰 수가 크게 줄어서, 후반부 비율은 표본이 작은 점을 감안해야 합니다. 막대에 마우스를 올리거나 탭하면 건수가 보이고, '표로 보기'에서 전체 수치를 볼 수 있습니다.</p>
     <div class="grid g2">
-      <div class="card"><div class="sm-title">월별 리뷰 수</div><div class="chart" id="volChart"></div></div>
-      <div class="card"><div class="sm-title">월별 부정·혼합 리뷰 비율 (리뷰 10건 이상인 달)</div><div class="chart" id="negShareChart"></div></div>
+      <div class="card"><h3 class="sm-title">월별 리뷰 수</h3><div class="chart" id="volChart"></div></div>
+      <div class="card"><h3 class="sm-title">월별 부정·혼합 리뷰 비율 (리뷰 10건 이상인 달)</h3><div class="chart" id="negShareChart"></div></div>
     </div>
     <div class="card" style="margin-top:12px">
-      <div class="sm-title">분기별 주제별 부정·혼합 언급 수</div>
+      <h3 class="sm-title">분기별 주제별 부정·혼합 언급 수</h3>
       <p class="small muted" style="margin:0 0 8px">작은 차트마다 세로축 척도가 다릅니다. 모양(언제 튀었는지)을 보는 용도입니다.</p>
       <div class="sm-grid" id="smallMultiples"></div>
+      <div id="smTableAnchor"></div>
     </div>
   </section>
 
-  <section id="s-ver">
-    <h2>버전별 추이</h2>
+  <section id="s-ver" aria-labelledby="h-ver">
+    <h2 id="h-ver">버전별 추이</h2>
     <p class="sub">리뷰가 30건 이상인 마이너 버전만 표시합니다. 리뷰를 쓴 시점의 앱 버전 기준입니다.</p>
-    <div class="card"><div class="sm-title">버전별 부정·혼합 리뷰 비율</div><div class="chart" id="verChart"></div></div>
+    <div class="card"><h3 class="sm-title">버전별 부정·혼합 리뷰 비율</h3><div class="chart" id="verChart"></div></div>
     <div class="card" style="margin-top:12px">
-      <div class="sm-title">직전 버전 대비 변화가 컸던 업데이트</div>
-      <div class="scroll"><table id="verTable"></table></div>
+      <h3 class="sm-title">직전 버전 대비 변화가 컸던 업데이트</h3>
+      <div class="scroll" tabindex="0" role="region" aria-label="버전별 변화 표 (가로 스크롤)"><table id="verTable"></table></div>
     </div>
   </section>
 
-  <section id="s-method">
-    <h2>분류 방법과 검수</h2>
+  <section id="s-method" aria-labelledby="h-method">
+    <h2 id="h-method">분류 방법과 검수</h2>
     <div class="grid g2">
       <div class="card small" id="methodCard"></div>
       <div class="card small" id="auditCard"></div>
     </div>
   </section>
+  </main>
 </div>
-<div class="tip" id="tip"></div>
+<div class="tip" id="tip" aria-hidden="true"></div>
 
 <script>
 const D = /*__DATA__*/null;
@@ -218,6 +239,22 @@ function el(tag, attrs = {}, parent) {
   if (parent) parent.appendChild(e);
   return e;
 }
+// 막대 위 글자색: 검정·흰색 중 막대 색과 대비가 더 큰 쪽 (WCAG 상대 휘도 기준)
+function lum(hex) {
+  const h = hex.replace("#", ""), c = [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16) / 255)
+    .map(x => x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4));
+  return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+}
+function labelColor(varName) {
+  const L = lum(css(varName) || "#888888");
+  return (L + 0.05) / 0.0534 >= 1.05 / (L + 0.05) ? "#0b0b0b" : "#ffffff";
+}
+// 차트용 SVG: 스크린리더에는 요약 문장 하나로 읽히고, 수치는 차트 아래 표에서 읽는다
+function chartSvg(box, W, H, label) {
+  return el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": label + ". 정확한 수치는 아래 '표로 보기'에 있습니다."}, box);
+}
+
+/* ---------- 툴팁: 마우스 + 탭(터치) ---------- */
 const tip = document.getElementById("tip");
 function showTip(ev, html) {
   tip.innerHTML = html; tip.style.display = "block";
@@ -225,13 +262,48 @@ function showTip(ev, html) {
   let x = ev.clientX + pad, y = ev.clientY + pad;
   if (x + w > innerWidth - 8) x = ev.clientX - w - pad;
   if (y + h > innerHeight - 8) y = ev.clientY - h - pad;
-  tip.style.left = x + "px"; tip.style.top = y + "px";
+  tip.style.left = Math.max(8, x) + "px"; tip.style.top = Math.max(8, y) + "px";
 }
 const hideTip = () => tip.style.display = "none";
 function bindTip(node, fn) {
   node.addEventListener("mousemove", ev => showTip(ev, fn()));
   node.addEventListener("mouseleave", hideTip);
+  node.addEventListener("click", ev => { ev.stopPropagation(); showTip(ev, fn()); });
 }
+document.addEventListener("click", hideTip);
+addEventListener("scroll", hideTip, {passive: true});
+addEventListener("keydown", e => { if (e.key === "Escape") hideTip(); });
+
+/* ---------- 표 (차트의 대체 수단) ---------- */
+function tableHTML(caption, cols, rows, numFrom = 1) {
+  return `<table><caption>${esc(caption)}</caption><thead><tr>${cols.map((c, i) => `<th scope="col"${i >= numFrom ? ' class="num"' : ""}>${esc(c)}</th>`).join("")}</tr></thead>` +
+    `<tbody>${rows.map(r => `<tr>${r.map((v, i) => i === 0 ? `<th scope="row">${v}</th>` : `<td${i >= numFrom ? ' class="num"' : ""}>${v}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+}
+// 차트(또는 기준 요소) 바로 뒤에 '표로 보기' 버튼과 접힌 표 영역을 한 번만 만들고, 내용은 갱신한다
+function dataTable(anchorId, label, html) {
+  const id = anchorId + "_tbl";
+  let wrap = document.getElementById(id);
+  if (!wrap) {
+    const btn = document.createElement("button");
+    Object.assign(btn, {type: "button", className: "toggle-table", textContent: "표로 보기"});
+    btn.setAttribute("aria-expanded", "false"); btn.setAttribute("aria-controls", id);
+    btn.dataset.target = id; btn.setAttribute("aria-label", label + " 표 보기");
+    wrap = document.createElement("div");
+    Object.assign(wrap, {id, className: "scroll", hidden: true, tabIndex: 0});
+    wrap.setAttribute("role", "region"); wrap.setAttribute("aria-label", label + " 표");
+    document.getElementById(anchorId).after(btn, wrap);
+  }
+  wrap.innerHTML = html;
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest(".toggle-table");
+  if (!b) return;
+  const t = document.getElementById(b.dataset.target);
+  t.hidden = !t.hidden;
+  b.setAttribute("aria-expanded", String(!t.hidden));
+  b.textContent = t.hidden ? "표로 보기" : "표 닫기";
+});
+
 // 한쪽 끝만 둥근 가로 막대 path (끝 반경 r)
 function hbarPath(x, y, w, h, rRight = 4, rLeft = 0) {
   const r1 = Math.min(rRight, w / 2, h / 2), r0 = Math.min(rLeft, w / 2, h / 2);
@@ -246,6 +318,8 @@ function niceMax(v) {
   const p = Math.pow(10, Math.floor(Math.log10(v))), m = v / p;
   return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p;
 }
+// 글자 크기 설정에 따라 바뀌는 1rem의 실제 픽셀 크기 (차트 글자 폭 계산용)
+const remPx = () => parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
 
 /* ---------- 헤더 ---------- */
 function header() {
@@ -263,16 +337,17 @@ function header() {
   ];
   document.getElementById("kpis").innerHTML = tiles.map(t =>
     `<div class="card tile ${t.cls || ""}"><div class="label">${t.label}</div><div class="value">${t.value}</div><div class="note">${t.note}</div></div>`).join("");
-  document.getElementById("sentLegend").innerHTML = SENTS.map(s => `<span><i style="background:var(${SVAR[s]})"></i>${s}</span>`).join("");
+  document.getElementById("sentLegend").innerHTML = SENTS.map(s => `<li><i style="background:var(${SVAR[s]})" aria-hidden="true"></i>${s}</li>`).join("");
 }
 
 /* ---------- 주제별 100% 누적 막대 ---------- */
+const topicRows = () => D.crosstab.slice().sort((a, b) => (a.topic === "일반") - (b.topic === "일반") || b.n - a.n);
 function topicChart() {
-  const rows = D.crosstab.slice().sort((a, b) => (a.topic === "일반") - (b.topic === "일반") || b.n - a.n);
+  const rows = topicRows();
   const box = document.getElementById("topicChart");
   const W = Math.max(box.clientWidth, 300), labelW = 84, rightW = W < 520 ? 92 : 112, rowH = 34, barH = 20, H = rows.length * rowH + 24;
-  const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "주제별 감성 비율 누적 막대"}, box);
-  const plotW = W - labelW - rightW;
+  const svg = chartSvg(box, W, H, "주제별 감성 비율 누적 막대 그래프");
+  const plotW = W - labelW - rightW, cw = remPx() * 0.75 * 0.62;  // 글자 하나의 대략적 폭
   [0, .25, .5, .75, 1].forEach(t => {
     const x = labelW + plotW * t;
     el("line", {x1: x, x2: x, y1: 0, y2: H - 20, class: "gridline"}, svg);
@@ -281,7 +356,7 @@ function topicChart() {
   rows.forEach((r, i) => {
     const y = i * rowH + 6;
     const lt = el("text", {x: labelW - 10, y: y + barH / 2 + 4, "text-anchor": "end"}, svg);
-    lt.textContent = r.topic; lt.style.fill = css("--ink"); lt.style.fontSize = "12px";
+    lt.textContent = r.topic; lt.style.fill = css("--ink"); lt.style.fontSize = "0.8125rem";
     let x = labelW;
     const segs = SENTS.filter(s => r[s] > 0);
     segs.forEach((s, j) => {
@@ -289,11 +364,12 @@ function topicChart() {
       const first = j === 0, last = j === segs.length - 1;
       const gap = last ? 0 : 2;
       const p = el("path", {d: hbarPath(x, y, Math.max(w - gap, 0.5), barH, last ? 4 : 0, first ? 4 : 0), fill: `var(${SVAR[s]})`}, svg);
-      if (w > 34) {
+      // 색만으로 구분하지 않도록, 자리가 있으면 감성 이름까지 적는다
+      const full = `${s} ${pct(r[s + "_pct"])}`, short = pct(r[s + "_pct"]);
+      const txt = (full.length * cw + 12 < w) ? full : (short.length * cw + 10 < w ? short : "");
+      if (txt) {
         const t = el("text", {x: x + 6, y: y + barH / 2 + 4}, svg);
-        t.textContent = pct(r[s + "_pct"]);
-        t.style.fill = (s === "혼합" || s === "중립") ? "#0b0b0b" : "#ffffff";
-        t.style.fontSize = "11px"; t.style.pointerEvents = "none";
+        t.textContent = txt; t.style.fill = labelColor(SVAR[s]); t.style.pointerEvents = "none";
       }
       bindTip(p, () => `<b>${r.topic} · ${s}</b><div class="row"><span>${fmt(r[s])}건</span><span>${pct(r[s + "_pct"], 1)}</span></div>`);
       x += w;
@@ -301,44 +377,54 @@ function topicChart() {
     const nt = el("text", {x: W - rightW + 10, y: y + barH / 2 + 4, class: "val"}, svg);
     nt.textContent = `${fmt(r.n)}건 · ${pct(r.share, 1)}`;
   });
-  // 표
-  const t = document.getElementById("topicTable");
-  t.innerHTML = `<table><tr><th>주제</th><th class="num">언급 리뷰</th><th class="num">전체 대비</th>${SENTS.map(s => `<th class="num">${s}</th>`).join("")}</tr>` +
-    rows.map(r => `<tr><td>${r.topic}</td><td class="num">${fmt(r.n)}</td><td class="num">${pct(r.share, 1)}</td>${SENTS.map(s => `<td class="num">${fmt(r[s])} (${pct(r[s + "_pct"], 1)})</td>`).join("")}</tr>`).join("") + "</table>" +
-    `<p class="small muted">참고: 리뷰 단위 전체 감성 × 주제</p><table><tr><th>주제</th>${SENTS.map(s => `<th class="num">${s}</th>`).join("")}</tr>` +
-    D.crosstab_review_level.map(r => `<tr><td>${r.topic}</td>${SENTS.map(s => `<td class="num">${fmt(r[s])}</td>`).join("")}</tr>`).join("") + "</table>";
+}
+function topicTable() {
+  const rows = topicRows();
+  dataTable("topicChart", "주제별 감성 비율",
+    tableHTML("주제별 감성 (주제마다 매긴 감성)", ["주제", "언급 리뷰", "전체 대비", ...SENTS],
+      rows.map(r => [esc(r.topic), fmt(r.n), pct(r.share, 1), ...SENTS.map(s => `${fmt(r[s])} (${pct(r[s + "_pct"], 1)})`)])) +
+    tableHTML("참고: 리뷰 단위 전체 감성 × 주제", ["주제", ...SENTS],
+      D.crosstab_review_level.map(r => [esc(r.topic), ...SENTS.map(s => fmt(r[s]))])));
 }
 
 function overallChart() {
   const so = D.sentiment_overall, n = D.meta.n;
   const box = document.getElementById("overallChart");
   const W = Math.max(box.clientWidth, 280), H = 64;
-  const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "전체 감성 분포"}, box);
+  const svg = chartSvg(box, W, H, "리뷰 전체 감성 분포 막대");
+  const cw = remPx() * 0.75 * 0.62;
   let x = 0;
   SENTS.forEach((s, j) => {
     const w = W * so[s] / n, last = j === SENTS.length - 1;
     const p = el("path", {d: hbarPath(x, 8, Math.max(w - (last ? 0 : 2), .5), 28, last ? 4 : 0, j === 0 ? 4 : 0), fill: `var(${SVAR[s]})`}, svg);
     bindTip(p, () => `<b>${s}</b><div class="row"><span>${fmt(so[s])}건</span><span>${pct(so[s] / n, 1)}</span></div>`);
-    if (w > 60) {
+    const label = `${s} ${pct(so[s] / n)}`;
+    if (label.length * cw + 14 < w) {
       const t = el("text", {x: x + 7, y: 26.5}, svg);
-      t.textContent = `${s} ${pct(so[s] / n)}`;
-      t.style.fill = (s === "혼합" || s === "중립") ? "#0b0b0b" : "#fff"; t.style.fontSize = "12px"; t.style.pointerEvents = "none";
+      t.textContent = label; t.style.fill = labelColor(SVAR[s]); t.style.pointerEvents = "none";
     }
     x += w;
   });
   const lg = el("text", {x: 0, y: 56, class: "axis-label"}, svg);
   lg.textContent = SENTS.map(s => `${s} ${fmt(so[s])}`).join(" · ");
 }
+function overallTable() {
+  const so = D.sentiment_overall, n = D.meta.n;
+  dataTable("overallChart", "리뷰 전체 감성", tableHTML("리뷰 전체 감성 (내용 기준)", ["감성", "건수", "비율"],
+    SENTS.map(s => [s, fmt(so[s]), pct(so[s] / n, 1)])));
+}
 
 function ratingNote() {
   const rd = D.meta.rating_dist, n = D.meta.n;
   const five = (rd["5"] || 0) / n, so = D.sentiment_overall;
+  const ks = ["1", "2", "3", "4", "5"];
   document.getElementById("ratingNote").innerHTML =
     `<p style="margin:0 0 6px">별점 5점이 <b>${pct(five, 1)}</b>지만, 내용상 긍정은 <b>${pct(so["긍정"] / n, 1)}</b>입니다. ` +
     `별점은 높게 주면서 문제를 신고하거나 불만을 함께 적는 리뷰(혼합 ${fmt(so["혼합"])}건)가 많아서, 감성은 별점이 아니라 내용으로 판정했습니다.</p>` +
-    `<table><tr><th>별점</th>${["1","2","3","4","5"].map(k => `<th class="num">★${k}</th>`).join("")}</tr>` +
-    `<tr><td>건수</td>${["1","2","3","4","5"].map(k => `<td class="num">${fmt(rd[k] || 0)}</td>`).join("")}</tr>` +
-    `<tr><td>비율</td>${["1","2","3","4","5"].map(k => `<td class="num">${pct((rd[k] || 0) / n, 1)}</td>`).join("")}</tr></table>`;
+    `<div class="scroll" tabindex="0" role="region" aria-label="별점 분포 표">` +
+    tableHTML("별점 분포", ["구분", ...ks.map(k => `★${k}`)], [
+      ["건수", ...ks.map(k => fmt(rd[k] || 0))],
+      ["비율", ...ks.map(k => pct((rd[k] || 0) / n, 1))]]) + `</div>`;
 }
 
 /* ---------- 키워드 ---------- */
@@ -347,7 +433,7 @@ function hbarList(boxId, items, color, label) {
   const box = document.getElementById(boxId); box.innerHTML = "";
   if (!items.length) { box.innerHTML = `<p class="muted small">해당 리뷰가 없습니다.</p>`; return; }
   const W = Math.max(box.clientWidth, 280), labelW = 104, rowH = 24, barH = 14, H = items.length * rowH + 4;
-  const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": label}, box);
+  const svg = chartSvg(box, W, H, label);
   const max = Math.max(...items.map(i => i.pct));
   const plotW = W - labelW - 70;
   items.forEach((it, i) => {
@@ -361,28 +447,36 @@ function hbarList(boxId, items, color, label) {
     bindTip(p, () => `<b>${esc(it.kw)}</b><div class="row"><span>${fmt(it.n)}건</span><span>${pct(it.pct, 1)}</span></div>`);
   });
 }
-function kwRender() {
-  const cell = D.keywords.find(k => k.topic === kwState.topic && k.sentiment === kwState.sent);
-  const head = document.getElementById("kwHead");
-  if (!cell) { head.textContent = "해당 조합의 리뷰가 없습니다."; hbarList("kwChart", [], "", ""); hbarList("termChart", [], "", ""); return; }
-  head.textContent = `${kwState.sent}·${kwState.topic} 리뷰 ${fmt(cell.n)}건 기준`;
+const kwCell = () => D.keywords.find(k => k.topic === kwState.topic && k.sentiment === kwState.sent);
+function kwCharts() {
+  const cell = kwCell();
+  if (!cell) { hbarList("kwChart", [], "", ""); hbarList("termChart", [], "", ""); return; }
   const color = `var(${SVAR[kwState.sent]})`;
-  hbarList("kwChart", cell.keywords.slice(0, 10), color, "대표 키워드 비중");
-  hbarList("termChart", cell.terms.slice(0, 10), color, "원문 단어 비중");
+  hbarList("kwChart", cell.keywords.slice(0, 10), color, `${kwState.sent}·${kwState.topic} 리뷰의 대표 키워드 비중 막대 그래프`);
+  hbarList("termChart", cell.terms.slice(0, 10), color, `${kwState.sent}·${kwState.topic} 리뷰의 원문 단어 비중 막대 그래프`);
+}
+function kwRender() {
+  const cell = kwCell();
+  const head = document.getElementById("kwHead");
+  head.textContent = cell ? `${kwState.sent}·${kwState.topic} 리뷰 ${fmt(cell.n)}건 기준` : `${kwState.sent}·${kwState.topic}: 해당 조합의 리뷰가 없습니다.`;
+  kwCharts();
+  const rows = list => list.slice(0, 10).map(it => [esc(it.kw), fmt(it.n), pct(it.pct, 1)]);
+  dataTable("kwChart", "대표 키워드", tableHTML(`${kwState.sent}·${kwState.topic} 대표 키워드`, ["키워드", "건수", "비율"], cell ? rows(cell.keywords) : []));
+  dataTable("termChart", "원문 단어", tableHTML(`${kwState.sent}·${kwState.topic} 자주 나온 표현`, ["표현", "건수", "비율"], cell ? rows(cell.terms) : []));
 }
 function kwControls() {
   const topics = [...new Set(D.keywords.map(k => k.topic))];
   if (!topics.includes(kwState.topic)) kwState.topic = topics[0];
   const tBox = document.getElementById("kwTopic"), sBox = document.getElementById("kwSent");
-  tBox.innerHTML = topics.map(t => `<button type="button" data-v="${t}">${t}</button>`).join("");
-  sBox.innerHTML = ["부정", "긍정", "혼합"].map(s => `<button type="button" data-v="${s}">${s}</button>`).join("");
+  tBox.innerHTML = topics.map(t => `<button type="button" data-v="${esc(t)}" aria-pressed="false">${esc(t)}</button>`).join("");
+  sBox.innerHTML = ["부정", "긍정", "혼합"].map(s => `<button type="button" data-v="${s}" aria-pressed="false">${s}</button>`).join("");
   const sync = () => {
-    tBox.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.v === kwState.topic));
-    sBox.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.v === kwState.sent));
+    tBox.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === kwState.topic)));
+    sBox.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === kwState.sent)));
     kwRender();
   };
-  tBox.onclick = e => { if (e.target.dataset.v) { kwState.topic = e.target.dataset.v; sync(); } };
-  sBox.onclick = e => { if (e.target.dataset.v) { kwState.sent = e.target.dataset.v; sync(); } };
+  tBox.onclick = e => { const b = e.target.closest("button"); if (b) { kwState.topic = b.dataset.v; sync(); } };
+  sBox.onclick = e => { const b = e.target.closest("button"); if (b) { kwState.sent = b.dataset.v; sync(); } };
   sync();
 }
 
@@ -402,19 +496,21 @@ function prio() {
   const items = D.priority.slice(0, 15);
   const maxS = items[0].score;
   document.getElementById("prioTable").innerHTML =
-    `<tr><th>#</th><th>항목</th><th class="num">점수</th><th class="num">N</th><th class="num">좋아요 합</th><th class="num">최근 6개월</th><th class="num">추세 r</th></tr>` +
+    `<caption class="sr-only">고쳐야 할 우선순위 상위 ${items.length}개 (키워드 단위). 각 항목 아래에 대표 리뷰가 있습니다.</caption>` +
+    `<thead><tr><th scope="col">순위</th><th scope="col">항목</th><th scope="col" class="num">점수</th><th scope="col" class="num">N</th><th scope="col" class="num">좋아요 합</th><th scope="col" class="num">최근 6개월</th><th scope="col" class="num">추세 r</th></tr></thead><tbody>` +
     items.map((it, i) => {
       const trend = it.ratio >= 1.15 ? "▲ 증가" : it.ratio <= 0.85 ? "▼ 감소" : "– 유지";
       const qs = it.quotes.map(quoteHTML).join("");
-      return `<tr><td class="rank">${i + 1}</td><td class="item"><b>${esc(it.topic)}</b> · ${esc(it.kw)}</td>` +
-        `<td class="num"><span class="bar-track"><span class="bar-inline" style="width:${(it.score / maxS * 100).toFixed(0)}%"></span></span>${it.score.toFixed(1)}</td>` +
+      return `<tr><td class="rank">${i + 1}</td><th scope="row" class="item"><b>${esc(it.topic)}</b> · ${esc(it.kw)}</th>` +
+        `<td class="num"><span class="bar-track" aria-hidden="true"><span class="bar-inline" style="width:${(it.score / maxS * 100).toFixed(0)}%"></span></span>${it.score.toFixed(1)}</td>` +
         `<td class="num">${fmt(it.n)}</td><td class="num">${fmt(it.thumbs)}</td><td class="num">${it.recent_n}건 (${pct(it.recent_rate, 1)})</td>` +
         `<td class="num">${it.ratio.toFixed(2)} ${trend}</td></tr>` +
-        `<tr class="qrow"><td></td><td colspan="6" style="padding-top:0">${i < 5 ? qs : `<details><summary>대표 리뷰 ${it.quotes.length}개 보기</summary>${qs}</details>`}</td></tr>`;
-    }).join("");
+        `<tr class="qrow"><td></td><td colspan="6" style="padding-top:0">${i < 5 ? qs : `<details><summary>${esc(it.topic)} · ${esc(it.kw)} 대표 리뷰 ${it.quotes.length}개 보기</summary>${qs}</details>`}</td></tr>`;
+    }).join("") + `</tbody>`;
   document.getElementById("prioTopicTable").innerHTML =
-    `<tr><th>주제</th><th class="num">점수</th><th class="num">부정·혼합 리뷰</th><th class="num">최근 6개월</th><th class="num">추세 r</th></tr>` +
-    D.priority_topics.map(t => `<tr><td>${t.topic}</td><td class="num">${t.score.toFixed(1)}</td><td class="num">${fmt(t.n)}</td><td class="num">${t.recent_n}</td><td class="num">${t.ratio.toFixed(2)}</td></tr>`).join("");
+    `<caption class="sr-only">주제 단위 요약 점수</caption>` +
+    `<thead><tr><th scope="col">주제</th><th scope="col" class="num">점수</th><th scope="col" class="num">부정·혼합 리뷰</th><th scope="col" class="num">최근 6개월</th><th scope="col" class="num">추세 r</th></tr></thead><tbody>` +
+    D.priority_topics.map(t => `<tr><th scope="row">${esc(t.topic)}</th><td class="num">${t.score.toFixed(1)}</td><td class="num">${fmt(t.n)}</td><td class="num">${t.recent_n}</td><td class="num">${t.ratio.toFixed(2)}</td></tr>`).join("") + `</tbody>`;
 }
 
 /* ---------- 장점 ---------- */
@@ -423,12 +519,12 @@ function good() {
   document.getElementById("goodSub").innerHTML =
     `주제별로 긍정 판정을 받은 리뷰를 기준으로 했습니다. 주제 없이 "재밌어요" 같은 전반적 호평만 남긴 리뷰도 <b>${fmt(g.n)}건</b> 있습니다(자주 나온 말: ${g.terms.slice(0, 8).map(t => esc(t.kw)).join(", ")}).`;
   document.getElementById("goodCards").innerHTML = D.strengths.slice(0, 6).map(s =>
-    `<div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline"><b style="font-size:15px">${s.topic}</b>` +
+    `<div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><h3 style="font-size:0.9375rem;margin:0">${esc(s.topic)}</h3>` +
     `<span class="small muted">긍정 ${fmt(s.n)} · 부정 ${fmt(s.neg_n)}</span></div>` +
     `<div class="small" style="margin:4px 0 6px">긍정 비중 <b>${pct(s.pos_ratio)}</b> <span class="muted">(긍정 ÷ (긍정+부정))</span></div>` +
     `<div>${s.keywords.map(k => `<span class="pill">${esc(k.kw)} ${pct(k.pct)}</span>`).join("")}</div>` +
     (s.quotes[0] ? quoteHTML(s.quotes[0]) : "") +
-    (s.quotes.length > 1 ? `<details><summary>원문 더 보기</summary>${s.quotes.slice(1).map(quoteHTML).join("")}</details>` : "") +
+    (s.quotes.length > 1 ? `<details><summary>${esc(s.topic)} 원문 더 보기</summary>${s.quotes.slice(1).map(quoteHTML).join("")}</details>` : "") +
     `</div>`).join("");
 }
 
@@ -436,7 +532,7 @@ function good() {
 function columnChart(boxId, rows, key, opts = {}) {
   const box = document.getElementById(boxId);
   const W = Math.max(box.clientWidth, 280), H = 220, L = 40, B = 26, T = 10, R = 6;
-  const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": opts.label || ""}, box);
+  const svg = chartSvg(box, W, H, opts.label || "");
   const max = niceMax(Math.max(...rows.map(r => r[key])));
   const pw = W - L - R, ph = H - T - B;
   [0, .5, 1].forEach(t => {
@@ -447,7 +543,7 @@ function columnChart(boxId, rows, key, opts = {}) {
   const bw = pw / rows.length, w = Math.min(Math.max(bw - 2, 1), 24);
   rows.forEach((r, i) => {
     const h = ph * r[key] / max, x = L + i * bw + (bw - w) / 2;
-    const p = el("path", {d: vbarPath(x, T + ph - h, w, Math.max(h, 0.5), Math.min(4, w / 2)), fill: "var(--accent)"}, svg);
+    el("path", {d: vbarPath(x, T + ph - h, w, Math.max(h, 0.5), Math.min(4, w / 2)), fill: "var(--accent)"}, svg);
     const hit = el("rect", {x: L + i * bw, y: T, width: bw, height: ph, fill: "transparent"}, svg);
     bindTip(hit, () => opts.tip(r));
     if (opts.xlabel && opts.xlabel(r, i)) {
@@ -458,7 +554,7 @@ function columnChart(boxId, rows, key, opts = {}) {
 function lineChart(boxId, pts, opts) {
   const box = document.getElementById(boxId);
   const W = Math.max(box.clientWidth, 280), H = 220, L = 40, B = 26, T = 12, R = 10;
-  const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": opts.label}, box);
+  const svg = chartSvg(box, W, H, opts.label);
   const pw = W - L - R, ph = H - T - B;
   const max = opts.max || niceMax(Math.max(...pts.map(p => p.y)));
   const xs = i => L + (pts.length === 1 ? pw / 2 : pw * i / (pts.length - 1));
@@ -479,44 +575,46 @@ function lineChart(boxId, pts, opts) {
   const cross = el("line", {y1: T, y2: T + ph, stroke: "var(--axis)", "stroke-width": 1, visibility: "hidden"}, svg);
   const dot = el("circle", {r: 4.5, fill: color, stroke: "var(--surface)", "stroke-width": 2, visibility: "hidden"}, svg);
   const hit = el("rect", {x: L, y: T, width: pw, height: ph, fill: "transparent"}, svg);
-  hit.addEventListener("mousemove", ev => {
+  const move = ev => {
     const r = svg.getBoundingClientRect(), sx = (ev.clientX - r.left) * W / r.width;
     const i = Math.max(0, Math.min(pts.length - 1, Math.round((sx - L) / pw * (pts.length - 1))));
     cross.setAttribute("x1", xs(i)); cross.setAttribute("x2", xs(i)); cross.setAttribute("visibility", "visible");
     dot.setAttribute("cx", xs(i)); dot.setAttribute("cy", ys(pts[i].y)); dot.setAttribute("visibility", "visible");
     showTip(ev, opts.tip(pts[i]));
-  });
+  };
+  hit.addEventListener("mousemove", move);
+  hit.addEventListener("click", ev => { ev.stopPropagation(); move(ev); });
   hit.addEventListener("mouseleave", () => { hideTip(); cross.setAttribute("visibility", "hidden"); dot.setAttribute("visibility", "hidden"); });
   if (opts.endLabel) {
     const lp = pts[pts.length - 1];
     const t = el("text", {x: xs(pts.length - 1) - 4, y: ys(lp.y) - 8, "text-anchor": "end", class: "val"}, svg); t.textContent = opts.endLabel(lp);
   }
 }
-function trends() {
-  const mo = D.monthly;
-  columnChart("volChart", mo, "n", {
-    label: "월별 리뷰 수",
+const SM_TOPICS = ["과금", "버그", "콘텐츠", "운영", "밸런스/성장", "UI/편의성", "캐릭터/아트", "광고"];
+const negSharePts = () => D.monthly.filter(r => r.n >= 10).map(r => ({x: r.month, y: (r.neg + r.mixed) / r.n, r}));
+function trendCharts() {
+  columnChart("volChart", D.monthly, "n", {
+    label: "월별 리뷰 수 막대 그래프",
     tip: r => `<b>${r.month}</b><div class="row"><span>리뷰</span><span>${fmt(r.n)}건</span></div><div class="row"><span>부정·혼합</span><span>${fmt(r.neg + r.mixed)}건</span></div><div class="row"><span>평균 별점</span><span>${r.avg_rating}</span></div>`,
     xlabel: (r) => r.month.endsWith("-01") ? r.month.slice(0, 4) : ""
   });
-  const pts = mo.filter(r => r.n >= 10).map(r => ({x: r.month, y: (r.neg + r.mixed) / r.n, r}));
+  const pts = negSharePts();
   lineChart("negShareChart", pts, {
-    label: "월별 부정·혼합 비율", max: niceMax(Math.max(...pts.map(p => p.y))), yfmt: v => pct(v),
+    label: "월별 부정·혼합 리뷰 비율 꺾은선 그래프", max: niceMax(Math.max(...pts.map(p => p.y))), yfmt: v => pct(v),
     tip: p => `<b>${p.x}</b><div class="row"><span>부정·혼합</span><span>${pct(p.y, 1)}</span></div><div class="row"><span>표본</span><span>${fmt(p.r.n)}건</span></div>`,
     xlabel: (p, i) => (i === 0 || p.x.endsWith("-01")) ? p.x.slice(0, 4) : "",
     endLabel: p => pct(p.y)
   });
-  const topics = ["과금", "버그", "콘텐츠", "운영", "밸런스/성장", "UI/편의성", "캐릭터/아트", "광고"];
   const sm = document.getElementById("smallMultiples");
   const qs = D.quarterly;
-  topics.forEach(tp => {
+  SM_TOPICS.forEach((tp, k) => {
     const div = document.createElement("div");
-    const id = "sm_" + tp.replace(/\W/g, "_") + Math.random().toString(36).slice(2, 6);
-    div.innerHTML = `<div class="sm-title">${tp}</div><div class="chart" id="${id}"></div>`;
+    const id = "sm_" + k;
+    div.innerHTML = `<h4 class="sm-title">${esc(tp)}</h4><div class="chart" id="${id}"></div>`;
     sm.appendChild(div);
     const box = document.getElementById(id);
     const W = Math.max(box.clientWidth, 140), H = 110, L = 26, T = 6, B = 18, R = 4;
-    const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": tp + " 분기별 부정 언급"}, box);
+    const svg = chartSvg(box, W, H, tp + " 분기별 부정·혼합 언급 수 막대 그래프");
     const max = niceMax(Math.max(1, ...qs.map(q => q["neg_" + tp])));
     const pw = W - L - R, ph = H - T - B, bw = pw / qs.length, w = Math.min(Math.max(bw - 2, 1), 24);
     el("line", {x1: L, x2: W - R, y1: T + ph, y2: T + ph, class: "baseline"}, svg);
@@ -531,24 +629,37 @@ function trends() {
     });
   });
 }
+function trendTables() {
+  dataTable("volChart", "월별 리뷰 수", tableHTML("월별 리뷰 수", ["월", "리뷰", "부정·혼합", "평균 별점"],
+    D.monthly.map(r => [r.month, fmt(r.n), fmt(r.neg + r.mixed), r.avg_rating])));
+  dataTable("negShareChart", "월별 부정·혼합 비율", tableHTML("월별 부정·혼합 리뷰 비율 (리뷰 10건 이상인 달)", ["월", "부정·혼합 비율", "리뷰"],
+    negSharePts().map(p => [p.x, pct(p.y, 1), fmt(p.r.n)])));
+  dataTable("smTableAnchor", "분기별 주제별 부정·혼합 언급 수", tableHTML("분기별 주제별 부정·혼합 언급 수", ["분기", ...SM_TOPICS, "그 분기 리뷰"],
+    D.quarterly.map(q => [q.q, ...SM_TOPICS.map(tp => fmt(q["neg_" + tp])), fmt(q.n)])));
+}
 
 /* ---------- 버전 ---------- */
-function versions() {
-  const vs = D.versions;
-  const pts = vs.map(v => ({x: v.version, y: v.neg_share, v}));
+const verPts = () => D.versions.map(v => ({x: v.version, y: v.neg_share, v}));
+function verChart() {
+  const pts = verPts();
   lineChart("verChart", pts, {
-    label: "버전별 부정·혼합 비율", max: niceMax(Math.max(...pts.map(p => p.y))), yfmt: v => pct(v),
+    label: "버전별 부정·혼합 리뷰 비율 꺾은선 그래프", max: niceMax(Math.max(...pts.map(p => p.y))), yfmt: v => pct(v),
     tip: p => `<b>v${p.x}</b> <span class="muted">${p.v.first}~</span><div class="row"><span>부정·혼합</span><span>${pct(p.y, 1)}</span></div><div class="row"><span>리뷰</span><span>${fmt(p.v.n)}건</span></div><div class="row"><span>평균 별점</span><span>${p.v.avg_rating}</span></div>`,
     xlabel: (p, i) => (i % Math.ceil(pts.length / 8) === 0) ? "v" + p.x : "",
     endLabel: p => "v" + p.x + " " + pct(p.y)
   });
+}
+function verTables() {
+  dataTable("verChart", "버전별 부정·혼합 비율", tableHTML("버전별 부정·혼합 리뷰 비율", ["버전", "첫 리뷰", "리뷰", "부정·혼합 비율", "평균 별점"],
+    verPts().map(p => ["v" + esc(p.x), p.v.first, fmt(p.v.n), pct(p.y, 1), p.v.avg_rating]), 2));
   document.getElementById("verTable").innerHTML =
-    `<tr><th>업데이트</th><th class="num">부정·혼합 비율</th><th class="num">변화</th><th>가장 많이 바뀐 주제</th><th>근거 리뷰</th></tr>` +
-    D.version_changes.map(c => `<tr><td>v${c.from} → <b>v${c.to}</b><div class="small muted">${c.to_first}~ · ${c.n}건</div></td>` +
+    `<caption class="sr-only">직전 버전 대비 부정·혼합 비율 변화가 컸던 업데이트</caption>` +
+    `<thead><tr><th scope="col">업데이트</th><th scope="col" class="num">부정·혼합 비율</th><th scope="col" class="num">변화</th><th scope="col">가장 많이 바뀐 주제</th><th scope="col">근거 리뷰</th></tr></thead><tbody>` +
+    D.version_changes.map(c => `<tr><th scope="row">v${esc(c.from)} → <b>v${esc(c.to)}</b><div class="small muted">${c.to_first}~ · ${c.n}건</div></th>` +
       `<td class="num">${pct(c.from_share)} → ${pct(c.to_share)}</td>` +
-      `<td class="num" style="color:${c.diff > 0 ? "var(--ink)" : "var(--good-text)"}">${c.diff > 0 ? "▲" : "▼"} ${(Math.abs(c.diff) * 100).toFixed(1)}%p</td>` +
-      `<td>${c.top_topic_changes.map(t => `<span class="pill">${t.topic} ${t.diff > 0 ? "+" : ""}${(t.diff * 100).toFixed(1)}%p</span>`).join("")}</td>` +
-      `<td style="min-width:260px">${c.quotes.length ? `<details><summary>원문 보기</summary>${c.quotes.map(quoteHTML).join("")}</details>` : ""}</td></tr>`).join("");
+      `<td class="num" style="color:${c.diff > 0 ? "var(--ink)" : "var(--good-text)"}">${c.diff > 0 ? "▲ 증가" : "▼ 감소"} ${(Math.abs(c.diff) * 100).toFixed(1)}%p</td>` +
+      `<td>${c.top_topic_changes.map(t => `<span class="pill">${esc(t.topic)} ${t.diff > 0 ? "+" : ""}${(t.diff * 100).toFixed(1)}%p</span>`).join("")}</td>` +
+      `<td style="min-width:260px">${c.quotes.length ? `<details><summary>v${esc(c.to)} 원문 보기</summary>${c.quotes.map(quoteHTML).join("")}</details>` : ""}</td></tr>`).join("") + `</tbody>`;
 }
 
 /* ---------- 방법·검수 ---------- */
@@ -556,7 +667,7 @@ function method() {
   const m = D.meta, ls = m.label_source, g = m.grouping;
   const other = g.other_topics.length ? `${g.other_topics.join(", ")} (전체 대비 ${pct(g.other_threshold)} 미만 → '기타'로 묶음)` : "없음";
   document.getElementById("methodCard").innerHTML =
-    `<b>분류 절차</b><ol style="padding-left:18px;margin:6px 0">` +
+    `<h3 class="sm-title" style="font-size:0.8125rem;color:var(--ink)">분류 절차</h3><ol style="padding-left:18px;margin:6px 0">` +
     `<li>키워드 규칙을 1차로 적용했습니다(커뮤니티 표현 포함: 현질·가챠·확률·뽑기 → 과금, 튕김·렉·접속불가·버벅 → 버그 등). 부정어 처리도 넣었습니다("렉 없음" → 긍정).</li>` +
     `<li>짧고 감성이 하나뿐이라 규칙으로 확신할 수 있는 <b>${fmt(ls.rule || 0)}건</b>은 규칙 판정을 그대로 썼습니다.</li>` +
     `<li>나머지 <b>${fmt(ls.manual || 0)}건</b>은 내용을 읽고 판정했습니다. 대상은 길거나, 주제가 여럿이거나, 긍·부정이 섞였거나, 별점과 내용이 어긋난 리뷰입니다.</li></ol>` +
@@ -565,32 +676,45 @@ function method() {
     `<b>데이터</b> Google Play는 스토어 표기 리뷰 수와 거의 같은 전량, App Store는 공개 RSS 피드의 전량(150건)입니다.`;
   const a = D.audit;
   const ac = document.getElementById("auditCard");
-  if (!a) { ac.innerHTML = `<b>검수</b><p class="muted">검수 결과 없음</p>`; return; }
-  ac.innerHTML = `<b>무작위 ${a.n}건 직접 검수</b>` +
-    `<table style="margin-top:6px"><tr><th>항목</th><th class="num">정확도</th></tr>` +
-    a.metrics.map(x => `<tr><td>${esc(x.name)}</td><td class="num">${x.ok}/${a.n} (${pct(x.ok / a.n)})</td></tr>`).join("") + `</table>` +
+  if (!a) { ac.innerHTML = `<h3 class="sm-title">검수</h3><p class="muted">검수 결과 없음</p>`; return; }
+  ac.innerHTML = `<h3 class="sm-title" style="font-size:0.8125rem;color:var(--ink)">무작위 ${a.n}건 직접 검수</h3>` +
+    tableHTML(`무작위 ${a.n}건 검수 정확도`, ["항목", "정확도"], a.metrics.map(x => [esc(x.name), `${x.ok}/${a.n} (${pct(x.ok / a.n)})`])) +
     (a.notes ? `<p class="small" style="margin-top:8px">${esc(a.notes)}</p>` : "") +
     (a.errors && a.errors.length ? `<details><summary>오판 사례 ${a.errors.length}건</summary>${a.errors.map(e => `<div class="quote">${esc(e.text)}<div class="meta">판정: ${esc(e.got)} → 올바른 값: ${esc(e.want)}</div></div>`).join("")}</details>` : "");
 }
 
 /* ---------- 공통 ---------- */
-document.querySelectorAll(".toggle-table").forEach(b => b.onclick = () => {
-  const t = document.getElementById(b.dataset.target); t.hidden = !t.hidden; b.textContent = t.hidden ? "표로 보기" : "표 닫기";
-});
-document.getElementById("themeBtn").onclick = () => {
+const themeBtn = document.getElementById("themeBtn");
+const isDark = () => { const r = document.documentElement; return r.dataset.theme ? r.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; };
+const syncThemeBtn = () => { themeBtn.textContent = isDark() ? "라이트 모드로 보기" : "다크 모드로 보기"; };
+themeBtn.onclick = () => {
   const r = document.documentElement;
-  const dark = r.dataset.theme ? r.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-  r.dataset.theme = dark ? "light" : "dark";
+  r.dataset.theme = isDark() ? "light" : "dark";
   try { localStorage.setItem("dt-theme", r.dataset.theme); } catch (e) {}
-  render();
+  syncThemeBtn();
+  renderCharts();  // 막대 위 글자색만 다시 계산 (버튼·표·포커스는 그대로)
 };
 try { const t = localStorage.getItem("dt-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
-function render() {
-  ["topicChart", "overallChart", "kwChart", "termChart", "volChart", "negShareChart", "smallMultiples", "verChart"].forEach(id => document.getElementById(id).innerHTML = "");
-  header(); topicChart(); overallChart(); ratingNote(); kwControls(); prio(); good(); trends(); versions(); method();
+matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => { syncThemeBtn(); renderCharts(); });
+
+// 차트(SVG)만 다시 그린다. 버튼·표·펼친 상세는 그대로 두므로, 확대·창 크기 변경 때 키보드 포커스가 사라지지 않는다.
+function renderCharts() {
+  hideTip();
+  ["topicChart", "overallChart", "volChart", "negShareChart", "smallMultiples", "verChart"].forEach(id => document.getElementById(id).innerHTML = "");
+  topicChart(); overallChart(); kwCharts(); trendCharts(); verChart();
 }
-render();
-let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(render, 150); });
+// 처음 한 번만 만드는 부분 (텍스트, 표, 버튼)
+function renderOnce() {
+  header(); ratingNote(); kwControls(); prio(); good(); method();
+  topicTable(); overallTable(); trendTables(); verTables(); syncThemeBtn();
+}
+renderOnce();
+renderCharts();
+let rz, lastW = innerWidth;
+addEventListener("resize", () => {
+  clearTimeout(rz);
+  rz = setTimeout(() => { if (innerWidth !== lastW) { lastW = innerWidth; renderCharts(); } }, 150);
+});
 </script>
 </body>
 </html>

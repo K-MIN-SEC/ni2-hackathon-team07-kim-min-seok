@@ -1,0 +1,37 @@
+설정 freeze=6 epochs=3 lr=4e-05 hard_w=3.0 max_len=128
+fold 1/5 학습 5079건
+    step 50/297 loss 0.914 (268s)
+    step 100/297 loss 0.007 (505s)
+    step 150/297 loss 0.416 (701s)
+    step 200/297 loss 0.009 (1059s)
+    step 250/297 loss 0.303 (1254s)
+fold 1/5 끝 (1420s) 감성 정확도 전체 0.906 / 어려운 건 0.877
+fold 2/5 학습 5079건
+    step 50/297 loss 0.935 (172s)
+    step 100/297 loss 0.008 (319s)
+    step 150/297 loss 0.372 (447s)
+    step 200/297 loss 0.013 (581s)
+    step 250/297 loss 0.304 (716s)
+fold 2/5 끝 (861s) 감성 정확도 전체 0.924 / 어려운 건 0.892
+fold 3/5 학습 5079건
+    step 50/297 loss 0.904 (142s)
+    step 100/297 loss 0.013 (272s)
+    step 150/297 loss 0.410 (400s)
+    step 200/297 loss 0.006 (540s)
+    step 250/297 loss 0.296 (675s)
+fold 3/5 끝 (819s) 감성 정확도 전체 0.921 / 어려운 건 0.887
+fold 4/5 학습 5079건
+    step 50/297 loss 0.961 (136s)
+    step 100/297 loss 0.007 (260s)
+    step 150/297 loss 0.374 (383s)
+    step 200/297 loss 0.011 (516s)
+    step 250/297 loss 0.283 (648s)
+fold 4/5 끝 (792s) 감성 정확도 전체 0.928 / 어려운 건 0.899
+fold 5/5 학습 5080건
+    step 50/297 loss 0.886 (133s)
+    step 100/297 loss 0.008 (257s)
+    step 150/297 loss 0.373 (385s)
+    step 200/297 loss 0.020 (518s)
+    step 250/297 loss 0.282 (652s)
+fold 5/5 끝 (793s) 감성 정확도 전체 0.913 / 어려운 건 0.884
+완료: {'all_acc': 0.9185698535202395, 'hard_acc': 0.8876847290640394, 'config': {'freeze': 6, 'epochs': 3, 'lr': 4e-05, 'hard_w': 3.0, 'max_len': 128}}

@@ -19,7 +19,8 @@ import sys
 
 import pandas as pd
 
-sys.stdout.reconfigure(encoding="utf-8")
+import os
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # 저장소 폴더
 
 TOPICS = ["과금", "버그", "콘텐츠", "운영", "밸런스/성장", "UI/편의성", "캐릭터/아트", "광고"]
 SENTS = ["긍정", "혼합", "중립", "부정"]
@@ -298,4 +299,7 @@ def main():
 
 
 if __name__ == "__main__":
+    os.chdir(ROOT)  # 어느 위치에서 실행해도 저장소 폴더 기준 경로(data/, work/)로 동작
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     main()

@@ -1,0 +1,18 @@
+
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]
+Loading weights:  10%|█         | 20/199 [00:00<00:00, 185.72it/s]
+Loading weights:  51%|█████▏    | 102/199 [00:00<00:00, 521.65it/s]
+Loading weights:  84%|████████▍ | 168/199 [00:00<00:00, 560.01it/s]
+Loading weights: 100%|██████████| 199/199 [00:00<00:00, 541.86it/s]
+    step 50/372 loss 0.923 (177s)
+    step 100/372 loss 0.484 (318s)
+    step 150/372 loss 0.441 (439s)
+    step 200/372 loss 0.320 (570s)
+    step 250/372 loss 0.372 (710s)
+    step 300/372 loss 0.275 (845s)
+    step 350/372 loss 0.253 (977s)
+
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]
+Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  3.10it/s]
+Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  3.09it/s]
+저장 work\ft\model

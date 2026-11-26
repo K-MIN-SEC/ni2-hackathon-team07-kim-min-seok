@@ -7,3 +7,6 @@ joblib==1.6.0
 kiwipiepy==0.25.1
 requests==2.34.2
 google-play-scraper==1.2.7
+# 로컬 문장 임베딩 (scripts/embeddings.py). CPU 전용 torch:
+#   pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cpu
+sentence-transformers==6.3.0
