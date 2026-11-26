@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>게임 리뷰 감성 분석 — 7팀 카페인 중독</title>
+<meta name="description" content="2026 NI2.0 AID 해커톤 7팀. 모바일 게임 스토어 리뷰를 감성과 주제로 나눠 운영·기획 담당자가 고칠 점과 지킬 점을 찾도록 돕는 대시보드">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232870cc'/%3E%3Crect x='7' y='17' width='4' height='8' rx='1' fill='%23fff'/%3E%3Crect x='14' y='11' width='4' height='14' rx='1' fill='%23fff'/%3E%3Crect x='21' y='7' width='4' height='18' rx='1' fill='%23fff'/%3E%3C/svg%3E">
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7; --surface: #fcfcfb; --surface-2: #f3f2ee;
+  --ink: #0b0b0b; --ink-2: #52514e; --muted: #6b6a64;
+  --grid: #e1e0d9; --ring: rgba(11,11,11,0.10);
+  --pos: #2870cc; --neg: #c93a39; --mix: #8a5a00;
+  --accent: #2870cc; --accent-ink: #fff; --accent-wash: rgba(40,112,204,0.12);
+  --focus: #2870cc;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --surface-2: #232321;
+    --ink: #f0efec; --ink-2: #c3c2b7; --muted: #a3a29c;
+    --grid: #2c2c2a; --ring: rgba(255,255,255,0.14);
+    --pos: #6aa8f0; --neg: #f08a8a; --mix: #e0a63a;
+    --accent: #3987e5; --accent-ink: #fff; --accent-wash: rgba(57,135,229,0.18);
+    --focus: #6aa8f0;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface: #1a1a19; --surface-2: #232321;
+  --ink: #f0efec; --ink-2: #c3c2b7; --muted: #a3a29c;
+  --grid: #2c2c2a; --ring: rgba(255,255,255,0.14);
+  --pos: #6aa8f0; --neg: #f08a8a; --mix: #e0a63a;
+  --accent: #3987e5; --accent-ink: #fff; --accent-wash: rgba(57,135,229,0.18);
+  --focus: #6aa8f0;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--page); color: var(--ink); font: 1rem/1.6 system-ui, -apple-system, "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; }
+a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+.skip { position: absolute; left: 8px; top: -48px; background: var(--surface); color: var(--ink); padding: 8px 12px; border-radius: 6px; border: 2px solid var(--focus); z-index: 10; }
+.skip:focus { top: 8px; }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 32px 16px 56px; }
+
+header .eyebrow { font-size: 0.8125rem; color: var(--ink-2); margin: 0 0 10px; display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; justify-content: space-between; }
+header h1 { font-size: clamp(1.625rem, 4.4vw, 2.375rem); line-height: 1.25; margin: 0 0 12px; letter-spacing: -0.02em; font-weight: 700; }
+header .lead { font-size: 1.0625rem; color: var(--ink-2); margin: 0; max-width: 46em; }
+.theme { background: var(--surface); color: var(--ink-2); border: 1px solid var(--ring); border-radius: 6px; padding: 4px 10px; cursor: pointer; font: inherit; font-size: 0.8125rem; }
+
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 24px 0 0; padding: 0; list-style: none; }
+.facts li { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 12px 14px; }
+.facts b { display: block; font-size: 0.8125rem; color: var(--ink-2); font-weight: 600; margin-bottom: 2px; }
+.facts span { font-size: 0.9375rem; }
+
+h2 { font-size: 1.25rem; margin: 40px 0 6px; letter-spacing: -0.01em; }
+.sub { color: var(--ink-2); margin: 0 0 16px; font-size: 0.9375rem; }
+
+.cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--ring); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; }
+.card .tag { font-size: 0.75rem; font-weight: 600; color: var(--ink-2); background: var(--surface-2); border-radius: 999px; padding: 2px 10px; align-self: flex-start; }
+.card h3 { font-size: 1.25rem; margin: 10px 0 4px; }
+.card .what { color: var(--ink-2); margin: 0 0 14px; font-size: 0.9375rem; }
+.stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 0 0 14px; }
+.stat { background: var(--page); border: 1px solid var(--grid); border-radius: 8px; padding: 10px 12px; }
+.stat .v { font-size: 1.375rem; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.stat .l { font-size: 0.75rem; color: var(--ink-2); }
+.card ul.points { margin: 0 0 16px; padding-left: 1.1em; font-size: 0.9375rem; }
+.card ul.points li { margin: 3px 0; }
+.card .note { font-size: 0.8125rem; color: var(--muted); margin: 0 0 16px; }
+.card .actions { margin-top: auto; display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+.btn { display: inline-flex; align-items: center; gap: 6px; background: var(--accent); color: var(--accent-ink); text-decoration: none; font-weight: 600; border-radius: 8px; padding: 9px 16px; font-size: 0.9375rem; }
+.btn:hover { filter: brightness(1.08); }
+.links { font-size: 0.875rem; }
+.links a { margin-right: 10px; }
+.pos { color: var(--pos); } .neg { color: var(--neg); }
+
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.box { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 14px 16px; font-size: 0.9375rem; }
+.box h3 { font-size: 0.9375rem; margin: 0 0 4px; }
+.box p { margin: 0; color: var(--ink-2); }
+
+.limits { background: var(--surface-2); border-radius: 10px; padding: 14px 18px; font-size: 0.9375rem; color: var(--ink-2); }
+.limits ul { margin: 0; padding-left: 1.1em; }
+.limits li { margin: 4px 0; }
+
+footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--grid); font-size: 0.8125rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 16px; justify-content: space-between; }
+
+@media (max-width: 760px) {
+  .cards, .grid3 { grid-template-columns: 1fr; }
+  .facts { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">본문 바로가기</a>
+<div class="wrap">
+  <header>
+    <p class="eyebrow"><span>2026 NI2.0 AID 해커톤 · 7팀 카페인 중독 (서일대학교 AI게임융합학과) · 연계 기업 ㈜에이블게임즈</span>
+      <button class="theme" id="themeBtn" type="button">다크 모드로 보기</button></p>
+    <h1>게임 스토어 리뷰, 무엇을 고치고 무엇을 지킬지 한눈에</h1>
+    <p class="lead">모바일 게임 리뷰를 감성(긍정·부정·혼합)과 주제(과금, 버그, 콘텐츠 등)로 나눠 보여 줍니다. 운영 담당자와 기획자가 리뷰를 하나하나 읽지 않고도 반복되는 불만과 칭찬을 찾고, 근거가 된 원래 리뷰까지 바로 확인할 수 있습니다.</p>
+    <ul class="facts" aria-label="과제 요약">
+      <li><b>대상 사용자</b><span>게임 개발사·배급사의 운영 담당자와 기획자</span></li>
+      <li><b>대상 게임</b><span>에이블게임즈 「달토끼 키우기」, 「메이플 키우기」</span></li>
+      <li><b>원칙</b><span>별점과 내용 감성은 따로 봅니다. 모든 숫자는 원래 리뷰로 이어집니다.</span></li>
+    </ul>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <h2>결과물</h2>
+    <p class="sub">두 가지 화면이 있습니다. 둘 다 브라우저에서 바로 열리고 서버나 외부 AI API를 쓰지 않습니다.</p>
+
+    <div class="cards">
+      <article class="card" aria-labelledby="c1">
+        <span class="tag">리뷰 단위 · 전량 분석</span>
+        <h3 id="c1">달토끼 키우기 리뷰 분석 대시보드</h3>
+        <p class="what">글이 있는 한국어 리뷰 전량을 감성·주제로 분류하고, 고쳐야 할 우선순위와 지켜야 할 장점을 계산했습니다.</p>
+        <div class="stats">
+          <div class="stat"><div class="v">6,349건</div><div class="l">분석한 리뷰 (Google Play 6,199 · App Store 150)</div></div>
+          <div class="stat"><div class="v"><span class="pos">69%</span> / <span class="neg">22%</span></div><div class="l">내용상 긍정 / 부정 또는 혼합</div></div>
+          <div class="stat"><div class="v">버그</div><div class="l">1순위로 고칠 주제 (키워드 1위 '업데이트 불가')</div></div>
+          <div class="stat"><div class="v">캐릭터/아트</div><div class="l">지켜야 할 장점 (언급의 96%가 긍정)</div></div>
+        </div>
+        <ul class="points">
+          <li>주제별 긍정·부정, 감성×주제 키워드, 개선 우선순위, 버전별 추이</li>
+          <li>숫자·막대를 누르면 근거 리뷰 목록이 열립니다</li>
+          <li>CSV를 불러오면 같은 방식으로 다시 계산합니다 (파일은 외부로 전송되지 않음)</li>
+          <li>새 리뷰는 LLM 없이 규칙 + 머신러닝으로 분류합니다. 어려운 리뷰 감성 정확도 62.2% → 89.7% (5-겹 교차검증)</li>
+        </ul>
+        <p class="note">분류기는 로컬 서버(<code>review-analysis/server</code>)로 실행합니다. 이 사이트에는 분류가 끝난 결과만 올라가 있습니다.</p>
+        <div class="actions">
+          <a class="btn" href="review-analysis/dashboard/dashboard.html">대시보드 열기 →</a>
+          <span class="links"><a href="https://github.com/K-MIN-SEC/ni2-hackathon-team07-kim-min-seok/blob/main/review-analysis/README.md">설명</a><a href="https://github.com/K-MIN-SEC/ni2-hackathon-team07-kim-min-seok/blob/main/review-analysis/docs/IMPROVEMENT_REPORT.md">테스트·개선 보고서</a></span>
+        </div>
+      </article>
+
+      <article class="card" aria-labelledby="c2">
+        <span class="tag">의견 단위 · 두 게임 비교</span>
+        <h3 id="c2">Game Voice Lab</h3>
+        <p class="what">리뷰 한 건을 의견 단위로 나눠, 한 리뷰 안에 섞인 칭찬과 불만을 따로 셉니다.</p>
+        <div class="stats">
+          <div class="stat"><div class="v">466건</div><div class="l">리뷰 (달토끼 436 · 메이플 30)</div></div>
+          <div class="stat"><div class="v">634건</div><div class="l">리뷰에서 나눈 의견</div></div>
+          <div class="stat"><div class="v">13종</div><div class="l">주제 카테고리</div></div>
+          <div class="stat"><div class="v">18/18</div><div class="l">자동 테스트 통과 (집계·필터·데이터 검증)</div></div>
+        </div>
+        <ul class="points">
+          <li>게임·스토어·기간·별점·카테고리·감성·키워드 필터</li>
+          <li>주제별 분석, 키워드 분석, 건의 사항, 의견 탐색</li>
+          <li>의견마다 40자 이하 발췌와 원래 리뷰 출처 링크</li>
+          <li>리뷰는 스토어 웹 화면을 열람해 모았습니다 (자동 수집 도구 미사용)</li>
+        </ul>
+        <p class="note">의견 라벨은 팀 검수 전입니다 (미검수 622건, 판단 보류 12건).</p>
+        <div class="actions">
+          <a class="btn" href="GameVoiceLab/">Game Voice Lab 열기 →</a>
+          <span class="links"><a href="https://github.com/K-MIN-SEC/ni2-hackathon-team07-kim-min-seok/blob/main/GameVoiceLab/README.md">설명</a><a href="https://github.com/K-MIN-SEC/ni2-hackathon-team07-kim-min-seok/blob/main/GameVoiceLab/docs/qa-report.md">QA 보고서</a></span>
+        </div>
+      </article>
+    </div>
+
+    <h2>이렇게 만들었습니다</h2>
+    <div class="grid3">
+      <div class="box"><h3>1. 수집</h3><p>공개 스토어 리뷰를 모으고 출처(스토어, 작성일, 링크)를 함께 저장했습니다.</p></div>
+      <div class="box"><h3>2. 분류</h3><p>규칙으로 확신하는 리뷰는 규칙으로, 애매한 리뷰는 AI가 판정 기준서에 따라 판정했습니다(별점은 숨김). 이 라벨로 새 리뷰용 분류기를 학습했습니다.</p></div>
+      <div class="box"><h3>3. 검증</h3><p>무작위 50건 검수에서 감성 50/50 일치. 분류기는 5-겹 교차검증으로, 화면은 집계·필터·잘못된 데이터 처리 자동 테스트로 확인했습니다.</p></div>
+    </div>
+
+    <h2>자료와 한계</h2>
+    <div class="limits">
+      <ul>
+        <li>공개 리뷰 일부로 만든 결과입니다. 전체 이용자의 의견으로 일반화하지 않습니다.</li>
+        <li>App Store 리뷰가 적어(150건) 리뷰 분석 대시보드의 결과는 사실상 Google Play 기준입니다.</li>
+        <li>최근 6개월 리뷰가 57건뿐이라 최근 추세는 표본이 작습니다.</li>
+        <li>정답 라벨의 일부는 AI 판정입니다. 정확도 89.7%는 그 정답과의 일치도입니다.</li>
+        <li>실제 리뷰와 샘플 데이터를 섞지 않고, 화면에 데이터 유형을 표시합니다.</li>
+      </ul>
+    </div>
+  </main>
+
+  <footer>
+    <span>2026 NI2.0 AID 해커톤 7팀 카페인 중독</span>
+    <a href="https://github.com/K-MIN-SEC/ni2-hackathon-team07-kim-min-seok">GitHub 저장소</a>
+  </footer>
+</div>
+<script>
+(function () {
+  var root = document.documentElement, btn = document.getElementById("themeBtn");
+  function isDark() { return root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; }
+  function sync() { btn.textContent = isDark() ? "라이트 모드로 보기" : "다크 모드로 보기"; }
+  try { var t = localStorage.getItem("dt-theme"); if (t) root.dataset.theme = t; } catch (e) {}
+  btn.addEventListener("click", function () {
+    root.dataset.theme = isDark() ? "light" : "dark";
+    try { localStorage.setItem("dt-theme", root.dataset.theme); } catch (e) {}
+    sync();
+  });
+  sync();
+})();
+</script>
+</body>
+</html>
