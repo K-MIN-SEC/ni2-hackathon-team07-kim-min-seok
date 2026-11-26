@@ -10,7 +10,7 @@
 > 👉 결과 대시보드는 [`dashboard/dashboard.html`](dashboard/dashboard.html)을 내려받아 브라우저로 열면 됩니다. 인터넷 연결 없이 열립니다.
 > 👉 진행 과정과 판단 근거, 수치는 [`docs/WORK_SUMMARY.md`](docs/WORK_SUMMARY.md)에 자세히 정리했습니다.
 >
-> 2026 NI2.0 AID 해커톤 7팀 저장소 안의 `review-analysis/` 폴더입니다. 저장소 루트에 있는 오토 밸런싱 도구와는 별개의 작업입니다.
+> 2026 NI2.0 AID 해커톤 7팀 저장소 안의 `review-analysis/` 폴더입니다. 팀 프로젝트 전체 설명은 [저장소 루트 README](../README.md)를 보세요.
 
 ---
 
