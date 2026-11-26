@@ -90,5 +90,77 @@
     "collectedCount": 10,
     "publishedAtMin": "2022-06-13",
     "publishedAtMax": "2025-05-17"
+  },
+  {
+    "collectionId": "C-daltoki-gp-web-newest",
+    "platform": "Google Play",
+    "sortOrder": "newest",
+    "deviceFilter": "전화",
+    "requestedCount": null,
+    "selectionMethod": "웹 스토어 > 리뷰 모두 보기 > 기기 \"전화\" > 정렬 \"최신\" > 화면에 로드된 처음 200건 (실제 분포용)",
+    "gameId": "daltoki",
+    "locale": "ko-KR",
+    "collectedAt": "2026-11-26",
+    "dataType": "actual",
+    "collectionTool": "브라우저 화면 열람 + 지문 대조 검증(review-analysis/data/data-sources.md 9장)",
+    "excludedFields": [
+      "작성자 닉네임",
+      "프로필 이미지",
+      "앱 버전(웹 미표시)",
+      "개발자 답변",
+      "리뷰 원문 전문"
+    ],
+    "collectionGroup": "gp_web_newest",
+    "collectedCount": 180,
+    "publishedAtMin": "2025-06-03",
+    "publishedAtMax": "2026-08-15"
+  },
+  {
+    "collectionId": "C-daltoki-gp-web-rating1",
+    "platform": "Google Play",
+    "sortOrder": "newest",
+    "deviceFilter": "전화",
+    "requestedCount": null,
+    "selectionMethod": "웹 스토어 > 리뷰 모두 보기 > 정렬 \"최신\" > 별표 평점 \"별 1개\" > 처음 150건 (부정 보강용, 분포 계산 제외)",
+    "gameId": "daltoki",
+    "locale": "ko-KR",
+    "collectedAt": "2026-11-26",
+    "dataType": "actual",
+    "collectionTool": "브라우저 화면 열람 + 지문 대조 검증(review-analysis/data/data-sources.md 9장)",
+    "excludedFields": [
+      "작성자 닉네임",
+      "프로필 이미지",
+      "앱 버전(웹 미표시)",
+      "개발자 답변",
+      "리뷰 원문 전문"
+    ],
+    "collectionGroup": "gp_web_rating1_supplement",
+    "collectedCount": 113,
+    "publishedAtMin": "2023-04-21",
+    "publishedAtMax": "2025-06-03"
+  },
+  {
+    "collectionId": "C-daltoki-gp-web-rating2",
+    "platform": "Google Play",
+    "sortOrder": "newest",
+    "deviceFilter": "전화",
+    "requestedCount": null,
+    "selectionMethod": "웹 스토어 > 리뷰 모두 보기 > 정렬 \"최신\" > 별표 평점 \"별 2개\" > 표시된 118건 전체 (부정 보강용, 분포 계산 제외)",
+    "gameId": "daltoki",
+    "locale": "ko-KR",
+    "collectedAt": "2026-11-26",
+    "dataType": "actual",
+    "collectionTool": "브라우저 화면 열람 + 지문 대조 검증(review-analysis/data/data-sources.md 9장)",
+    "excludedFields": [
+      "작성자 닉네임",
+      "프로필 이미지",
+      "앱 버전(웹 미표시)",
+      "개발자 답변",
+      "리뷰 원문 전문"
+    ],
+    "collectionGroup": "gp_web_rating2_supplement",
+    "collectedCount": 113,
+    "publishedAtMin": "2021-06-28",
+    "publishedAtMax": "2025-05-30"
   }
 ]

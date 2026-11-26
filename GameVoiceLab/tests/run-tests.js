@@ -11,7 +11,15 @@ const A = require('../js/analytics.js');
 const L = require('../js/data-loader.js');
 
 const DATA_DIR = path.join(__dirname, '..', 'data');
-const load = () => Object.fromEntries(L.FILES.map(k => [k, JSON.parse(fs.readFileSync(path.join(DATA_DIR, k + '.json'), 'utf8'))]));
+const loadAll = () => Object.fromEntries(L.FILES.map(k => [k, JSON.parse(fs.readFileSync(path.join(DATA_DIR, k + '.json'), 'utf8'))]));
+// 기존 손계산 기준값(19.12)은 GVL 직접 분류분(리뷰 60·의견 111)에 대한 것 → 회귀 기준으로 그 부분집합을 사용
+const load = () => {
+  const d = loadAll();
+  d.reviews = d.reviews.filter(r => (r.labelSource || 'gvl_manual') === 'gvl_manual');
+  const ids = new Set(d.reviews.map(r => r.reviewId));
+  d.opinions = d.opinions.filter(o => ids.has(o.reviewId));
+  return d;
+};
 const clone = x => JSON.parse(JSON.stringify(x));
 
 // ---- 손계산용 소형 픽스처 (설명용 가상 데이터, 실제 데이터 아님) ----
@@ -63,6 +71,8 @@ qa('QA-001', '실제 데이터 불러오기·검증', () => {
   assert.strictEqual(d.opinions.length, 111);
   const fx = L.validateData(fixture());
   assert.deepStrictEqual(fx.errors, []);
+  const all = loadAll();
+  assert.deepStrictEqual(L.validateData(all).errors, []);
 });
 
 // QA-002 중복 리뷰 검출
@@ -288,6 +298,47 @@ qa('QA-017', '실제·샘플 데이터 분리', () => {
   assert.strictEqual(A.applyFilters(mixed, { dataType: 'actual' }).opinions.length, 111);
   assert.strictEqual(A.applyFilters(mixed, { dataType: 'sample' }).reviews.length, 3);
   assert.ok(real.reviews.every(r => r.dataType === 'actual'));
+});
+
+// QA-018 별점 보강분은 기본 집계에서 제외 (데이터 확장, project-plan.md 21장)
+qa('QA-018', '보강분 기본 제외·선택 포함', () => {
+  const d = loadAll();
+  const dist = d.reviews.filter(r => (r.sampleRole || 'distribution') === 'distribution');
+  const sup = d.reviews.filter(r => r.sampleRole === 'supplement');
+  assert.ok(sup.length > 0, '보강분이 있어야 함');
+  const def = A.applyFilters(d, { dataType: 'actual' });
+  assert.strictEqual(def.reviews.length, dist.length);
+  assert.strictEqual(def.excludedSupplement, sup.length);
+  assert.ok(def.reviews.every(r => (r.sampleRole || 'distribution') === 'distribution'));
+  const all = A.applyFilters(d, { dataType: 'actual', sampleScope: 'all' });
+  assert.strictEqual(all.reviews.length, d.reviews.length);
+  // 보강분은 1·2점만
+  assert.ok(sup.every(r => r.rating === 1 || r.rating === 2));
+  // 분류 출처 필터
+  const team = A.applyFilters(d, { dataType: 'actual', labelSource: 'team' });
+  assert.ok(team.reviews.length > 0 && team.reviews.every(r => r.labelSource.startsWith('team_')));
+  const man = A.applyFilters(d, { dataType: 'actual', labelSource: 'gvl_manual' });
+  assert.strictEqual(man.reviews.length, 60);
+});
+
+// QA-019 팀원 라벨 변환분 무결성
+qa('QA-019', '팀원 라벨 변환분 무결성', () => {
+  const d = loadAll();
+  const imported = d.reviews.filter(r => (r.labelSource || '').startsWith('team_'));
+  const manualExt = new Set(d.reviews.filter(r => (r.labelSource || 'gvl_manual') === 'gvl_manual').map(r => r.platform + r.externalReviewId));
+  assert.ok(imported.length > 0);
+  for (const r of imported) {
+    assert.ok(!manualExt.has(r.platform + r.externalReviewId), '직접 분류분과 중복 ' + r.reviewId);
+    assert.ok(r.summary.startsWith('[자동]'), '자동 요약 표시 ' + r.reviewId);
+    assert.strictEqual(r.originalText, null);
+    assert.strictEqual(r.appVersion, null);
+  }
+  const ids = new Set(imported.map(r => r.reviewId));
+  const ops = d.opinions.filter(o => ids.has(o.reviewId));
+  assert.ok(ops.every(o => o.labelSource && o.labelSource.startsWith('team_')));
+  assert.ok(ops.every(o => o.evidenceText === null || Array.from(o.evidenceText).length <= 40));
+  assert.ok(ops.filter(o => o.verificationStatus === 'on_hold').every(o => /혼합/.test(o.holdReason)));
+  assert.ok(imported.every(r => ops.some(o => o.reviewId === r.reviewId)), '의견 없는 변환 리뷰');
 });
 
 // ---- report ----

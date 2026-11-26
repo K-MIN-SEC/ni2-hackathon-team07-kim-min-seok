@@ -402,6 +402,7 @@ const reviews = R.map(([code, g, pf, ext, rating, pub, summary]) => ({
   platform: pf === 'google' ? 'Google Play' : 'App Store', rating,
   originalText: null, summary, publishedAt: toKstDate(pub), publishedAtRaw: pub, collectedAt: COLLECTED,
   sourceUrl: pf === 'google' ? gpUrl(g, ext) : asUrl(g), appVersion: null, dataType: 'actual',
+  helpfulCount: null, sampleRole: 'distribution', labelSource: 'gvl_manual',
 }));
 const counter = {};
 const opinions = OP.map(([code, cat, s, ot, kw, sum]) => {
@@ -412,7 +413,7 @@ const opinions = OP.map(([code, cat, s, ot, kw, sum]) => {
   if ([...ev].length > EXCERPT_MAX) throw new Error(`excerpt too long (${[...ev].length}) ${key}`);
   return { opinionId: `O-${key}`, reviewId: 'R-' + code, categoryId: cat, sentiment: s,
     otherType: ot, keyword: kw, summary: sum, evidenceText: ev,
-    verificationStatus: HOLD[key] ? 'on_hold' : 'unreviewed', holdReason: HOLD[key] || null };
+    verificationStatus: HOLD[key] ? 'on_hold' : 'unreviewed', holdReason: HOLD[key] || null, labelSource: 'gvl_manual' };
 });
 for (const k of Object.keys(HOLD)) if (!opinions.some(o => o.opinionId === 'O-' + k)) throw new Error('hold without opinion ' + k);
 for (const o of opinions) {
@@ -422,6 +423,52 @@ for (const o of opinions) {
 const unusedEv = Object.keys(EV).filter(k => !opinions.some(o => o.opinionId === 'O-' + k));
 if (unusedEv.length) throw new Error('excerpt without opinion: ' + unusedEv.join(', '));
 const categories = CATS.map(([id, name, scope]) => ({ categoryId: id, name, scope }));
+
+// ---- 데이터 확장(2026-11-26): 스토어 웹 열람 확인 리뷰 + 팀원 라벨 변환분 병합 ----
+// 생성: python tools/convert_team_labels.py → tools/generated/team_web_import.json
+const IMPORT_PATH = path.join(__dirname, 'generated', 'team_web_import.json');
+const WEB_COLLECTIONS = {
+  gp_web_newest: { collectionId: 'C-daltoki-gp-web-newest', platform: 'Google Play', sortOrder: 'newest', deviceFilter: '전화', requestedCount: null,
+    selectionMethod: '웹 스토어 > 리뷰 모두 보기 > 기기 "전화" > 정렬 "최신" > 화면에 로드된 처음 200건 (실제 분포용)' },
+  gp_web_rating1_supplement: { collectionId: 'C-daltoki-gp-web-rating1', platform: 'Google Play', sortOrder: 'newest', deviceFilter: '전화', requestedCount: null,
+    selectionMethod: '웹 스토어 > 리뷰 모두 보기 > 정렬 "최신" > 별표 평점 "별 1개" > 처음 150건 (부정 보강용, 분포 계산 제외)' },
+  gp_web_rating2_supplement: { collectionId: 'C-daltoki-gp-web-rating2', platform: 'Google Play', sortOrder: 'newest', deviceFilter: '전화', requestedCount: null,
+    selectionMethod: '웹 스토어 > 리뷰 모두 보기 > 정렬 "최신" > 별표 평점 "별 2개" > 표시된 118건 전체 (부정 보강용, 분포 계산 제외)' },
+  ios_web_default: { collectionId: 'C-daltoki-ios-web', platform: 'App Store', sortOrder: 'store_default', deviceFilter: 'iPhone', requestedCount: null,
+    selectionMethod: '웹 스토어 평가 및 리뷰 페이지 기본 노출 10건' },
+};
+let imported = null;
+if (fs.existsSync(IMPORT_PATH)) {
+  imported = JSON.parse(fs.readFileSync(IMPORT_PATH, 'utf8'));
+  for (const [g, c] of Object.entries(WEB_COLLECTIONS)) {
+    COLLECTIONS.push({ ...c, gameId: 'daltoki', locale: 'ko-KR', collectedAt: COLLECTED, dataType: 'actual',
+      collectionTool: '브라우저 화면 열람 + 지문 대조 검증(review-analysis/data/data-sources.md 9장)',
+      excludedFields: ['작성자 닉네임', '프로필 이미지', '앱 버전(웹 미표시)', '개발자 답변', '리뷰 원문 전문'], collectionGroup: g });
+  }
+  for (const r of imported.reviews) {
+    const c = WEB_COLLECTIONS[r.collectionGroup];
+    if (!c) throw new Error('unknown collection group ' + r.collectionGroup);
+    reviews.push({
+      reviewId: 'R-' + r.code, externalReviewId: r.externalReviewId, gameId: r.gameId, collectionId: c.collectionId,
+      platform: r.platform, rating: r.rating, originalText: null, summary: r.summary,
+      publishedAt: r.publishedAt, publishedAtRaw: r.publishedAtRaw, collectedAt: r.collectedAt || COLLECTED,
+      sourceUrl: r.sourceUrl, appVersion: null, dataType: 'actual',
+      helpfulCount: r.helpfulCount, sampleRole: r.sampleRole, labelSource: r.labelSource, collectionGroups: r.collectionGroups,
+    });
+  }
+  for (const o of imported.opinions) {
+    if (o.evidenceText !== null && [...o.evidenceText].length > EXCERPT_MAX) throw new Error('import excerpt too long ' + o.opinionCode);
+    if ((o.verificationStatus === 'on_hold') !== (o.holdReason !== null)) throw new Error('import holdReason ' + o.opinionCode);
+    opinions.push({ opinionId: 'O-' + o.opinionCode, reviewId: 'R-' + o.reviewCode, categoryId: o.categoryId, sentiment: o.sentiment,
+      otherType: o.otherType, keyword: o.keyword, summary: o.summary, evidenceText: o.evidenceText,
+      verificationStatus: o.verificationStatus, holdReason: o.holdReason, labelSource: o.labelSource });
+  }
+  for (const k of imported.keywords) {
+    const ex = KEYWORD_LIST.find(([kw]) => kw === k.keyword);
+    if (ex && ex[1] !== k.categoryId) throw new Error(`import keyword category conflict ${k.keyword}`);
+    if (!ex) KEYWORD_LIST.push([k.keyword, k.categoryId]);
+  }
+}
 
 // integrity checks
 const rid = new Set(reviews.map(r => r.reviewId));
@@ -441,7 +488,7 @@ const collections = COLLECTIONS.map(c => {
   const d = rs.map(r => r.publishedAt).filter(Boolean).sort();
   if (c.requestedCount != null && rs.length !== c.requestedCount) throw new Error('count mismatch ' + c.collectionId);
   return { ...c, collectedCount: rs.length, publishedAtMin: d[0] || null, publishedAtMax: d[d.length - 1] || null };
-});
+}).filter(c => c.collectedCount > 0 || !c.collectionGroup); // 웹 묶음 중 리뷰가 모두 직접 분류분과 겹쳐 비는 묶음은 제외
 for (const r of reviews) {
   const c = collections.find(x => x.collectionId === r.collectionId);
   if (!c || c.gameId !== r.gameId || c.platform !== r.platform) throw new Error('review collection ' + r.reviewId);

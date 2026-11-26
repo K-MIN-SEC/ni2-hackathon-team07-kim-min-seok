@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>달토끼 리뷰 분석</title>
+<title>리뷰 분석</title>
 <style>
 :root {
   color-scheme: light;
@@ -97,23 +97,161 @@ details > summary { cursor: pointer; color: var(--ink-2); font-size: 12px; margi
 .sm-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 @media (max-width: 860px) { .sm-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
 .sm-title { font-size: 12px; color: var(--ink-2); font-weight: 600; margin-bottom: 2px; }
+
+/* ---- 가독성·편의성 개선 (2026-11-26) ---- */
+nav a.active { background: var(--accent-wash); color: var(--ink); font-weight: 600; }
+nav a .n { color: var(--muted); margin-right: 3px; font-variant-numeric: tabular-nums; }
+h2 .n { color: var(--accent); margin-right: 6px; }
+h2 a.anchor { color: var(--muted); text-decoration: none; font-weight: 400; font-size: 14px; margin-left: 6px; opacity: 0; }
+h2:hover a.anchor, h2 a.anchor:focus { opacity: 1; }
+.summary { margin-top: 12px; }
+.summary h2 { font-size: 15px; margin-bottom: 8px; }
+.summary ul { margin: 0; padding-left: 0; list-style: none; display: grid; gap: 8px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 860px) { .summary ul { grid-template-columns: 1fr; } }
+.summary li { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.5; }
+.summary li .ico { flex: none; width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center; font-size: 12px; font-weight: 700; color: #fff; }
+.summary li b { color: var(--ink); }
+.summary li .go { color: var(--accent); text-decoration: none; white-space: nowrap; font-size: 12px; }
+.quote { line-height: 1.6; }
+.quote .qt { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.quote.open .qt { display: block; }
+.quote .more { background: none; border: 0; padding: 0; color: var(--accent); font: inherit; font-size: 12px; cursor: pointer; }
+details > summary { list-style: none; display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border: 1px solid var(--ring); border-radius: 999px; background: var(--surface); }
+details > summary::-webkit-details-marker { display: none; }
+details > summary::before { content: "▸"; font-size: 10px; color: var(--muted); }
+details[open] > summary::before { content: "▾"; }
+details > summary:hover { color: var(--ink); background: var(--surface-2); }
+.preview { color: var(--muted); font-size: 12px; margin-left: 4px; }
+.toolbar .actions { display: flex; gap: 6px; }
+#toTop { position: fixed; right: 16px; bottom: 16px; z-index: 20; display: none; }
+#toTop.show { display: inline-block; }
+.hint { color: var(--muted); font-size: 11px; margin-top: 4px; }
+@media (hover: none) { .hint.hover-only { display: none; } }
+/* ---- 클릭해서 리뷰 보기 ---- */
+.clk { cursor: pointer; }
+.chart path.clk, .chart rect.clk { transition: opacity .12s; }
+.chart path.clk:hover { opacity: .78; }
+.chart rect.clk:hover { fill: var(--accent-wash); }
+.chart .clk:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.chart text.clk:hover { fill: var(--accent) !important; text-decoration: underline; }
+button.linkish { background: none; border: 0; padding: 0; color: inherit; font: inherit; cursor: pointer; text-align: inherit; }
+button.linkish:hover { color: var(--accent); text-decoration: underline; }
+button.linkish.count { color: var(--accent); }
+tr.clk:hover td { background: var(--accent-wash); }
+.tile.clk { cursor: pointer; transition: border-color .12s; }
+.tile.clk:hover { border-color: var(--accent); }
+.pill.clk:hover { background: var(--accent-wash); color: var(--ink); }
+.tip .act { margin-top: 6px; padding-top: 5px; border-top: 1px solid var(--ring); color: var(--accent); font-size: 11px; }
+.allbtn { margin-top: 6px; font-size: 12px; background: var(--accent-wash); color: var(--ink); border: 0; border-radius: 999px; padding: 3px 10px; cursor: pointer; font-family: inherit; }
+.allbtn:hover { outline: 1px solid var(--accent); }
+.drawer-bg { position: fixed; inset: 0; background: rgba(0,0,0,.30); z-index: 60; display: none; }
+.drawer-bg.open { display: block; }
+.drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(620px, 100vw); background: var(--page); border-left: 1px solid var(--ring);
+  z-index: 61; display: none; flex-direction: column; box-shadow: -10px 0 32px rgba(0,0,0,.18); }
+.drawer.open { display: flex; }
+.dr-head { padding: 14px 16px 10px; border-bottom: 1px solid var(--grid); background: var(--surface); }
+.dr-head .row1 { display: flex; gap: 10px; align-items: flex-start; }
+.dr-head h3 { margin: 0; font-size: 16px; font-weight: 650; flex: 1; }
+.dr-head .crumb { color: var(--muted); font-size: 12px; margin-top: 2px; }
+.dr-tools { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+.dr-tools input, .dr-tools select { font: inherit; font-size: 12px; padding: 5px 8px; border: 1px solid var(--ring); border-radius: 6px; background: var(--page); color: var(--ink); }
+.dr-tools input { flex: 1 1 160px; min-width: 0; }
+.chips { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--ring); background: var(--page); color: var(--ink-2); border-radius: 999px; padding: 2px 9px; font: inherit; font-size: 12px; cursor: pointer; }
+.chip i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.chip.on { background: var(--accent-wash); color: var(--ink); border-color: var(--accent); font-weight: 600; }
+.chip[disabled] { opacity: .4; cursor: default; }
+.dr-list { overflow-y: auto; padding: 12px 16px 28px; flex: 1; }
+.dr-count { font-size: 12px; color: var(--ink-2); margin-bottom: 8px; }
+.dr-warn { color: var(--neg); font-size: 12px; margin-top: 4px; }
+.rv { background: var(--surface); border: 1px solid var(--ring); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; }
+.rv .top { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 12px; color: var(--ink-2); }
+.rv .stars { color: var(--mix); letter-spacing: 1px; font-size: 12px; }
+.rv .sb { padding: 1px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+.rv .ttl { font-weight: 600; margin-top: 6px; }
+.rv .tx { margin-top: 6px; font-size: 13.5px; line-height: 1.65; white-space: pre-wrap; word-break: break-word;
+  display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
+.rv.open .tx { display: block; }
+.rv .tp { margin-top: 6px; }
+.rv .tp .pill { font-size: 11px; }
+.rv .tp .pill b { font-weight: 600; }
+.rv .exp { background: none; border: 0; padding: 0; color: var(--accent); font: inherit; font-size: 12px; cursor: pointer; margin-top: 2px; }
+mark { background: rgba(237,161,0,.30); color: inherit; border-radius: 2px; padding: 0 1px; }
+.dr-more { display: block; margin: 8px auto 0; }
+/* ---- CSV 불러오기 ---- */
+.ds-badge { font-size: 12px; font-weight: 600; vertical-align: middle; padding: 2px 9px; border-radius: 999px; background: var(--surface-2); color: var(--ink-2); margin-left: 6px; }
+.ds-badge.example { background: rgba(237,161,0,.18); color: var(--ink); }
+.ds-badge.user { background: var(--accent-wash); color: var(--ink); }
+label.upload { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; background: var(--accent); color: #fff; border: 1px solid var(--accent);
+  border-radius: 6px; padding: 4px 12px; font-size: 13px; font-weight: 600; }
+label.upload::before { content: "⇪"; font-size: 12px; }
+label.upload:hover { filter: brightness(1.05); }
+label.upload:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+.upload-note { margin: -6px 0 8px; }
+.upload-note.err { color: var(--neg); background: rgba(227,73,72,.08); }
+.csv-help { margin: 0 0 12px; }
+.csv-help-body { background: var(--surface); border: 1px solid var(--ring); border-radius: 8px; padding: 10px 12px; margin-top: 6px; }
+.csv-help-body table { margin: 6px 0; }
+.csv-help-body code { background: var(--surface-2); padding: 0 4px; border-radius: 4px; font-size: 12px; }
+body.dragging .wrap { outline: 3px dashed var(--accent); outline-offset: -8px; }
+@media print {
+  .drawer, .drawer-bg, .actions, .csv-help, .upload-note { display: none !important; }
+  nav, #themeBtn, #printBtn, #toTop, .tip, .toggle-table, .seg { display: none !important; }
+  body { background: #fff; }
+  .card { break-inside: avoid; }
+  section { break-before: auto; }
+  details > summary { border: 0; padding: 0; }
+  .quote .qt { display: block; }
+}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="toolbar">
     <header>
-      <h1>달토끼 키우기 스토어 리뷰 분석</h1>
+      <h1>리뷰 분석 <span class="ds-badge" id="dsBadge"></span></h1>
       <p id="scope"></p>
     </header>
-    <button class="theme" id="themeBtn" type="button">테마 전환</button>
+    <div class="actions">
+      <label class="theme upload" title="라벨이 붙은 리뷰 CSV를 불러오면 모든 비율·분포를 그 파일로 다시 계산합니다">
+        CSV 불러오기<input type="file" id="csvInput" accept=".csv,text/csv" hidden>
+      </label>
+      <button class="theme" id="exampleBtn" type="button" hidden>예시 자료로 돌아가기</button>
+      <button class="theme" id="printBtn" type="button" title="모든 접힌 리뷰를 펼친 상태로 인쇄/PDF 저장">인쇄·PDF</button>
+      <button class="theme" id="themeBtn" type="button">테마 전환</button>
+    </div>
   </div>
+  <div class="callout small upload-note" id="uploadNote"></div>
+  <details class="small csv-help" id="csvHelp">
+    <summary>CSV 형식 안내</summary>
+    <div class="csv-help-body">
+      <p>이 대시보드는 <b>분류(라벨)가 끝난 리뷰 CSV</b>를 읽어 브라우저 안에서 모든 수치를 계산합니다. 파일은 어디에도 전송되지 않습니다.</p>
+      <table>
+        <tr><th>열</th><th>필수</th><th>설명</th></tr>
+        <tr><td><code>content</code></td><td>필수</td><td>리뷰 본문</td></tr>
+        <tr><td><code>date</code></td><td>필수</td><td>작성 시각 (YYYY-MM-DD 또는 YYYY-MM-DD HH:MM:SS)</td></tr>
+        <tr><td><code>rating</code></td><td>필수</td><td>별점 1~5</td></tr>
+        <tr><td><code>sentiment</code></td><td>필수</td><td>리뷰 전체 감성: 긍정·부정·중립·혼합</td></tr>
+        <tr><td><code>sent_&lt;주제&gt;</code></td><td>필수(1개 이상)</td><td>주제별 감성. 예: <code>sent_과금</code>, <code>sent_버그</code>, <code>sent_일반</code>. 언급 없으면 빈칸</td></tr>
+        <tr><td><code>keywords</code></td><td>선택</td><td><code>주제/키워드</code>를 <code>|</code>로 연결. 예: <code>버그/튕김|과금/뽑기</code></td></tr>
+        <tr><td><code>version</code>, <code>thumbs_up</code>, <code>store</code>, <code>title</code>, <code>review_id</code>, <code>topics</code>, <code>label_source</code></td><td>선택</td><td>버전별 분석·좋아요 가중치·스토어 구분 등에 사용</td></tr>
+      </table>
+      <p class="muted">라벨이 없는 원본 리뷰는 먼저 <code>python scripts/ml_classify.py predict 원본.csv 결과.csv</code>로 분류한 뒤 결과 CSV를 불러오세요. 형식은 <code>data/reviews_labeled.csv</code>와 같습니다.</p>
+      <button class="theme" type="button" id="templateBtn">빈 양식 CSV 내려받기</button>
+    </div>
+  </details>
 
   <div class="grid g4" id="kpis"></div>
 
-  <nav>
-    <a href="#s-topic">주제별 감성</a><a href="#s-kw">키워드</a><a href="#s-prio">개선 우선순위</a>
-    <a href="#s-good">지켜야 할 장점</a><a href="#s-trend">추이</a><a href="#s-ver">버전별</a><a href="#s-method">방법·검수</a>
+  <div class="card summary" id="summaryCard">
+    <h2>한눈에 보기</h2>
+    <ul id="summaryList"></ul>
+    <p class="hint">요약은 아래 각 섹션의 계산 결과에서 자동으로 뽑은 문장입니다. 근거는 "자세히"를 눌러 해당 섹션에서 확인하세요.</p>
+  </div>
+
+  <nav id="secNav">
+    <a href="#s-topic"><span class="n">1</span>주제별 감성</a><a href="#s-kw"><span class="n">2</span>키워드</a><a href="#s-prio"><span class="n">3</span>개선 우선순위</a>
+    <a href="#s-good"><span class="n">4</span>지켜야 할 장점</a><a href="#s-ver"><span class="n">5</span>버전별 추이</a><a href="#s-method"><span class="n">6</span>방법·검수</a>
   </nav>
 
   <section id="s-topic">
@@ -145,7 +283,8 @@ details > summary { cursor: pointer; color: var(--ink-2); font-size: 12px; margi
       <div id="kwHead" class="small muted" style="margin-bottom:6px"></div>
       <div class="grid g2">
         <div><div class="sm-title">대표 키워드</div><div class="chart" id="kwChart"></div></div>
-        <div><div class="sm-title">자주 나온 표현 (원문 단어)</div><div class="chart" id="termChart"></div></div>
+        <div><div class="sm-title">자주 나온 표현 (원문 단어)</div><div class="chart" id="termChart"></div>
+          <p class="hint">원문 단어를 그대로 센 값이라 "하지", "스킬도"처럼 의미가 약한 단어가 섞일 수 있습니다. 해석은 왼쪽 대표 키워드를 기준으로 하세요.</p></div>
       </div>
     </div>
   </section>
@@ -169,27 +308,25 @@ details > summary { cursor: pointer; color: var(--ink-2); font-size: 12px; margi
     <div class="grid g3" id="goodCards"></div>
   </section>
 
-  <section id="s-trend">
-    <h2>월별 추이</h2>
-    <p class="sub">2022년 이후 리뷰 수가 크게 줄어서, 후반부 비율은 표본이 작은 점을 감안해야 합니다(막대에 마우스를 올리면 건수가 보입니다).</p>
-    <div class="grid g2">
-      <div class="card"><div class="sm-title">월별 리뷰 수</div><div class="chart" id="volChart"></div></div>
-      <div class="card"><div class="sm-title">월별 부정·혼합 리뷰 비율 (리뷰 10건 이상인 달)</div><div class="chart" id="negShareChart"></div></div>
-    </div>
-    <div class="card" style="margin-top:12px">
-      <div class="sm-title">분기별 주제별 부정·혼합 언급 수</div>
-      <p class="small muted" style="margin:0 0 8px">작은 차트마다 세로축 척도가 다릅니다. 모양(언제 튀었는지)을 보는 용도입니다.</p>
-      <div class="sm-grid" id="smallMultiples"></div>
-    </div>
-  </section>
-
   <section id="s-ver">
     <h2>버전별 추이</h2>
-    <p class="sub">리뷰가 30건 이상인 마이너 버전만 표시합니다. 리뷰를 쓴 시점의 앱 버전 기준입니다.</p>
-    <div class="card"><div class="sm-title">버전별 부정·혼합 리뷰 비율</div><div class="chart" id="verChart"></div></div>
+    <p class="sub" id="verSub">리뷰를 쓴 시점의 앱 버전(마이너 버전, 예: v1.32.x) 기준입니다. 막대·점을 클릭하면 그 버전의 리뷰를 볼 수 있습니다.</p>
+    <div class="grid g2">
+      <div class="card"><div class="sm-title">버전별 리뷰 수 <span class="muted">(전체 버전)</span></div><div class="chart" id="verVolChart"></div></div>
+      <div class="card"><div class="sm-title">버전별 부정·혼합 리뷰 비율 <span class="muted" id="verMinNote"></span></div><div class="chart" id="verChart"></div></div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <div class="sm-title">버전별 주제별 부정·혼합 언급 수</div>
+      <p class="small muted" style="margin:0 0 8px">작은 차트마다 세로축 척도가 다릅니다. 어느 버전에서 튀었는지 모양을 보는 용도입니다(리뷰가 충분한 버전만).</p>
+      <div class="sm-grid" id="smallMultiples"></div>
+    </div>
     <div class="card" style="margin-top:12px">
       <div class="sm-title">직전 버전 대비 변화가 컸던 업데이트</div>
       <div class="scroll"><table id="verTable"></table></div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <button class="toggle-table" data-target="verListTable" style="margin-top:0">버전별 수치 표로 보기</button>
+      <div class="scroll" id="verListTable" hidden></div>
     </div>
   </section>
 
@@ -201,10 +338,240 @@ details > summary { cursor: pointer; color: var(--ink-2); font-size: 12px; margi
     </div>
   </section>
 </div>
+<button class="theme" id="toTop" type="button" aria-label="맨 위로">▲ 맨 위로</button>
 <div class="tip" id="tip"></div>
+<div class="drawer-bg" id="drawerBg"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drTitle">
+  <div class="dr-head">
+    <div class="row1">
+      <div style="flex:1"><h3 id="drTitle">리뷰</h3><div class="crumb" id="drCrumb"></div></div>
+      <button class="theme" type="button" id="drClose" aria-label="닫기">닫기 ✕</button>
+    </div>
+    <div class="dr-tools">
+      <input type="search" id="drSearch" placeholder="이 목록 안에서 검색 (예: 튕김, 결제)" aria-label="리뷰 검색">
+      <select id="drSort" aria-label="정렬">
+        <option value="thumbs">좋아요 많은 순</option>
+        <option value="new">최신 순</option>
+        <option value="old">오래된 순</option>
+        <option value="low">별점 낮은 순</option>
+        <option value="high">별점 높은 순</option>
+      </select>
+      <select id="drStore" aria-label="스토어">
+        <option value="">전체 스토어</option><option value="g">Google Play</option><option value="a">App Store</option>
+      </select>
+    </div>
+    <div class="chips" id="drChips" aria-label="리뷰 전체 감성으로 거르기"></div>
+    <div class="dr-warn" id="drWarn" hidden></div>
+  </div>
+  <div class="dr-list" id="drList"></div>
+</aside>
 
 <script>
-const D = /*__DATA__*/null;
+const EMBED = /*__DATA__*/null;   // 예시 자료: 리뷰(reviews) + 불용어(stop) + 검수(audit)
+let D = null;                       // 현재 데이터셋의 집계 결과 (analyzeReviews 결과)
+let DS = {kind: "example", name: "", audit: null};
+
+/*ANALYZE-START*/
+// scripts/analyze.py 를 그대로 옮긴 집계. 입력 R = 내부 리뷰 레코드 배열, 출력 = analysis.json 과 같은 구조(+버전 보강)
+function analyzeReviews(R, opt) {
+  const SENTS = ["긍정", "혼합", "중립", "부정"], SC = {P: "긍정", M: "혼합", N: "중립", X: "부정"};
+  const TOP = opt.topics, STOPW = new Set(opt.stop || []);
+  const RECENT_DAYS = 182, K = 20, MIN_ITEM_N = 8, OTHER_TH = 0.03, VER_MIN = opt.verMin || 30;
+  const N = R.length;
+  const rnd = (x, k) => Math.round(x * Math.pow(10, k)) / Math.pow(10, k);
+  const log2p = x => Math.log2(1 + x);
+  const shift = (s, days) => new Date(Date.parse(s.replace(" ", "T") + "Z") - days * 864e5).toISOString().slice(0, 19).replace("T", " ");
+  const count = (arr, f) => arr.reduce((a, x) => a + (f(x) ? 1 : 0), 0);
+  const NM = c => c === "X" || c === "M";
+  const mean = (arr, f) => arr.length ? arr.reduce((a, x) => a + f(x), 0) / arr.length : 0;
+  const dist = rows => { const o = {}; rows.forEach(r => { o[r.r] = (o[r.r] || 0) + 1; }); return Object.fromEntries(Object.keys(o).sort().map(k => [k, o[k]])); };
+  const mostCommon = (m, n) => [...m.entries()].sort((a, b) => b[1] - a[1]).slice(0, n);
+  // 주제 묶기: 전체 리뷰 대비 3% 미만 주제 → '기타'
+  const share = {}; TOP.forEach(t => share[t] = rnd(count(R, r => r.ts[t]) / Math.max(N, 1), 4));
+  const other = TOP.filter(t => count(R, r => r.ts[t]) / Math.max(N, 1) < OTHER_TH);
+  const show = TOP.filter(t => !other.includes(t)).concat(other.length ? ["기타"] : [], opt.hasGeneral ? ["일반"] : []);
+  const gs = (r, t) => {
+    if (t !== "기타") return r.ts[t] ? SC[r.ts[t]] : "";
+    const vals = new Set(other.map(s => r.ts[s]).filter(Boolean).map(c => SC[c]));
+    if (!vals.size) return "";
+    if (vals.size === 1) return [...vals][0];
+    if ((vals.has("긍정") && vals.has("부정")) || vals.has("혼합")) return "혼합";
+    const rest = [...vals].filter(v => v !== "중립").sort();
+    return rest.length ? rest[0] : "중립";
+  };
+  const TOPLEN = TOP.slice().sort((a, b) => b.length - a.length);
+  const splitKw = k => { for (const tp of TOPLEN) if (k.startsWith(tp + "/")) { const kw = k.slice(tp.length + 1); return [tp, kw === "(기타표현)" ? "기타 표현" : kw]; } return [null, null]; };
+  const terms = (rows, n) => {
+    const c = new Map();
+    rows.forEach(r => new Set((r.t.match(/[가-힣A-Za-z]{2,}/g) || [])).forEach(w => { if (!STOPW.has(w)) c.set(w, (c.get(w) || 0) + 1); }));
+    return mostCommon(c, n);
+  };
+  const storeName = s => s === "g" ? "Google Play" : s === "a" ? "App Store" : (s || "기타");
+  const pickQuotes = (sub, n, minLen = 25, maxLen = 320) => {
+    let s = sub.filter(r => r.t.length >= minLen);
+    if (s.length < n) s = sub;
+    return s.map((r, i) => ({r, i, rank: log2p(r.th) - 1.5 * (r.nt - 1) - 1.5 * (r.t.length > 220 ? 1 : 0) + 0.002 * Math.min(r.t.length, 200)}))
+      .sort((a, b) => b.rank - a.rank || a.i - b.i).slice(0, n)
+      .map(({r}) => ({text: r.t.slice(0, maxLen) + (r.t.length > maxLen ? "…" : ""), rating: r.r, thumbs: r.th, date: r.d.slice(0, 10),
+                      store: storeName(r.s), version: r.v || ""}));
+  };
+  const dates = R.map(r => r.d).sort();
+  const end = dates[dates.length - 1] || "1970-01-01 00:00:00";
+  const recentStart = shift(end, RECENT_DAYS), last30 = shift(end, 30);
+  const isRecent = r => r.d > recentStart;
+  const R_recent = count(R, isRecent), R_base = N - R_recent;
+  const byStore = {}; R.forEach(r => (byStore[r.s] = byStore[r.s] || []).push(r));
+  const ls = {}; R.forEach(r => { if (r.ls) ls[r.ls] = (ls[r.ls] || 0) + 1; });
+  const out = {meta: {
+    n: N, stores: Object.fromEntries(Object.entries(byStore).map(([s, g]) => [s, g.length])),
+    start: (dates[0] || "").slice(0, 10), end: end.slice(0, 10), recent_start: recentStart.slice(0, 10), recent_ts: recentStart,
+    recent_n: R_recent, base_n: R_base, last30_n: count(R, r => r.d > last30), label_source: ls,
+    grouping: {other_threshold: OTHER_TH, other_topics: other, share}, topics: TOP, topics_shown: show,
+    avg_rating: rnd(mean(R, r => r.r), 2), rating_dist: dist(R),
+    store_stats: Object.fromEntries(Object.entries(byStore).map(([s, g]) => { const d2 = g.map(r => r.d).sort();
+      return [s, {name: storeName(s), n: g.length, start: d2[0].slice(0, 10), end: d2[d2.length - 1].slice(0, 10), avg: rnd(mean(g, r => r.r), 2), rating_dist: dist(g)}]; })),
+  }};
+  out.sentiment_overall = Object.fromEntries(SENTS.map(s => [s, count(R, r => SC[r.se] === s)]));
+  out.crosstab = show.map(t => {
+    const m = count(R, r => gs(r, t) !== ""); const row = {topic: t, n: m, share: rnd(m / Math.max(N, 1), 4)};
+    SENTS.forEach(s => { const c = count(R, r => gs(r, t) === s); row[s] = c; row[s + "_pct"] = rnd(c / Math.max(m, 1), 4); });
+    return row;
+  });
+  out.crosstab_review_level = show.map(t => ({topic: t, ...Object.fromEntries(SENTS.map(s => [s, count(R, r => gs(r, t) !== "" && SC[r.se] === s)]))}));
+  out.keywords = [];
+  show.filter(t => t !== "일반").forEach(t => {
+    const members = t === "기타" ? other : [t];
+    ["부정", "긍정", "혼합"].forEach(s => {
+      const sub = R.filter(r => gs(r, t) === s); if (!sub.length) return;
+      const c = new Map();
+      sub.forEach(r => new Set(r.k).forEach(k => { const [tp, kw] = splitKw(k); if (tp && members.includes(tp)) { const lab = t !== "기타" ? kw : (kw === tp ? tp : `${tp}·${kw}`); c.set(lab, (c.get(lab) || 0) + 1); } }));
+      out.keywords.push({topic: t, sentiment: s, n: sub.length,
+        keywords: mostCommon(c, 12).map(([k, v]) => ({kw: k, n: v, pct: rnd(v / sub.length, 4)})),
+        terms: terms(sub, 10).map(([k, v]) => ({kw: k, n: v, pct: rnd(v / sub.length, 4)}))});
+    });
+  });
+  // 개선 우선순위
+  const items = [];
+  TOP.forEach(tp => {
+    const kws = new Map();
+    R.forEach(r => { if (!NM(r.ts[tp])) return; new Set(r.k).forEach(k => { const [a, b] = splitKw(k); if (a === tp) { if (!kws.has(b)) kws.set(b, []); kws.get(b).push(r); } }); });
+    kws.forEach((sub, kw) => {
+      if (kw === "기타 표현" || sub.length < MIN_ITEM_N) return;
+      const n = sub.length, nr = count(sub, isRecent), nb = n - nr;
+      const pBase = R_base ? nb / R_base : 0, rate = (nr + K * pBase) / (R_recent + K);
+      const ratio = pBase > 0 ? rate / pBase : (nr ? 3 : 1);
+      items.push({topic: tp, kw, n, recent_n: nr, base_n: nb, last30_n: count(sub, r => r.d > last30),
+        thumbs: sub.reduce((a, r) => a + r.th, 0), W: rnd(sub.reduce((a, r) => a + log2p(r.th), 0), 2),
+        recent_rate: R_recent ? rnd(nr / R_recent, 4) : 0, base_rate: rnd(pBase, 4), ratio: rnd(ratio, 3),
+        G: rnd(Math.min(Math.max(ratio, 0), 3) / 3, 4), _sub: sub});
+    });
+  });
+  if (items.length) {
+    const nmax = Math.max(...items.map(i => i.n)), wmax = Math.max(...items.map(i => i.W)) || 1;
+    items.forEach(i => { i.score = rnd(100 * (0.5 * i.n / nmax + 0.3 * i.W / wmax + 0.2 * i.G), 1); i.quotes = pickQuotes(i._sub, 3); delete i._sub; });
+  }
+  out.priority = items.sort((a, b) => b.score - a.score);
+  const tsum = TOP.map(tp => {
+    const sub = R.filter(r => NM(r.ts[tp])), n = sub.length, nr = count(sub, isRecent), nb = n - nr;
+    const pBase = R_base ? nb / R_base : 0, rate = (nr + K * pBase) / (R_recent + K), ratio = pBase ? rate / pBase : 1;
+    return {topic: tp, n, recent_n: nr, W: rnd(sub.reduce((a, r) => a + log2p(r.th), 0), 2), ratio: rnd(ratio, 3), G: rnd(Math.min(ratio, 3) / 3, 4)};
+  });
+  const nm = Math.max(1, ...tsum.map(t => t.n)), wm = Math.max(...tsum.map(t => t.W)) || 1;
+  tsum.forEach(t => { t.score = rnd(100 * (0.5 * t.n / nm + 0.3 * t.W / wm + 0.2 * t.G), 1); });
+  out.priority_topics = tsum.sort((a, b) => b.score - a.score);
+  // 장점
+  out.strengths = TOP.map(tp => {
+    const pos = R.filter(r => r.ts[tp] === "P"); if (!pos.length) return null;
+    const c = new Map(); pos.forEach(r => new Set(r.k).forEach(k => { const [a, b] = splitKw(k); if (a === tp) c.set(b, (c.get(b) || 0) + 1); }));
+    const negn = count(R, r => r.ts[tp] === "X");
+    return {topic: tp, n: pos.length, neg_n: negn, mixed_n: count(R, r => r.ts[tp] === "M"), pos_ratio: rnd(pos.length / Math.max(pos.length + negn, 1), 4),
+            keywords: mostCommon(c, 6).map(([k, v]) => ({kw: k, n: v, pct: rnd(v / pos.length, 4)})), quotes: pickQuotes(pos, 3)};
+  }).filter(Boolean).sort((a, b) => b.n - a.n);
+  const genPos = R.filter(r => r.ts["일반"] === "P");
+  out.general_positive = {n: genPos.length, terms: terms(genPos, 15).map(([k, v]) => ({kw: k, n: v}))};
+  // 버전별 (마이너 버전). versions = VER_MIN건 이상, versions_all = 전체
+  const vkey = v => v.split(".").map(Number);
+  const vcmp = (a, b) => { const x = vkey(a), y = vkey(b); for (let i = 0; i < Math.max(x.length, y.length); i++) { const d = (x[i] || 0) - (y[i] || 0); if (d) return d; } return 0; };
+  const byMinor = new Map(); R.forEach(r => { if (r.mi) { if (!byMinor.has(r.mi)) byMinor.set(r.mi, []); byMinor.get(r.mi).push(r); } });
+  const verRow = (v, g) => {
+    const d2 = g.map(r => r.d).sort(), row = {version: v, n: g.length, first: d2[0].slice(0, 10), last: d2[d2.length - 1].slice(0, 10),
+      neg_share: rnd(count(g, r => NM(r.se)) / g.length, 4), neg_n: count(g, r => NM(r.se)), avg_rating: rnd(mean(g, r => r.r), 2)};
+    TOP.forEach(tp => { const c = count(g, r => NM(r.ts[tp])); row["neg_" + tp] = rnd(c / g.length, 4); row["negc_" + tp] = c; });
+    return row;
+  };
+  out.versions_all = [...byMinor.keys()].sort(vcmp).map(v => verRow(v, byMinor.get(v)));
+  const vs = out.versions_all.filter(v => v.n >= VER_MIN);
+  out.versions = vs; out.ver_min = VER_MIN;
+  const changes = [];
+  for (let i = 1; i < vs.length; i++) {
+    const a = vs[i - 1], b = vs[i], diff = b.neg_share - a.neg_share;
+    const g = byMinor.get(b.version);
+    changes.push({from: a.version, to: b.version, to_first: b.first, diff: rnd(diff, 4), from_share: a.neg_share, to_share: b.neg_share, n: b.n,
+      top_topic_changes: TOP.map(tp => [tp, b["neg_" + tp] - a["neg_" + tp]]).sort((x, y) => Math.abs(y[1]) - Math.abs(x[1])).slice(0, 3).map(([tp, x]) => ({topic: tp, diff: rnd(x, 4)})),
+      quotes: diff > 0 ? pickQuotes(g.filter(r => NM(r.se)), 2) : pickQuotes(g.filter(r => r.se === "P"), 1)});
+  }
+  out.version_changes = changes.sort((x, y) => Math.abs(y.diff) - Math.abs(x.diff)).slice(0, 8);
+  return out;
+}
+/*ANALYZE-END*/
+
+/* ---------- CSV 읽기 → 내부 리뷰 레코드 ---------- */
+function parseCSV(text) {
+  const rows = []; let row = [], f = "", q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) { if (c === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += c; }
+    else if (c === '"') q = true;
+    else if (c === ",") { row.push(f); f = ""; }
+    else if (c === "\n" || c === "\r") { if (c === "\r" && text[i + 1] === "\n") i++; row.push(f); rows.push(row); row = []; f = ""; }
+    else f += c;
+  }
+  if (f !== "" || row.length) { row.push(f); rows.push(row); }
+  return rows.filter(r => r.length > 1 || (r[0] || "").trim() !== "");
+}
+const SENT_IN = {"긍정": "P", "부정": "X", "중립": "N", "혼합": "M", positive: "P", negative: "X", neutral: "N", mixed: "M"};
+function normDate(s) {
+  s = String(s || "").trim().replace(/\//g, "-").replace("T", " ").replace(/Z$|[+-]\d\d:?\d\d$/, "");
+  const m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
+  if (!m) return null;
+  const p = n => String(n || 0).padStart(2, "0");
+  return `${m[1]}-${p(m[2])}-${p(m[3])} ${p(m[4])}:${p(m[5])}:${p(m[6])}`;
+}
+function toRecords(table) {
+  const head = table[0].map(h => h.replace(/^﻿/, "").trim());
+  const col = name => head.indexOf(name);
+  const need = ["content", "date", "rating", "sentiment"].filter(c => col(c) < 0);
+  const sentCols = head.filter(h => h.startsWith("sent_"));
+  if (need.length || !sentCols.length) {
+    throw new Error(`필수 열이 없습니다: ${need.concat(sentCols.length ? [] : ["sent_<주제> (1개 이상)"]).join(", ")}. ` +
+      `라벨이 없는 원본이면 먼저 ml_classify.py predict로 분류하세요.`);
+  }
+  const topics = sentCols.map(h => h.slice(5)).filter(t => t !== "일반");
+  const hasGeneral = sentCols.includes("sent_일반");
+  const get = (r, name) => { const i = col(name); return i < 0 ? "" : (r[i] || ""); };
+  const errs = []; const out = [];
+  table.slice(1).forEach((r, idx) => {
+    const line = idx + 2;
+    const d = normDate(get(r, "date")), rating = parseInt(get(r, "rating"), 10), se = SENT_IN[get(r, "sentiment").trim()];
+    if (!d || !(rating >= 1 && rating <= 5) || !se) { if (errs.length < 5) errs.push(`${line}행`); return; }
+    const ts = {};
+    sentCols.forEach(h => { const v = SENT_IN[(get(r, h) || "").trim()]; if (v) ts[h.slice(5)] = v; });
+    const ver = get(r, "version").trim(), mm = ver.match(/^(\d+\.\d+)/);
+    const st = get(r, "store").trim();
+    const topicsCol = get(r, "topics").trim();
+    out.push({i: get(r, "review_id") || String(line), s: st === "google_play" ? "g" : st === "app_store" ? "a" : (st || "o"),
+      d, r: rating, v: ver, mi: mm ? mm[1] : "", th: parseInt(get(r, "thumbs_up"), 10) || 0, ti: get(r, "title").trim(),
+      t: get(r, "content"), se, ts, k: get(r, "keywords").split("|").map(x => x.trim()).filter(Boolean), ls: get(r, "label_source").trim(),
+      nt: topicsCol ? topicsCol.split("|").length : Math.max(Object.keys(ts).length, 1)});
+  });
+  if (!out.length) throw new Error("읽을 수 있는 리뷰 행이 없습니다.");
+  return {rows: out, topics, hasGeneral, skipped: table.length - 1 - out.length, errs};
+}
+function loadDataset(rows, meta) {
+  D = analyzeReviews(rows, {topics: meta.topics, hasGeneral: meta.hasGeneral, stop: EMBED.stop});
+  D.reviews = rows; D.stop = EMBED.stop; D.recent_ts = D.meta.recent_ts;
+  DS = meta;
+}
 const SENTS = ["긍정", "혼합", "중립", "부정"];
 const SVAR = {"긍정": "--pos", "혼합": "--mix", "중립": "--neu", "부정": "--neg"};
 const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
@@ -228,10 +595,158 @@ function showTip(ev, html) {
   tip.style.left = x + "px"; tip.style.top = y + "px";
 }
 const hideTip = () => tip.style.display = "none";
-function bindTip(node, fn) {
-  node.addEventListener("mousemove", ev => showTip(ev, fn()));
+const CLICK_HINT = `<div class="act">클릭하면 해당 리뷰를 볼 수 있습니다</div>`;
+// onClick이 있으면: 마우스오버 = 수치, 클릭/Enter = 해당 리뷰 목록. 없으면 탭 시 수치만 표시(터치 기기)
+function bindTip(node, fn, onClick) {
+  node.addEventListener("mousemove", ev => showTip(ev, fn() + (onClick ? CLICK_HINT : "")));
   node.addEventListener("mouseleave", hideTip);
+  if (onClick) {
+    node.classList.add("clk"); node.setAttribute("tabindex", "0"); node.setAttribute("role", "button");
+    node.addEventListener("click", ev => { ev.stopPropagation(); hideTip(); onClick(); });
+    node.addEventListener("keydown", ev => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); onClick(); } });
+  } else {
+    node.addEventListener("click", ev => { ev.stopPropagation(); showTip(ev, fn()); });
+  }
 }
+document.addEventListener("click", hideTip);
+function clickable(node, onClick, label) {
+  node.classList.add("clk"); node.setAttribute("tabindex", "0"); node.setAttribute("role", "button");
+  if (label) node.setAttribute("aria-label", label);
+  node.addEventListener("click", ev => { ev.stopPropagation(); onClick(); });
+  node.addEventListener("keydown", ev => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); onClick(); } });
+}
+
+/* ---------- 리뷰 선택 규칙 (analyze.py 집계 규칙과 동일) ---------- */
+// 현재 데이터셋 기준 값들 (데이터셋을 바꿀 때 syncData()로 갱신)
+let R = [], SMALL = [], TOPICS8 = [], STOPSET = new Set();
+const SC = {P: "긍정", M: "혼합", N: "중립", X: "부정"}, CS = {"긍정": "P", "혼합": "M", "중립": "N", "부정": "X"};
+function syncData() {
+  R = D.reviews; SMALL = D.meta.grouping.other_topics; TOPICS8 = D.meta.topics; STOPSET = new Set(D.stop || []);
+  if (typeof tokCache !== "undefined") tokCache.clear();
+}
+const NEGMIX = c => c === "X" || c === "M";
+function gs(r, t) {                       // 표시 주제의 주제별 감성 (기타 = 작은 주제 합성)
+  if (t !== "기타") return r.ts[t] ? SC[r.ts[t]] : "";
+  const vals = new Set(SMALL.map(s => r.ts[s]).filter(Boolean).map(c => SC[c]));
+  if (!vals.size) return "";
+  if (vals.size === 1) return [...vals][0];
+  if ((vals.has("긍정") && vals.has("부정")) || vals.has("혼합")) return "혼합";
+  const rest = [...vals].filter(v => v !== "중립").sort();
+  return rest.length ? rest[0] : "중립";
+}
+function splitKw(k) {
+  for (const tp of TOPICS8.slice().sort((a, b) => b.length - a.length))
+    if (k.startsWith(tp + "/")) { const kw = k.slice(tp.length + 1); return [tp, kw === "(기타표현)" ? "기타 표현" : kw]; }
+  return [null, null];
+}
+function kwLabels(r, t) {                 // 키워드 분포 섹션의 표기 규칙
+  const members = t === "기타" ? SMALL : [t], out = new Set();
+  for (const k of r.k) { const [tp, kw] = splitKw(k); if (tp && members.includes(tp)) out.add(t !== "기타" ? kw : (kw === tp ? tp : `${tp}·${kw}`)); }
+  return out;
+}
+function rawKw(r, tp) { const out = new Set(); for (const k of r.k) { const [a, b] = splitKw(k); if (a === tp) out.add(b); } return out; }
+const tokCache = new Map();
+function tokens(r) {
+  if (!tokCache.has(r.i)) tokCache.set(r.i, new Set((r.t.match(/[가-힣A-Za-z]{2,}/g) || []).filter(w => !STOPSET.has(w))));
+  return tokCache.get(r.i);
+}
+const SEL = {
+  all: () => ({title: "분석한 전체 리뷰", fn: () => true, expected: D.meta.n}),
+  sent: s => ({title: `리뷰 전체 감성: ${s}`, fn: r => r.se === CS[s], expected: D.sentiment_overall[s]}),
+  negmix: () => ({title: "리뷰 전체 감성: 부정 또는 혼합", fn: r => NEGMIX(r.se), expected: D.sentiment_overall["부정"] + D.sentiment_overall["혼합"]}),
+  recent: () => ({title: `최근 6개월 리뷰 (${D.meta.recent_start} 이후)`, fn: r => r.d > D.recent_ts, expected: D.meta.recent_n}),
+  rating: k => ({title: `별점 ★${k} 리뷰`, fn: r => r.r === +k, expected: D.meta.rating_dist[k] || 0}),
+  topic: (t, n) => ({title: `주제 '${t}'를 언급한 리뷰`, fn: r => gs(r, t) !== "", expected: n}),
+  topicSent: (t, s, n) => ({title: `${t} · ${s}`, crumb: "주제별 감성 (그 주제에 대한 감성 기준)", fn: r => gs(r, t) === s, expected: n}),
+  kw: (t, s, kw, n) => ({title: `${s}·${t} 리뷰 중 '${kw}' 언급`, crumb: "감성 × 주제별 키워드 분포 · 대표 키워드", fn: r => gs(r, t) === s && kwLabels(r, t).has(kw), expected: n}),
+  term: (t, s, w, n) => ({title: `${s}·${t} 리뷰 중 원문 단어 '${w}'`, crumb: "감성 × 주제별 키워드 분포 · 자주 나온 표현", fn: r => gs(r, t) === s && tokens(r).has(w), expected: n, hl: [w]}),
+  prio: it => ({title: `${it.topic} · ${it.kw} (부정·혼합)`, crumb: "고쳐야 할 우선순위", fn: r => NEGMIX(r.ts[it.topic]) && rawKw(r, it.topic).has(it.kw), expected: it.n}),
+  prioTopic: t => ({title: `${t.topic} 주제 부정·혼합 리뷰`, crumb: "주제 단위 요약 점수", fn: r => NEGMIX(r.ts[t.topic]), expected: t.n}),
+  strength: s => ({title: `${s.topic} 긍정 리뷰`, crumb: "지켜야 할 장점", fn: r => r.ts[s.topic] === "P", expected: s.n}),
+  strengthKw: (s, k) => ({title: `${s.topic} 긍정 리뷰 중 '${k.kw}' 언급`, crumb: "지켜야 할 장점", fn: r => r.ts[s.topic] === "P" && rawKw(r, s.topic).has(k.kw), expected: k.n}),
+  general: g => ({title: "주제 없이 전반적 호평만 남긴 리뷰", crumb: "지켜야 할 장점", fn: r => r.ts["일반"] === "P", expected: g.n}),
+  minor: (v, n) => ({title: `앱 버전 v${v}.x 리뷰`, crumb: "버전별 추이 (리뷰 작성 시점 버전)", fn: r => r.mi === v, expected: n}),
+  minorNeg: v => ({title: `앱 버전 v${v.version}.x 부정·혼합 리뷰`, crumb: "버전별 부정·혼합 비율", fn: r => r.mi === v.version && NEGMIX(r.se), expected: v.neg_n}),
+  minorTopic: (tp, v) => ({title: `v${v.version}.x · ${tp} 부정·혼합 언급`, crumb: "버전별 주제별 부정·혼합 언급 수", fn: r => r.mi === v.version && NEGMIX(r.ts[tp]), expected: v["negc_" + tp]}),
+};
+
+/* ---------- 리뷰 목록 서랍 ---------- */
+const dr = {sel: null, base: [], sent: "", store: "", q: "", sort: "thumbs", shown: 40};
+const $ = id => document.getElementById(id);
+function openSel(sel) {
+  dr.sel = sel; dr.base = R.filter(sel.fn); dr.sent = ""; dr.store = ""; dr.q = ""; dr.sort = "thumbs"; dr.shown = 40;
+  $("drSearch").value = ""; $("drSort").value = "thumbs"; $("drStore").value = "";
+  $("drTitle").textContent = sel.title;
+  $("drCrumb").textContent = (sel.crumb ? sel.crumb + " · " : "") + `${fmt(dr.base.length)}건`;
+  const w = $("drWarn");
+  if (sel.expected != null && sel.expected !== dr.base.length) { w.hidden = false; w.textContent = `주의: 차트 수치(${fmt(sel.expected)}건)와 목록(${fmt(dr.base.length)}건)이 다릅니다.`; }
+  else w.hidden = true;
+  $("drawer").classList.add("open"); $("drawerBg").classList.add("open");
+  document.body.style.overflow = "hidden";
+  drRender();
+  $("drList").scrollTop = 0;
+  $("drClose").focus();
+}
+function closeDrawer() { $("drawer").classList.remove("open"); $("drawerBg").classList.remove("open"); document.body.style.overflow = ""; }
+const STARS = n => "★★★★★".slice(0, n) + "☆☆☆☆☆".slice(0, 5 - n);
+function sentBadge(c) {
+  const s = SC[c], dark = c === "M" || c === "N";
+  return `<span class="sb" style="background:var(${SVAR[s]});color:${dark ? "#0b0b0b" : "#fff"}">${s}</span>`;
+}
+function hl(text, words) {
+  let h = esc(text);
+  for (const w of words || []) if (w) h = h.split(esc(w)).join(`<mark>${esc(w)}</mark>`);
+  return h;
+}
+function drFiltered() {
+  const q = dr.q.trim().toLowerCase();
+  let xs = dr.base.filter(r => (!dr.sent || r.se === dr.sent) && (!dr.store || r.s === dr.store) && (!q || (r.ti + " " + r.t).toLowerCase().includes(q)));
+  const by = {thumbs: (a, b) => b.th - a.th || (b.d > a.d ? 1 : -1), new: (a, b) => (b.d > a.d ? 1 : -1), old: (a, b) => (a.d > b.d ? 1 : -1),
+              low: (a, b) => a.r - b.r || b.th - a.th, high: (a, b) => b.r - a.r || b.th - a.th}[dr.sort];
+  return xs.sort(by);
+}
+function drRender() {
+  const cnt = {}; dr.base.forEach(r => { if (!dr.store || r.s === dr.store) cnt[r.se] = (cnt[r.se] || 0) + 1; });
+  $("drChips").innerHTML = `<button type="button" class="chip ${dr.sent ? "" : "on"}" data-sent="">전체 ${fmt(dr.base.filter(r => !dr.store || r.s === dr.store).length)}</button>` +
+    ["P", "M", "N", "X"].map(c => `<button type="button" class="chip ${dr.sent === c ? "on" : ""}" data-sent="${c}" ${cnt[c] ? "" : "disabled"}><i style="background:var(${SVAR[SC[c]]})"></i>${SC[c]} ${fmt(cnt[c] || 0)}</button>`).join("");
+  const xs = drFiltered(), words = (dr.sel.hl || []).concat(dr.q.trim() ? [dr.q.trim()] : []);
+  const list = xs.slice(0, dr.shown).map(r => {
+    const topics = Object.entries(r.ts).filter(([t]) => t !== "일반").map(([t, c]) => `<span class="pill"><span class="dot" style="background:var(${SVAR[SC[c]]})"></span>${esc(t)} <b>${SC[c]}</b></span>`).join("");
+    return `<article class="rv"><div class="top"><span class="stars" aria-label="별점 ${r.r}">${STARS(r.r)}</span>${sentBadge(r.se)}` +
+      `<span>${r.d.slice(0, 10)}</span><span>${r.s === "g" ? "Google Play" : "App Store"}</span>${r.v ? `<span>v${esc(r.v)}</span>` : ""}` +
+      `${r.s === "g" ? `<span title="좋아요">👍 ${fmt(r.th)}</span>` : ""}<span class="muted" title="판정 방식">${r.ls === "manual" ? "사람 판정" : "규칙 판정"}</span></div>` +
+      (r.ti ? `<div class="ttl">${hl(r.ti, words)}</div>` : "") +
+      `<div class="tx">${hl(r.t, words)}</div><button type="button" class="exp" data-exp hidden>전체 보기</button>` +
+      (topics ? `<div class="tp">${topics}</div>` : "") + `</article>`;
+  }).join("");
+  $("drList").innerHTML = `<div class="dr-count">${fmt(xs.length)}건${xs.length !== dr.base.length ? ` (선택 ${fmt(dr.base.length)}건 중)` : ""} · ${$("drSort").selectedOptions[0].text}</div>` +
+    (list || `<p class="muted">조건에 맞는 리뷰가 없습니다.</p>`) +
+    (xs.length > dr.shown ? `<button type="button" class="theme dr-more" data-drmore>${fmt(Math.min(40, xs.length - dr.shown))}건 더 보기 (남은 ${fmt(xs.length - dr.shown)}건)</button>` : "");
+  $("drList").querySelectorAll(".rv").forEach(a => { const t = a.querySelector(".tx"); a.querySelector("[data-exp]").hidden = t.scrollHeight <= t.clientHeight + 2; });
+}
+$("drClose").onclick = closeDrawer; $("drawerBg").onclick = closeDrawer;
+addEventListener("keydown", ev => { if (ev.key === "Escape" && $("drawer").classList.contains("open")) closeDrawer(); });
+const drTop = () => { $("drList").scrollTop = 0; };
+$("drSearch").addEventListener("input", ev => { dr.q = ev.target.value; dr.shown = 40; drRender(); drTop(); });
+$("drSort").onchange = ev => { dr.sort = ev.target.value; dr.shown = 40; drRender(); drTop(); };
+$("drStore").onchange = ev => { dr.store = ev.target.value; dr.sent = ""; dr.shown = 40; drRender(); drTop(); };
+$("drawer").addEventListener("click", ev => {
+  ev.stopPropagation();
+  const c = ev.target.closest("[data-sent]"); if (c && !c.disabled) { dr.sent = c.dataset.sent; dr.shown = 40; drRender(); drTop(); return; }
+  if (ev.target.closest("[data-drmore]")) { dr.shown += 40; drRender(); return; }
+  const e = ev.target.closest("[data-exp]"); if (e) { const a = e.closest(".rv"); a.classList.toggle("open"); e.textContent = a.classList.contains("open") ? "접기" : "전체 보기"; }
+});
+// HTML 표·버튼용: data-sel 속성에 선택 규칙을 등록
+let SELS = [];
+const selAttr = sel => { SELS.push(sel); return `data-sel="${SELS.length - 1}"`; };
+document.addEventListener("click", ev => {
+  const t = ev.target.closest("[data-sel]"); if (!t || t.closest(".drawer")) return;
+  ev.preventDefault(); openSel(SELS[+t.dataset.sel]);
+});
+document.addEventListener("keydown", ev => {
+  const t = ev.target.closest && ev.target.closest("tr[data-sel], .tile[data-sel]");
+  if (t && (ev.key === "Enter" || ev.key === " ")) { ev.preventDefault(); openSel(SELS[+t.dataset.sel]); }
+});
 // 한쪽 끝만 둥근 가로 막대 path (끝 반경 r)
 function hbarPath(x, y, w, h, rRight = 4, rLeft = 0) {
   const r1 = Math.min(rRight, w / 2, h / 2), r0 = Math.min(rLeft, w / 2, h / 2);
@@ -250,19 +765,22 @@ function niceMax(v) {
 /* ---------- 헤더 ---------- */
 function header() {
   const m = D.meta;
-  const gp = m.store_stats.google_play, ap = m.store_stats.app_store;
-  document.getElementById("scope").textContent =
-    `Google Play ${fmt(gp.n)}건(${gp.start}~${gp.end}) · App Store ${fmt(ap.n)}건(${ap.start}~${ap.end}) · 국가 kr, 언어 ko`;
+  const stores = Object.values(m.store_stats).map(s => `${s.name} ${fmt(s.n)}건(${s.start}~${s.end})`).join(" · ");
+  document.getElementById("scope").textContent = stores + (DS.kind === "example" ? " · 국가 kr, 언어 ko" : "");
+  const b = document.getElementById("dsBadge");
+  b.className = "ds-badge " + (DS.kind === "example" ? "example" : "user");
+  b.textContent = DS.kind === "example" ? "예시 자료 · 달토끼 키우기" : `불러온 파일 · ${DS.name}`;
+  document.getElementById("exampleBtn").hidden = DS.kind === "example";
   const so = D.sentiment_overall, n = m.n;
   const negmix = (so["부정"] + so["혼합"]) / n;
   const tiles = [
-    {cls: "hero", label: "분석한 리뷰", value: fmt(n), note: `평균 별점 ${m.avg_rating} · 사람이 읽고 판정 ${fmt(m.label_source.manual || 0)}건`},
-    {label: "내용상 긍정", value: pct(so["긍정"] / n), note: `${fmt(so["긍정"])}건`},
-    {label: "부정 또는 혼합", value: pct(negmix), note: `부정 ${fmt(so["부정"])} · 혼합 ${fmt(so["혼합"])}`},
-    {label: "최근 6개월 리뷰", value: fmt(m.recent_n), note: `${m.recent_start} 이후 · 최근 30일 ${m.last30_n}건`},
+    {cls: "hero", label: "분석한 리뷰", value: fmt(n), note: `평균 별점 ${m.avg_rating}` + (m.label_source.manual ? ` · 사람이 읽고 판정 ${fmt(m.label_source.manual)}건` : ""), sel: SEL.all()},
+    {label: "내용상 긍정", value: pct(so["긍정"] / n), note: `${fmt(so["긍정"])}건`, sel: SEL.sent("긍정")},
+    {label: "부정 또는 혼합", value: pct(negmix), note: `부정 ${fmt(so["부정"])} · 혼합 ${fmt(so["혼합"])}`, sel: SEL.negmix()},
+    {label: "최근 6개월 리뷰", value: fmt(m.recent_n), note: `${m.recent_start} 이후 · 최근 30일 ${m.last30_n}건`, sel: SEL.recent()},
   ];
   document.getElementById("kpis").innerHTML = tiles.map(t =>
-    `<div class="card tile ${t.cls || ""}"><div class="label">${t.label}</div><div class="value">${t.value}</div><div class="note">${t.note}</div></div>`).join("");
+    `<div class="card tile clk ${t.cls || ""}" tabindex="0" role="button" title="클릭하면 해당 리뷰 보기" ${selAttr(t.sel)}><div class="label">${t.label}</div><div class="value">${t.value}</div><div class="note">${t.note} <span style="color:var(--accent)">· 리뷰 보기 →</span></div></div>`).join("");
   document.getElementById("sentLegend").innerHTML = SENTS.map(s => `<span><i style="background:var(${SVAR[s]})"></i>${s}</span>`).join("");
 }
 
@@ -282,6 +800,7 @@ function topicChart() {
     const y = i * rowH + 6;
     const lt = el("text", {x: labelW - 10, y: y + barH / 2 + 4, "text-anchor": "end"}, svg);
     lt.textContent = r.topic; lt.style.fill = css("--ink"); lt.style.fontSize = "12px";
+    clickable(lt, () => openSel(SEL.topic(r.topic, r.n)), `${r.topic} 언급 리뷰 ${r.n}건 보기`);
     let x = labelW;
     const segs = SENTS.filter(s => r[s] > 0);
     segs.forEach((s, j) => {
@@ -295,7 +814,8 @@ function topicChart() {
         t.style.fill = (s === "혼합" || s === "중립") ? "#0b0b0b" : "#ffffff";
         t.style.fontSize = "11px"; t.style.pointerEvents = "none";
       }
-      bindTip(p, () => `<b>${r.topic} · ${s}</b><div class="row"><span>${fmt(r[s])}건</span><span>${pct(r[s + "_pct"], 1)}</span></div>`);
+      bindTip(p, () => `<b>${r.topic} · ${s}</b><div class="row"><span>${fmt(r[s])}건</span><span>${pct(r[s + "_pct"], 1)}</span></div>`,
+        () => openSel(SEL.topicSent(r.topic, s, r[s])));
       x += w;
     });
     const nt = el("text", {x: W - rightW + 10, y: y + barH / 2 + 4, class: "val"}, svg);
@@ -304,7 +824,7 @@ function topicChart() {
   // 표
   const t = document.getElementById("topicTable");
   t.innerHTML = `<table><tr><th>주제</th><th class="num">언급 리뷰</th><th class="num">전체 대비</th>${SENTS.map(s => `<th class="num">${s}</th>`).join("")}</tr>` +
-    rows.map(r => `<tr><td>${r.topic}</td><td class="num">${fmt(r.n)}</td><td class="num">${pct(r.share, 1)}</td>${SENTS.map(s => `<td class="num">${fmt(r[s])} (${pct(r[s + "_pct"], 1)})</td>`).join("")}</tr>`).join("") + "</table>" +
+    rows.map(r => `<tr><td><button class="linkish" ${selAttr(SEL.topic(r.topic, r.n))}>${r.topic}</button></td><td class="num">${fmt(r.n)}</td><td class="num">${pct(r.share, 1)}</td>${SENTS.map(s => `<td class="num"><button class="linkish count" ${selAttr(SEL.topicSent(r.topic, s, r[s]))}>${fmt(r[s])}</button> (${pct(r[s + "_pct"], 1)})</td>`).join("")}</tr>`).join("") + "</table>" +
     `<p class="small muted">참고: 리뷰 단위 전체 감성 × 주제</p><table><tr><th>주제</th>${SENTS.map(s => `<th class="num">${s}</th>`).join("")}</tr>` +
     D.crosstab_review_level.map(r => `<tr><td>${r.topic}</td>${SENTS.map(s => `<td class="num">${fmt(r[s])}</td>`).join("")}</tr>`).join("") + "</table>";
 }
@@ -318,7 +838,7 @@ function overallChart() {
   SENTS.forEach((s, j) => {
     const w = W * so[s] / n, last = j === SENTS.length - 1;
     const p = el("path", {d: hbarPath(x, 8, Math.max(w - (last ? 0 : 2), .5), 28, last ? 4 : 0, j === 0 ? 4 : 0), fill: `var(${SVAR[s]})`}, svg);
-    bindTip(p, () => `<b>${s}</b><div class="row"><span>${fmt(so[s])}건</span><span>${pct(so[s] / n, 1)}</span></div>`);
+    bindTip(p, () => `<b>${s}</b><div class="row"><span>${fmt(so[s])}건</span><span>${pct(so[s] / n, 1)}</span></div>`, () => openSel(SEL.sent(s)));
     if (w > 60) {
       const t = el("text", {x: x + 7, y: 26.5}, svg);
       t.textContent = `${s} ${pct(so[s] / n)}`;
@@ -337,13 +857,13 @@ function ratingNote() {
     `<p style="margin:0 0 6px">별점 5점이 <b>${pct(five, 1)}</b>지만, 내용상 긍정은 <b>${pct(so["긍정"] / n, 1)}</b>입니다. ` +
     `별점은 높게 주면서 문제를 신고하거나 불만을 함께 적는 리뷰(혼합 ${fmt(so["혼합"])}건)가 많아서, 감성은 별점이 아니라 내용으로 판정했습니다.</p>` +
     `<table><tr><th>별점</th>${["1","2","3","4","5"].map(k => `<th class="num">★${k}</th>`).join("")}</tr>` +
-    `<tr><td>건수</td>${["1","2","3","4","5"].map(k => `<td class="num">${fmt(rd[k] || 0)}</td>`).join("")}</tr>` +
+    `<tr><td>건수</td>${["1","2","3","4","5"].map(k => `<td class="num"><button class="linkish count" title="★${k} 리뷰 보기" ${selAttr(SEL.rating(k))}>${fmt(rd[k] || 0)}</button></td>`).join("")}</tr>` +
     `<tr><td>비율</td>${["1","2","3","4","5"].map(k => `<td class="num">${pct((rd[k] || 0) / n, 1)}</td>`).join("")}</tr></table>`;
 }
 
 /* ---------- 키워드 ---------- */
 let kwState = {topic: null, sent: "부정"};
-function hbarList(boxId, items, color, label) {
+function hbarList(boxId, items, color, label, selFor) {
   const box = document.getElementById(boxId); box.innerHTML = "";
   if (!items.length) { box.innerHTML = `<p class="muted small">해당 리뷰가 없습니다.</p>`; return; }
   const W = Math.max(box.clientWidth, 280), labelW = 104, rowH = 24, barH = 14, H = items.length * rowH + 4;
@@ -358,7 +878,9 @@ function hbarList(boxId, items, color, label) {
     const p = el("path", {d: hbarPath(labelW, y, w, barH, 4, 0), fill: color}, svg);
     const v = el("text", {x: labelW + w + 6, y: y + barH / 2 + 4, class: "val"}, svg);
     v.textContent = pct(it.pct);
-    bindTip(p, () => `<b>${esc(it.kw)}</b><div class="row"><span>${fmt(it.n)}건</span><span>${pct(it.pct, 1)}</span></div>`);
+    const go = selFor ? () => openSel(selFor(it)) : null;
+    bindTip(p, () => `<b>${esc(it.kw)}</b><div class="row"><span>${fmt(it.n)}건</span><span>${pct(it.pct, 1)}</span></div>`, go);
+    if (go) clickable(t, go, `${it.kw} 리뷰 ${it.n}건 보기`);
   });
 }
 function kwRender() {
@@ -367,8 +889,10 @@ function kwRender() {
   if (!cell) { head.textContent = "해당 조합의 리뷰가 없습니다."; hbarList("kwChart", [], "", ""); hbarList("termChart", [], "", ""); return; }
   head.textContent = `${kwState.sent}·${kwState.topic} 리뷰 ${fmt(cell.n)}건 기준`;
   const color = `var(${SVAR[kwState.sent]})`;
-  hbarList("kwChart", cell.keywords.slice(0, 10), color, "대표 키워드 비중");
-  hbarList("termChart", cell.terms.slice(0, 10), color, "원문 단어 비중");
+  const {topic, sent} = kwState;
+  hbarList("kwChart", cell.keywords.slice(0, 10), color, "대표 키워드 비중", it => SEL.kw(topic, sent, it.kw, it.n));
+  hbarList("termChart", cell.terms.slice(0, 10), color, "원문 단어 비중", it => SEL.term(topic, sent, it.kw, it.n));
+  head.innerHTML = `${kwState.sent}·${kwState.topic} 리뷰 <button class="linkish count" ${selAttr(SEL.topicSent(topic, sent, cell.n))}>${fmt(cell.n)}건</button> 기준 · 막대나 이름을 클릭하면 그 키워드를 언급한 리뷰를 봅니다`;
 }
 function kwControls() {
   const topics = [...new Set(D.keywords.map(k => k.topic))];
@@ -388,8 +912,32 @@ function kwControls() {
 
 /* ---------- 우선순위 ---------- */
 function quoteHTML(q) {
-  return `<div class="quote">${esc(q.text)}<div class="meta">★${q.rating} · 좋아요 ${fmt(q.thumbs)} · ${q.date} · ${q.store}${q.version ? " · v" + esc(q.version) : ""}</div></div>`;
+  const long = String(q.text).length > 110;
+  return `<div class="quote"><div class="qt">${esc(q.text)}</div>` +
+    (long ? `<button type="button" class="more" data-more>전체 보기</button>` : "") +
+    `<div class="meta">★${q.rating} · 좋아요 ${fmt(q.thumbs)} · ${q.date} · ${q.store}${q.version ? " · v" + esc(q.version) : ""}</div></div>`;
 }
+const preview = (t, n = 38) => { const s = String(t).replace(/\s+/g, " ").trim(); return s.length > n ? s.slice(0, n) + "…" : s; };
+// 대표 리뷰 묶음: 기본은 접고, 첫 리뷰의 앞부분을 미리보기로 보여준다
+function quotesBlock(quotes, label = "대표 리뷰") {
+  if (!quotes || !quotes.length) return "";
+  return `<details><summary>${label} ${quotes.length}개 보기<span class="preview">“${esc(preview(quotes[0].text))}”</span></summary>${quotes.map(quoteHTML).join("")}</details>`;
+}
+// '전체 보기'는 실제로 3줄을 넘겨 잘린 리뷰에만 보여준다(보이는 상태에서만 측정 가능)
+function fitMoreButtons(root = document) {
+  root.querySelectorAll(".quote").forEach(q => {
+    const qt = q.querySelector(".qt"), b = q.querySelector("[data-more]");
+    if (!b || q.classList.contains("open") || !qt.offsetParent) return;
+    b.hidden = qt.scrollHeight <= qt.clientHeight + 2;
+  });
+}
+document.addEventListener("toggle", ev => { if (ev.target.open) fitMoreButtons(ev.target); }, true);
+document.addEventListener("click", ev => {
+  const b = ev.target.closest("[data-more]");
+  if (!b) return;
+  const q = b.closest(".quote"); q.classList.toggle("open");
+  b.textContent = q.classList.contains("open") ? "접기" : "전체 보기";
+});
 function prio() {
   const m = D.meta;
   document.getElementById("prioSub").textContent =
@@ -400,33 +948,36 @@ function prio() {
     `r = 최근 6개월 언급률(평활) ÷ 이전 언급률, 평활 언급률 = (n<sub>최근</sub> + 20·p<sub>이전</sub>) ÷ (R<sub>최근</sub> + 20). ` +
     `최근 표본이 작아서(${m.recent_n}건), 리뷰 한두 건 때문에 추세가 튀지 않도록 기준선 쪽으로 당겨 줍니다(G = 1/3이면 변화 없음). 좋아요는 Google Play에만 있습니다.`;
   const items = D.priority.slice(0, 15);
-  const maxS = items[0].score;
+  if (!items.length) {
+    document.getElementById("prioTable").innerHTML = `<tr><td class="muted">부정·혼합 언급이 8건 이상인 주제/키워드 항목이 없습니다(키워드 열이 없거나 리뷰 수가 적은 경우).</td></tr>`;
+  }
+  const maxS = items.length ? items[0].score : 1;
   document.getElementById("prioTable").innerHTML =
     `<tr><th>#</th><th>항목</th><th class="num">점수</th><th class="num">N</th><th class="num">좋아요 합</th><th class="num">최근 6개월</th><th class="num">추세 r</th></tr>` +
     items.map((it, i) => {
       const trend = it.ratio >= 1.15 ? "▲ 증가" : it.ratio <= 0.85 ? "▼ 감소" : "– 유지";
       const qs = it.quotes.map(quoteHTML).join("");
-      return `<tr><td class="rank">${i + 1}</td><td class="item"><b>${esc(it.topic)}</b> · ${esc(it.kw)}</td>` +
+      return `<tr><td class="rank">${i + 1}</td><td class="item"><button class="linkish" title="부정·혼합 리뷰 ${it.n}건 보기" ${selAttr(SEL.prio(it))}><b>${esc(it.topic)}</b> · ${esc(it.kw)}</button></td>` +
         `<td class="num"><span class="bar-track"><span class="bar-inline" style="width:${(it.score / maxS * 100).toFixed(0)}%"></span></span>${it.score.toFixed(1)}</td>` +
         `<td class="num">${fmt(it.n)}</td><td class="num">${fmt(it.thumbs)}</td><td class="num">${it.recent_n}건 (${pct(it.recent_rate, 1)})</td>` +
         `<td class="num">${it.ratio.toFixed(2)} ${trend}</td></tr>` +
-        `<tr class="qrow"><td></td><td colspan="6" style="padding-top:0">${i < 5 ? qs : `<details><summary>대표 리뷰 ${it.quotes.length}개 보기</summary>${qs}</details>`}</td></tr>`;
+        `<tr class="qrow"><td></td><td colspan="6" style="padding-top:0">${quotesBlock(it.quotes)} <button type="button" class="allbtn" ${selAttr(SEL.prio(it))}>리뷰 ${fmt(it.n)}건 모두 보기</button></td></tr>`;
     }).join("");
   document.getElementById("prioTopicTable").innerHTML =
     `<tr><th>주제</th><th class="num">점수</th><th class="num">부정·혼합 리뷰</th><th class="num">최근 6개월</th><th class="num">추세 r</th></tr>` +
-    D.priority_topics.map(t => `<tr><td>${t.topic}</td><td class="num">${t.score.toFixed(1)}</td><td class="num">${fmt(t.n)}</td><td class="num">${t.recent_n}</td><td class="num">${t.ratio.toFixed(2)}</td></tr>`).join("");
+    D.priority_topics.map(t => `<tr class="clk" tabindex="0" title="부정·혼합 리뷰 ${t.n}건 보기" ${selAttr(SEL.prioTopic(t))}><td>${t.topic}</td><td class="num">${t.score.toFixed(1)}</td><td class="num">${fmt(t.n)}</td><td class="num">${t.recent_n}</td><td class="num">${t.ratio.toFixed(2)}</td></tr>`).join("");
 }
 
 /* ---------- 장점 ---------- */
 function good() {
   const g = D.general_positive;
   document.getElementById("goodSub").innerHTML =
-    `주제별로 긍정 판정을 받은 리뷰를 기준으로 했습니다. 주제 없이 "재밌어요" 같은 전반적 호평만 남긴 리뷰도 <b>${fmt(g.n)}건</b> 있습니다(자주 나온 말: ${g.terms.slice(0, 8).map(t => esc(t.kw)).join(", ")}).`;
+    `주제별로 긍정 판정을 받은 리뷰를 기준으로 했습니다. 주제 없이 "재밌어요" 같은 전반적 호평만 남긴 리뷰도 <button class="linkish count" ${selAttr(SEL.general(g))}><b>${fmt(g.n)}건</b></button> 있습니다(자주 나온 말: ${g.terms.slice(0, 8).map(t => esc(t.kw)).join(", ")}).`;
   document.getElementById("goodCards").innerHTML = D.strengths.slice(0, 6).map(s =>
-    `<div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline"><b style="font-size:15px">${s.topic}</b>` +
-    `<span class="small muted">긍정 ${fmt(s.n)} · 부정 ${fmt(s.neg_n)}</span></div>` +
+    `<div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline"><button class="linkish" ${selAttr(SEL.strength(s))}><b style="font-size:15px">${s.topic}</b></button>` +
+    `<span class="small muted">긍정 <button class="linkish count" ${selAttr(SEL.strength(s))}>${fmt(s.n)}</button> · 부정 ${fmt(s.neg_n)}</span></div>` +
     `<div class="small" style="margin:4px 0 6px">긍정 비중 <b>${pct(s.pos_ratio)}</b> <span class="muted">(긍정 ÷ (긍정+부정))</span></div>` +
-    `<div>${s.keywords.map(k => `<span class="pill">${esc(k.kw)} ${pct(k.pct)}</span>`).join("")}</div>` +
+    `<div>${s.keywords.map(k => `<button type="button" class="pill clk linkish" title="'${esc(k.kw)}' 언급 긍정 리뷰 ${k.n}건 보기" ${selAttr(SEL.strengthKw(s, k))}>${esc(k.kw)} ${pct(k.pct)}</button>`).join("")}</div>` +
     (s.quotes[0] ? quoteHTML(s.quotes[0]) : "") +
     (s.quotes.length > 1 ? `<details><summary>원문 더 보기</summary>${s.quotes.slice(1).map(quoteHTML).join("")}</details>` : "") +
     `</div>`).join("");
@@ -449,7 +1000,7 @@ function columnChart(boxId, rows, key, opts = {}) {
     const h = ph * r[key] / max, x = L + i * bw + (bw - w) / 2;
     const p = el("path", {d: vbarPath(x, T + ph - h, w, Math.max(h, 0.5), Math.min(4, w / 2)), fill: "var(--accent)"}, svg);
     const hit = el("rect", {x: L + i * bw, y: T, width: bw, height: ph, fill: "transparent"}, svg);
-    bindTip(hit, () => opts.tip(r));
+    bindTip(hit, () => opts.tip(r), opts.onClick ? () => opts.onClick(r) : null);
     if (opts.xlabel && opts.xlabel(r, i)) {
       const t = el("text", {x: x + w / 2, y: H - 8, "text-anchor": "middle", class: "axis-label"}, svg); t.textContent = opts.xlabel(r, i);
     }
@@ -479,82 +1030,121 @@ function lineChart(boxId, pts, opts) {
   const cross = el("line", {y1: T, y2: T + ph, stroke: "var(--axis)", "stroke-width": 1, visibility: "hidden"}, svg);
   const dot = el("circle", {r: 4.5, fill: color, stroke: "var(--surface)", "stroke-width": 2, visibility: "hidden"}, svg);
   const hit = el("rect", {x: L, y: T, width: pw, height: ph, fill: "transparent"}, svg);
+  const idxAt = ev => { const r = svg.getBoundingClientRect(), sx = (ev.clientX - r.left) * W / r.width;
+    return Math.max(0, Math.min(pts.length - 1, Math.round((sx - L) / pw * (pts.length - 1)))); };
   hit.addEventListener("mousemove", ev => {
-    const r = svg.getBoundingClientRect(), sx = (ev.clientX - r.left) * W / r.width;
-    const i = Math.max(0, Math.min(pts.length - 1, Math.round((sx - L) / pw * (pts.length - 1))));
+    const i = idxAt(ev);
     cross.setAttribute("x1", xs(i)); cross.setAttribute("x2", xs(i)); cross.setAttribute("visibility", "visible");
     dot.setAttribute("cx", xs(i)); dot.setAttribute("cy", ys(pts[i].y)); dot.setAttribute("visibility", "visible");
-    showTip(ev, opts.tip(pts[i]));
+    showTip(ev, opts.tip(pts[i]) + (opts.onClick ? CLICK_HINT : ""));
   });
+  if (opts.onClick) {
+    hit.classList.add("clk");
+    hit.addEventListener("click", ev => { ev.stopPropagation(); hideTip(); opts.onClick(pts[idxAt(ev)]); });
+  }
   hit.addEventListener("mouseleave", () => { hideTip(); cross.setAttribute("visibility", "hidden"); dot.setAttribute("visibility", "hidden"); });
   if (opts.endLabel) {
     const lp = pts[pts.length - 1];
     const t = el("text", {x: xs(pts.length - 1) - 4, y: ys(lp.y) - 8, "text-anchor": "end", class: "val"}, svg); t.textContent = opts.endLabel(lp);
   }
 }
-function trends() {
-  const mo = D.monthly;
-  columnChart("volChart", mo, "n", {
-    label: "월별 리뷰 수",
-    tip: r => `<b>${r.month}</b><div class="row"><span>리뷰</span><span>${fmt(r.n)}건</span></div><div class="row"><span>부정·혼합</span><span>${fmt(r.neg + r.mixed)}건</span></div><div class="row"><span>평균 별점</span><span>${r.avg_rating}</span></div>`,
-    xlabel: (r) => r.month.endsWith("-01") ? r.month.slice(0, 4) : ""
+/* ---------- 버전별 추이 (월별 추이를 버전 단위로 통합) ---------- */
+function versions() {
+  const va = D.versions_all, vs = D.versions;
+  const verBox = ["verVolChart", "verChart", "smallMultiples"];
+  if (!va.length) {
+    verBox.forEach(id => document.getElementById(id).innerHTML = `<p class="muted small">버전 정보가 있는 리뷰가 없습니다(CSV에 version 열 필요).</p>`);
+    document.getElementById("verTable").innerHTML = ""; document.getElementById("verListTable").innerHTML = "";
+    return;
+  }
+  document.getElementById("verMinNote").textContent = `(리뷰 ${D.ver_min}건 이상인 버전 ${vs.length}개)`;
+  const step = n => Math.max(1, Math.ceil(n / 8));
+  // 1) 버전별 리뷰 수 — 월별 리뷰 수 막대와 같은 형태
+  columnChart("verVolChart", va, "n", {
+    label: "버전별 리뷰 수",
+    tip: r => `<b>v${r.version}.x</b> <span class="muted">${r.first}~${r.last}</span><div class="row"><span>리뷰</span><span>${fmt(r.n)}건</span></div>` +
+      `<div class="row"><span>부정·혼합</span><span>${fmt(r.neg_n)}건 (${pct(r.neg_share, 1)})</span></div><div class="row"><span>평균 별점</span><span>${r.avg_rating}</span></div>`,
+    xlabel: (r, i) => i % step(va.length) === 0 ? "v" + r.version : "",
+    onClick: r => openSel(SEL.minor(r.version, r.n))
   });
-  const pts = mo.filter(r => r.n >= 10).map(r => ({x: r.month, y: (r.neg + r.mixed) / r.n, r}));
-  lineChart("negShareChart", pts, {
-    label: "월별 부정·혼합 비율", max: niceMax(Math.max(...pts.map(p => p.y))), yfmt: v => pct(v),
-    tip: p => `<b>${p.x}</b><div class="row"><span>부정·혼합</span><span>${pct(p.y, 1)}</span></div><div class="row"><span>표본</span><span>${fmt(p.r.n)}건</span></div>`,
-    xlabel: (p, i) => (i === 0 || p.x.endsWith("-01")) ? p.x.slice(0, 4) : "",
-    endLabel: p => pct(p.y)
+  // 2) 버전별 부정·혼합 비율 — 월별 비율 선과 같은 형태 (리뷰가 충분한 버전만)
+  const pts = vs.map(v => ({x: v.version, y: v.neg_share, v}));
+  if (pts.length) lineChart("verChart", pts, {
+    label: "버전별 부정·혼합 비율", max: niceMax(Math.max(...pts.map(p => p.y))), yfmt: v => pct(v),
+    tip: p => `<b>v${p.x}.x</b> <span class="muted">${p.v.first}~</span><div class="row"><span>부정·혼합</span><span>${pct(p.y, 1)} (${fmt(p.v.neg_n)}건)</span></div><div class="row"><span>리뷰</span><span>${fmt(p.v.n)}건</span></div><div class="row"><span>평균 별점</span><span>${p.v.avg_rating}</span></div>`,
+    xlabel: (p, i) => (i % step(pts.length) === 0) ? "v" + p.x : "",
+    endLabel: p => "v" + p.x + " " + pct(p.y),
+    onClick: p => openSel(SEL.minorNeg(p.v))
   });
-  const topics = ["과금", "버그", "콘텐츠", "운영", "밸런스/성장", "UI/편의성", "캐릭터/아트", "광고"];
+  else document.getElementById("verChart").innerHTML = `<p class="muted small">리뷰가 ${D.ver_min}건 이상인 버전이 없습니다.</p>`;
+  // 3) 버전별 주제별 부정·혼합 언급 수 — 분기별 작은 차트를 버전 단위로
   const sm = document.getElementById("smallMultiples");
-  const qs = D.quarterly;
-  topics.forEach(tp => {
+  TOPICS8.forEach(tp => {
     const div = document.createElement("div");
-    const id = "sm_" + tp.replace(/\W/g, "_") + Math.random().toString(36).slice(2, 6);
-    div.innerHTML = `<div class="sm-title">${tp}</div><div class="chart" id="${id}"></div>`;
+    const id = "sm_" + Math.random().toString(36).slice(2, 8);
+    div.innerHTML = `<div class="sm-title">${esc(tp)}</div><div class="chart" id="${id}"></div>`;
     sm.appendChild(div);
     const box = document.getElementById(id);
-    const W = Math.max(box.clientWidth, 140), H = 110, L = 26, T = 6, B = 18, R = 4;
-    const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": tp + " 분기별 부정 언급"}, box);
-    const max = niceMax(Math.max(1, ...qs.map(q => q["neg_" + tp])));
-    const pw = W - L - R, ph = H - T - B, bw = pw / qs.length, w = Math.min(Math.max(bw - 2, 1), 24);
-    el("line", {x1: L, x2: W - R, y1: T + ph, y2: T + ph, class: "baseline"}, svg);
-    el("line", {x1: L, x2: W - R, y1: T, y2: T, class: "gridline"}, svg);
+    const W = Math.max(box.clientWidth, 140), H = 110, L = 26, T = 6, B = 18, Rr = 4;
+    const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": tp + " 버전별 부정 언급"}, box);
+    const max = niceMax(Math.max(1, ...vs.map(v => v["negc_" + tp])));
+    const pw = W - L - Rr, ph = H - T - B, bw = pw / Math.max(vs.length, 1), w = Math.min(Math.max(bw - 2, 1), 24);
+    el("line", {x1: L, x2: W - Rr, y1: T + ph, y2: T + ph, class: "baseline"}, svg);
+    el("line", {x1: L, x2: W - Rr, y1: T, y2: T, class: "gridline"}, svg);
     const mt = el("text", {x: L - 4, y: T + 4, "text-anchor": "end", class: "axis-label"}, svg); mt.textContent = max;
-    qs.forEach((q, i) => {
-      const v = q["neg_" + tp], h = ph * v / max, x = L + i * bw + (bw - w) / 2;
-      if (v > 0) el("path", {d: vbarPath(x, T + ph - h, w, h, Math.min(3, w / 2)), fill: "var(--neg)"}, svg);
+    vs.forEach((v, i) => {
+      const c = v["negc_" + tp], h = ph * c / max, x = L + i * bw + (bw - w) / 2;
+      if (c > 0) el("path", {d: vbarPath(x, T + ph - h, w, h, Math.min(3, w / 2)), fill: "var(--neg)"}, svg);
       const hit = el("rect", {x: L + i * bw, y: T, width: bw, height: ph, fill: "transparent"}, svg);
-      bindTip(hit, () => `<b>${tp} · ${q.q}</b><div class="row"><span>부정·혼합 언급</span><span>${v}건</span></div><div class="row"><span>그 분기 리뷰</span><span>${fmt(q.n)}건</span></div>`);
-      if (q.q.endsWith("Q1")) { const t = el("text", {x: x + w / 2, y: H - 4, "text-anchor": "middle", class: "axis-label"}, svg); t.textContent = q.q.slice(2, 4); }
+      bindTip(hit, () => `<b>${esc(tp)} · v${v.version}.x</b><div class="row"><span>부정·혼합 언급</span><span>${c}건</span></div><div class="row"><span>그 버전 리뷰</span><span>${fmt(v.n)}건</span></div>`,
+        c > 0 ? () => openSel(SEL.minorTopic(tp, v)) : null);
+      if (i === 0 || i === vs.length - 1) { const t = el("text", {x: x + w / 2, y: H - 4, "text-anchor": i ? "end" : "start", class: "axis-label"}, svg); t.textContent = "v" + v.version; }
     });
-  });
-}
-
-/* ---------- 버전 ---------- */
-function versions() {
-  const vs = D.versions;
-  const pts = vs.map(v => ({x: v.version, y: v.neg_share, v}));
-  lineChart("verChart", pts, {
-    label: "버전별 부정·혼합 비율", max: niceMax(Math.max(...pts.map(p => p.y))), yfmt: v => pct(v),
-    tip: p => `<b>v${p.x}</b> <span class="muted">${p.v.first}~</span><div class="row"><span>부정·혼합</span><span>${pct(p.y, 1)}</span></div><div class="row"><span>리뷰</span><span>${fmt(p.v.n)}건</span></div><div class="row"><span>평균 별점</span><span>${p.v.avg_rating}</span></div>`,
-    xlabel: (p, i) => (i % Math.ceil(pts.length / 8) === 0) ? "v" + p.x : "",
-    endLabel: p => "v" + p.x + " " + pct(p.y)
   });
   document.getElementById("verTable").innerHTML =
     `<tr><th>업데이트</th><th class="num">부정·혼합 비율</th><th class="num">변화</th><th>가장 많이 바뀐 주제</th><th>근거 리뷰</th></tr>` +
-    D.version_changes.map(c => `<tr><td>v${c.from} → <b>v${c.to}</b><div class="small muted">${c.to_first}~ · ${c.n}건</div></td>` +
+    D.version_changes.map(c => `<tr><td>v${c.from} → <b>v${c.to}</b><div class="small muted">${c.to_first}~ · <button class="linkish count" title="v${c.to}.x 리뷰 보기" ${selAttr(SEL.minor(c.to, c.n))}>${c.n}건</button></div></td>` +
       `<td class="num">${pct(c.from_share)} → ${pct(c.to_share)}</td>` +
       `<td class="num" style="color:${c.diff > 0 ? "var(--ink)" : "var(--good-text)"}">${c.diff > 0 ? "▲" : "▼"} ${(Math.abs(c.diff) * 100).toFixed(1)}%p</td>` +
       `<td>${c.top_topic_changes.map(t => `<span class="pill">${t.topic} ${t.diff > 0 ? "+" : ""}${(t.diff * 100).toFixed(1)}%p</span>`).join("")}</td>` +
-      `<td style="min-width:260px">${c.quotes.length ? `<details><summary>원문 보기</summary>${c.quotes.map(quoteHTML).join("")}</details>` : ""}</td></tr>`).join("");
+      `<td style="min-width:260px">${quotesBlock(c.quotes, "원문")}</td></tr>`).join("");
+  document.getElementById("verListTable").innerHTML =
+    `<table><tr><th>버전</th><th>기간</th><th class="num">리뷰</th><th class="num">부정·혼합</th><th class="num">부정·혼합 비율</th><th class="num">평균 별점</th></tr>` +
+    va.slice().reverse().map(v => `<tr><td>v${esc(v.version)}.x</td><td class="small">${v.first} ~ ${v.last}</td><td class="num"><button class="linkish count" ${selAttr(SEL.minor(v.version, v.n))}>${fmt(v.n)}</button></td>` +
+      `<td class="num"><button class="linkish count" ${selAttr(SEL.minorNeg(v))}>${fmt(v.neg_n)}</button></td><td class="num">${pct(v.neg_share, 1)}${v.n < D.ver_min ? ' <span class="muted">(표본 적음)</span>' : ""}</td><td class="num">${v.avg_rating}</td></tr>`).join("") + "</table>";
+}
+
+/* ---------- 한눈에 보기 (각 섹션 계산 결과에서 자동 생성) ---------- */
+function summary() {
+  const so = D.sentiment_overall, n = D.meta.n;
+  const worst = D.priority_topics.slice().sort((a, b) => b.n - a.n)[0];
+  const best = D.strengths[0];
+  const up = D.version_changes.filter(c => c.diff > 0).sort((a, b) => b.diff - a.diff)[0];
+  const topItem = D.priority[0];
+  const items = [
+    {c: "--pos", i: "감", t: `리뷰 내용상 <b>긍정 ${pct(so["긍정"] / n)}</b>, 부정·혼합 <b>${pct((so["부정"] + so["혼합"]) / n)}</b> (별점이 아니라 내용 기준, ${fmt(n)}건)`, href: "#s-topic"},
+    worst && worst.n > 0 && {c: "--neg", i: "불", t: `부정·혼합 언급이 가장 많은 주제는 <b>${esc(worst.topic)}</b> (${fmt(worst.n)}건).` + (topItem ? ` 점수 1위 세부 항목은 <b>${esc(topItem.topic)} · ${esc(topItem.kw)}</b>` : ""), href: "#s-prio"},
+    best && {c: "--pos", i: "강", t: `가장 큰 강점은 <b>${esc(best.topic)}</b> — 긍정 비중 <b>${pct(best.pos_ratio)}</b> (긍정 ${fmt(best.n)} · 부정 ${fmt(best.neg_n)})`, href: "#s-good"},
+    up && {c: "--mix", i: "변", t: `부정·혼합 비율이 가장 크게 오른 업데이트: <b>v${esc(up.from)} → v${esc(up.to)}</b> (${up.to_first}~, ${pct(up.from_share)} → ${pct(up.to_share)})`, href: "#s-ver"},
+    {c: "--neu", i: "!", t: `최근 6개월 리뷰는 <b>${fmt(D.meta.recent_n)}건</b>(최근 30일 ${D.meta.last30_n}건)${D.meta.recent_n < 100 ? "뿐이라 최근 추세는 표본이 작다는 점을 감안해야 합니다" : "입니다"}`, href: "#s-ver"},
+  ].filter(Boolean);
+  document.getElementById("summaryList").innerHTML = items.map(x =>
+    `<li><span class="ico" style="background:var(${x.c})">${x.i}</span><span>${x.t} <a class="go" href="${x.href}">자세히 →</a></span></li>`).join("");
 }
 
 /* ---------- 방법·검수 ---------- */
 function method() {
   const m = D.meta, ls = m.label_source, g = m.grouping;
   const other = g.other_topics.length ? `${g.other_topics.join(", ")} (전체 대비 ${pct(g.other_threshold)} 미만 → '기타'로 묶음)` : "없음";
+  if (DS.kind !== "example") {
+    document.getElementById("methodCard").innerHTML =
+      `<b>불러온 파일</b> ${esc(DS.name)} · 리뷰 ${fmt(m.n)}건${DS.skipped ? ` (형식 오류로 ${fmt(DS.skipped)}행 제외)` : ""}<br>` +
+      `<b>계산</b> 파일에 들어 있는 감성·주제 라벨을 그대로 사용해, 예시 자료와 같은 규칙(scripts/analyze.py)으로 브라우저 안에서 다시 계산했습니다. 파일은 외부로 전송되지 않습니다.<br>` +
+      `<b>주제</b> ${esc(m.topics.join(", "))}${m.topics_shown.includes("일반") ? " + 일반" : ""}. 기타 처리: ${other}.<br>` +
+      (Object.keys(ls).length ? `<b>라벨 출처</b> ${Object.entries(ls).map(([k, v]) => `${esc(k)} ${fmt(v)}건`).join(" · ")}` : "");
+    document.getElementById("auditCard").innerHTML = `<b>검수</b><p class="muted">불러온 파일에는 검수 결과가 없습니다. 라벨 정확도는 파일을 만든 쪽에서 확인해야 합니다.</p>`;
+    return;
+  }
   document.getElementById("methodCard").innerHTML =
     `<b>분류 절차</b><ol style="padding-left:18px;margin:6px 0">` +
     `<li>키워드 규칙을 1차로 적용했습니다(커뮤니티 표현 포함: 현질·가챠·확률·뽑기 → 과금, 튕김·렉·접속불가·버벅 → 버그 등). 부정어 처리도 넣었습니다("렉 없음" → 긍정).</li>` +
@@ -563,7 +1153,7 @@ function method() {
     `<b>감성</b> 별점이 아니라 내용으로 판정했습니다. 문의형 리뷰는 구체적 문제가 보이면 부정, 애매하면 중립입니다.<br>` +
     `<b>주제</b> 과금·버그·콘텐츠 + 데이터를 보고 추가한 운영·밸런스/성장·UI/편의성·캐릭터/아트·광고. 기타 처리: ${other}. 주제 없는 전반 평가는 '일반'.<br>` +
     `<b>데이터</b> Google Play는 스토어 표기 리뷰 수와 거의 같은 전량, App Store는 공개 RSS 피드의 전량(150건)입니다.`;
-  const a = D.audit;
+  const a = DS.audit;
   const ac = document.getElementById("auditCard");
   if (!a) { ac.innerHTML = `<b>검수</b><p class="muted">검수 결과 없음</p>`; return; }
   ac.innerHTML = `<b>무작위 ${a.n}건 직접 검수</b>` +
@@ -586,10 +1176,88 @@ document.getElementById("themeBtn").onclick = () => {
 };
 try { const t = localStorage.getItem("dt-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
 function render() {
-  ["topicChart", "overallChart", "kwChart", "termChart", "volChart", "negShareChart", "smallMultiples", "verChart"].forEach(id => document.getElementById(id).innerHTML = "");
-  header(); topicChart(); overallChart(); ratingNote(); kwControls(); prio(); good(); trends(); versions(); method();
+  SELS = [];
+  ["topicChart", "overallChart", "kwChart", "termChart", "verVolChart", "smallMultiples", "verChart"].forEach(id => document.getElementById(id).innerHTML = "");
+  header(); topicChart(); overallChart(); ratingNote(); kwControls(); prio(); good(); versions(); method(); summary();
+  fitMoreButtons();
 }
-render();
+
+/* ---------- 데이터셋: 예시 자료 / CSV 불러오기 ---------- */
+const EXAMPLE_TOPICS = ["과금", "버그", "콘텐츠", "운영", "밸런스/성장", "UI/편의성", "캐릭터/아트", "광고"];
+function useExample() {
+  loadDataset(EMBED.reviews, {kind: "example", name: "달토끼 키우기", audit: EMBED.audit || null, topics: EXAMPLE_TOPICS, hasGeneral: true});
+  syncData(); kwState.topic = null; render();
+  note(`지금 보이는 수치는 <b>예시 자료</b>(달토끼 키우기 스토어 리뷰 ${fmt(D.meta.n)}건)입니다. 오른쪽 위 <b>CSV 불러오기</b>로 다른 리뷰 파일을 넣으면 모든 비율·분포가 그 파일 기준으로 바뀝니다. 파일을 화면에 끌어다 놓아도 됩니다.`);
+}
+function note(html, err) { const n = document.getElementById("uploadNote"); n.innerHTML = html; n.classList.toggle("err", !!err); }
+async function readFile(file) {
+  const buf = await file.arrayBuffer();
+  let text = new TextDecoder("utf-8").decode(buf);
+  if (text.includes("�")) { try { text = new TextDecoder("euc-kr").decode(buf); } catch (e) {} }   // 엑셀 저장 CSV(CP949) 대응
+  return text;
+}
+async function useFile(file) {
+  if (!file) return;
+  note(`'${esc(file.name)}' 읽는 중…`);
+  try {
+    const parsed = toRecords(parseCSV(await readFile(file)));
+    loadDataset(parsed.rows, {kind: "user", name: file.name, audit: null, topics: parsed.topics, hasGeneral: parsed.hasGeneral, skipped: parsed.skipped});
+    syncData(); kwState.topic = null; closeDrawer(); render(); scrollTo({top: 0});
+    note(`<b>${esc(file.name)}</b> 리뷰 ${fmt(D.meta.n)}건으로 다시 계산했습니다.` +
+      (parsed.skipped ? ` 날짜·별점·감성 값을 읽을 수 없는 ${fmt(parsed.skipped)}행은 제외했습니다(예: ${parsed.errs.join(", ")}).` : "") +
+      ` <button class="linkish count" type="button" onclick="useExample()">예시 자료로 돌아가기</button>`);
+  } catch (e) {
+    note(`<b>'${esc(file.name)}'을(를) 불러오지 못했습니다.</b> ${esc(e.message)} 화면은 이전 자료를 그대로 보여줍니다. "CSV 형식 안내"를 확인하세요.`, true);
+    document.getElementById("csvHelp").open = true;
+  }
+}
+document.getElementById("csvInput").addEventListener("change", ev => { useFile(ev.target.files[0]); ev.target.value = ""; });
+document.getElementById("exampleBtn").onclick = useExample;
+addEventListener("dragover", ev => { ev.preventDefault(); document.body.classList.add("dragging"); });
+addEventListener("dragleave", ev => { if (!ev.relatedTarget) document.body.classList.remove("dragging"); });
+addEventListener("drop", ev => { ev.preventDefault(); document.body.classList.remove("dragging"); const f = ev.dataTransfer.files[0]; if (f) useFile(f); });
+document.getElementById("templateBtn").onclick = () => {
+  const head = ["review_id", "store", "date", "rating", "version", "title", "content", "thumbs_up", "sentiment", "topics",
+    ...EXAMPLE_TOPICS.map(t => "sent_" + t), "sent_일반", "keywords", "label_source"];
+  const ex = ["r1", "google_play", "2026-01-31 12:00:00", "4", "1.150.2", "", "재밌는데 업데이트 후 자주 튕겨요", "3", "혼합", "버그|일반",
+    ...EXAMPLE_TOPICS.map(t => t === "버그" ? "부정" : ""), "긍정", "버그/튕김", "manual"];
+  const q = v => /[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v;
+  const csv = "﻿" + [head, ex].map(r => r.map(q).join(",")).join("\r\n") + "\r\n";
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], {type: "text/csv;charset=utf-8"}));
+  a.download = "review_template.csv"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
+useExample();
+
+/* ---------- 탐색 편의: 섹션 번호·링크, 현재 위치 표시, 맨 위로, 인쇄 ---------- */
+(function navHelpers() {
+  const links = [...document.querySelectorAll("#secNav a")];
+  links.forEach((a, i) => {
+    const sec = document.querySelector(a.getAttribute("href"));
+    const h = sec && sec.querySelector("h2");
+    if (h && !h.querySelector(".n")) {
+      h.insertAdjacentHTML("afterbegin", `<span class="n">${i + 1}</span>`);
+      h.insertAdjacentHTML("beforeend", `<a class="anchor" href="#${sec.id}" title="이 섹션 링크">#</a>`);
+    }
+  });
+  const byId = Object.fromEntries(links.map(a => [a.getAttribute("href").slice(1), a]));
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { links.forEach(l => l.classList.remove("active")); byId[e.target.id] && byId[e.target.id].classList.add("active"); } });
+    }, {rootMargin: "-110px 0px -60% 0px"});
+    document.querySelectorAll("section[id]").forEach(s => io.observe(s));
+  }
+  const top = document.getElementById("toTop");
+  addEventListener("scroll", () => top.classList.toggle("show", scrollY > 800), {passive: true});
+  top.onclick = () => scrollTo({top: 0, behavior: "smooth"});
+  // 인쇄 시 접힌 리뷰·표를 모두 펼치고, 끝나면 원래대로
+  let opened = [];
+  addEventListener("beforeprint", () => {
+    opened = [...document.querySelectorAll("details:not([open])")]; opened.forEach(d => d.open = true);
+  });
+  addEventListener("afterprint", () => { opened.forEach(d => d.open = false); opened = []; });
+  document.getElementById("printBtn").onclick = () => print();
+})();
 let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(render, 150); });
 </script>
 </body>

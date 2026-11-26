@@ -45,8 +45,11 @@
     var typeBadge = f.dataType === 'actual'
       ? '<span class="badge actual">실제 공개 리뷰</span>'
       : (f.dataType === 'sample' ? '<span class="badge sample">샘플 데이터(가상)</span>' : '');
+    var distN = all.filter(function (r) { return (r.sampleRole || 'distribution') === 'distribution'; }).length;
+    var teamN = all.filter(function (r) { return (r.labelSource || '').indexOf('team_') === 0; }).length;
     $('headerBadges').innerHTML = typeBadge +
-      '<span class="badge">표본 리뷰 ' + all.length + '건 · 의견 ' + allOps.length + '건</span>' +
+      '<span class="badge" title="실제 분포용 ' + distN + '건 + 별점 보강분 ' + (all.length - distN) + '건">표본 리뷰 ' + all.length + '건 · 의견 ' + allOps.length + '건</span>' +
+      (teamN ? '<span class="badge hold" title="review-analysis 팀원 라벨(규칙·AI)을 변환한 리뷰. 팀 검수 전">자동 분류 ' + teamN + '건 · 검수 전</span>' : '') +
       (collected.min ? '<span class="badge">수집일 ' + esc(collected.min === collected.max ? collected.min : collected.min + '~' + collected.max) + '</span>' : '');
   }
 
@@ -57,6 +60,11 @@
     if (res.opinionFilterActive) {
       parts.push('<div class="notice info"><b>의견 필터 적용 중</b> — 리뷰 수·평균 별점·별점 분포는 <b>조건에 맞는 의견이 있는 리뷰 ' +
         res.reviews.length + '건 기준</b>입니다. 한 리뷰가 긍정·부정 의견을 함께 가질 수 있어, 감성별 리뷰 수의 합은 전체 리뷰 수보다 클 수 있습니다.</div>');
+    }
+    if (res.sampleScope === 'all') {
+      parts.push('<div class="notice"><b>별점 보강분 포함</b> — 1·2점 필터로 추가 수집한 리뷰가 들어 있어 별점·감성 비율이 <b>실제 사용자 분포가 아닙니다</b>. 키워드·근거 탐색용으로만 쓰세요.</div>');
+    } else if (res.excludedSupplement > 0) {
+      parts.push('<div class="notice info small">실제 분포용 리뷰만 집계 중 — 별점 보강분 ' + res.excludedSupplement + '건은 제외했습니다(필터 "수집 범위"에서 포함 가능).</div>');
     }
     if (desc.length) parts.push('<div class="notice info small">적용된 필터: ' + desc.map(esc).join(' · ') + '</div>');
     if (res.dateFilterActive && res.excludedNoDate > 0) {
@@ -163,7 +171,7 @@
           '<td class="num">' + esc(ratingText(r.rating)) + '</td><td class="num">' + esc(dateText(r.publishedAt)) + '</td>' +
           '<td>' + esc(catName(o.categoryId)) + '</td><td>' + C.sentimentChip(o) + '</td><td>' + esc(o.keyword) + '</td>' +
           '<td>' + esc(o.summary) + '</td><td>' + (o.evidenceText ? '<span class="excerpt">' + esc(o.evidenceText) + '</span>' : '<span class="muted">없음</span>') + '</td>' +
-          '<td>' + statusBadge(o) + '</td></tr>';
+          '<td>' + statusBadge(o) + '<br><span class="small muted">' + esc(A.LABEL_SOURCE_LABEL[o.labelSource || 'gvl_manual'] || '') + '</span></td></tr>';
       }).join('') + '</tbody></table></div>';
   }
 
@@ -222,12 +230,20 @@
     var noVersion = reviews.filter(function (r) { return !r.appVersion; }).length;
     var allDates = A.dateRange(reviews);
 
-    var colTable = '<div class="table-wrap"><table><thead><tr><th>게임</th><th>스토어</th><th>선정 방법</th><th class="num">수집 건수</th><th>작성일 범위(KST)</th><th>수집일</th></tr></thead><tbody>' +
+    var cnt = function (arr, fn) { var m = {}; arr.forEach(function (x) { var k = fn(x); m[k] = (m[k] || 0) + 1; }); return m; };
+    var bySource = cnt(reviews, function (r) { return r.labelSource || 'gvl_manual'; });
+    var byRole = cnt(reviews, function (r) { return r.sampleRole || 'distribution'; });
+    var opsBySource = cnt(ops, function (o) { return o.labelSource || 'gvl_manual'; });
+    var colTable = '<div class="table-wrap"><table><thead><tr><th>게임</th><th>스토어</th><th>선정 방법</th><th>역할</th><th class="num">수집 건수</th><th>작성일 범위</th><th>수집일</th></tr></thead><tbody>' +
       (cols.length ? cols.map(function (c) {
-        var n = reviews.filter(function (r) { return r.collectionId === c.collectionId; }).length;
-        return '<tr><td>' + esc(gameName(c.gameId)) + '</td><td>' + esc(c.platform) + '</td><td class="small">' + esc(c.selectionMethod) + '</td>' +
+        var rs = reviews.filter(function (r) { return r.collectionId === c.collectionId; });
+        var n = rs.length;
+        var role = rs.some(function (r) { return r.sampleRole === 'supplement'; }) ? '별점 보강분' : '실제 분포용';
+        return '<tr><td>' + esc(gameName(c.gameId)) + '</td><td>' + esc(c.platform) + '</td><td class="small">' + esc(c.selectionMethod) + '</td><td>' + esc(role) + '</td>' +
           '<td class="num">' + n + '</td><td class="num">' + esc((c.publishedAtMin || '확인 필요') + ' ~ ' + (c.publishedAtMax || '확인 필요')) + '</td><td class="num">' + esc(c.collectedAt) + '</td></tr>';
-      }).join('') : '<tr><td colspan="6" class="muted">수집 정보 없음</td></tr>') + '</tbody></table></div>';
+      }).join('') : '<tr><td colspan="7" class="muted">수집 정보 없음</td></tr>') + '</tbody></table></div>' +
+      '<p class="small muted">같은 리뷰가 여러 묶음(최신순·별점 필터)에 함께 나오면 1건으로 세고, 실제 분포용 묶음에 둡니다. ' +
+      '작성일: Google Play는 스토어 웹 표시 날짜(UTC 기준으로 확인됨), App Store는 KST 변환 날짜입니다.</p>';
 
     var storeRows = [];
     d.games.forEach(function (g) {
@@ -251,7 +267,9 @@
         '<dt>데이터 유형</dt><dd>' + (f.dataType === 'actual' ? '실제 공개 스토어 리뷰' : '샘플(가상) 데이터') + '</dd>' +
         '<dt>리뷰 수</dt><dd>' + reviews.length + '건</dd>' +
         '<dt>분석 의견 수</dt><dd>' + ops.length + '건</dd>' +
-        '<dt>작성일 범위</dt><dd>' + esc((allDates.min || '확인 필요') + ' ~ ' + (allDates.max || '확인 필요')) + ' (KST)</dd>' +
+        '<dt>수집 역할</dt><dd>실제 분포용 ' + (byRole.distribution || 0) + '건 · 별점 보강분 ' + (byRole.supplement || 0) + '건</dd>' +
+        '<dt>분류 출처</dt><dd>GVL 직접 분류 ' + (bySource.gvl_manual || 0) + '건 · 팀원 규칙 ' + (bySource.team_rule || 0) + '건 · 팀원 AI ' + (bySource.team_ai || 0) + '건 (리뷰 기준)</dd>' +
+        '<dt>작성일 범위</dt><dd>' + esc((allDates.min || '확인 필요') + ' ~ ' + (allDates.max || '확인 필요')) + '</dd>' +
         '<dt>수집 플랫폼</dt><dd>' + esc(Array.from(new Set(reviews.map(function (r) { return r.platform; }))).join(', ') || '없음') + '</dd>' +
         '<dt>수집 방식</dt><dd>' + esc((cols[0] && cols[0].collectionTool) || '확인 필요') + '</dd>' +
         '<dt>저장하지 않은 정보</dt><dd>' + esc(((cols[0] && cols[0].excludedFields) || []).join(', ') || '확인 필요') + '</dd>' +
@@ -259,6 +277,8 @@
       panel('분석 및 검수 방식', '',
         '<ul class="plain">' +
         '<li>리뷰를 개별 의견으로 분리하고, 의견마다 카테고리 1개와 감성 1개(긍정·부정·기타)를 사전 분류했습니다. 웹앱은 분류 결과를 집계만 합니다.</li>' +
+        '<li>의견 ' + ops.length + '건 중 GVL 직접 분류 ' + (opsBySource.gvl_manual || 0) + '건, 팀원(review-analysis) 라벨 변환 ' + ((opsBySource.team_rule || 0) + (opsBySource.team_ai || 0)) +
+        '건입니다. 변환분은 리뷰×주제마다 의견 1건으로 만들었고, 팀원 라벨이 "혼합"인 경우는 판단 보류로 두었습니다. 변환분의 원문 발췌는 키워드 단서가 있는 절에서 자동 추출했으며, 찾지 못하면 비워 두었습니다.</li>' +
         '<li>키워드는 정규화 사전(' + d.keywords.length + '종) 기준이며, 원문 발췌는 의견별로 최대 ' + L.EXCERPT_MAX + '자입니다(원문 전문은 저장하지 않음).</li>' +
         '<li>검수 상태: 미검수 ' + sc.unreviewed + '건 · 검수 완료 ' + sc.verified + '건 · 수정됨 ' + sc.corrected + '건 · 판단 보류 ' + sc.on_hold + '건</li>' +
         '<li>확인되지 않은 데이터: 별점 없음 ' + noRating + '건 · 작성일 없음 ' + noDate + '건 · 앱 버전 미확인 ' + noVersion + '건</li>' +
@@ -280,21 +300,27 @@
     var ops = A.opinionsOfReview(state.data, reviewId);
     var col = state.idx.col[r.collectionId];
     $('dlgTitle').textContent = gameName(r.gameId) + ' · ' + r.platform;
-    $('dlgSub').textContent = ratingText(r.rating) + ' · 작성일 ' + dateText(r.publishedAt) + ' (KST) · 의견 ' + ops.length + '건';
+    var dateBasis = r.platform === 'Google Play' ? '스토어 웹 표시 날짜(UTC 기준으로 확인됨)' : 'KST';
+    var isTeam = (r.labelSource || '').indexOf('team_') === 0;
+    $('dlgSub').textContent = ratingText(r.rating) + ' · 작성일 ' + dateText(r.publishedAt) + ' · 의견 ' + ops.length + '건' +
+      ' · ' + (A.LABEL_SOURCE_LABEL[r.labelSource || 'gvl_manual'] || '') + ' · ' + (A.SAMPLE_ROLE_LABEL[r.sampleRole || 'distribution'] || '');
     $('dlgBody').innerHTML =
       '<dl class="meta">' +
       '<dt>게임</dt><dd>' + esc(gameName(r.gameId)) + '</dd>' +
       '<dt>스토어</dt><dd>' + esc(r.platform) + '</dd>' +
       '<dt>별점</dt><dd>' + esc(ratingText(r.rating)) + '</dd>' +
-      '<dt>작성일</dt><dd>' + esc(dateText(r.publishedAt)) + ' (KST)' + (r.publishedAtRaw && r.publishedAtRaw !== r.publishedAt ? ' <span class="muted small">스토어 원래 값: ' + esc(r.publishedAtRaw) + '</span>' : '') + '</dd>' +
-      '<dt>앱 버전</dt><dd>' + esc(r.appVersion || '확인 필요') + '</dd>' +
+      '<dt>작성일</dt><dd>' + esc(dateText(r.publishedAt)) + ' <span class="muted small">(' + esc(dateBasis) + ')</span>' + (r.publishedAtRaw && r.publishedAtRaw !== r.publishedAt ? ' <span class="muted small">스토어 원래 값: ' + esc(r.publishedAtRaw) + '</span>' : '') + '</dd>' +
+      '<dt>앱 버전</dt><dd>' + esc(r.appVersion || '확인 필요 (웹에 표시되지 않음)') + '</dd>' +
+      '<dt>공감 수</dt><dd>' + (typeof r.helpfulCount === 'number' ? r.helpfulCount + '명 (스토어 웹 표시값)' : '확인 필요') + '</dd>' +
+      '<dt>분류 출처</dt><dd>' + esc(A.LABEL_SOURCE_LABEL[r.labelSource || 'gvl_manual']) + (isTeam ? ' <span class="badge hold">팀 검수 전</span>' : '') + '</dd>' +
+      '<dt>수집 역할</dt><dd>' + esc(A.SAMPLE_ROLE_LABEL[r.sampleRole || 'distribution']) + (r.sampleRole === 'supplement' ? ' <span class="muted small">(실제 분포 계산 제외)</span>' : '') + '</dd>' +
       '<dt>데이터 유형</dt><dd>' + (r.dataType === 'actual' ? '실제 공개 리뷰' : '샘플(가상)') + '</dd>' +
       '<dt>수집</dt><dd>' + esc(r.collectedAt) + (col ? ' · ' + esc(col.selectionMethod) : '') + '</dd>' +
       '<dt>스토어 리뷰 ID</dt><dd>' + esc(r.externalReviewId || '확인 필요') + '</dd>' +
       '<dt>출처</dt><dd><a href="' + esc(r.sourceUrl) + '" target="_blank" rel="noopener noreferrer">' + esc(r.sourceUrl) + '</a>' +
       (r.platform === 'App Store' ? '<br><span class="small muted">App Store는 리뷰별 링크가 없어 리뷰 페이지와 스토어 리뷰 ID로 확인합니다.</span>' : '') + '</dd>' +
       '</dl>' +
-      '<div class="summary-box"><span class="tag">리뷰 요약 (작성: 분석자, 원문 아님)</span>' + esc(r.summary) + '</div>' +
+      '<div class="summary-box"><span class="tag">' + (isTeam ? '자동 생성 요약 (팀원 라벨 기반 분류 결과 나열, 원문 아님)' : '리뷰 요약 (작성: 분석자, 원문 아님)') + '</span>' + esc(r.summary) + '</div>' +
       (r.originalText ? '<div class="summary-box"><span class="tag">원문</span>' + esc(r.originalText) + '</div>' : '<p class="small muted">원문 전문은 저장하지 않습니다(의견별 짧은 발췌만 표시). 전체 원문은 출처 링크에서 확인하세요.</p>') +
       '<h4 style="margin:12px 0 8px">추출 의견 ' + ops.length + '건</h4>' +
       ops.map(function (o) {

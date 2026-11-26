@@ -46,11 +46,17 @@
       '<label>데이터 유형<select name="dataType">' +
       (types.length ? types.map(function (t) { return opt(t, t === 'actual' ? '실제 데이터' : '샘플 데이터', s.dataType === t); }).join('') : opt('', '데이터 없음', true)) +
       '</select></label>' +
+      '<label title="별점 필터로 추가 수집한 1·2점 보강분은 실제 분포 계산에서 기본 제외">수집 범위<select name="sampleScope">' +
+      opt('distribution', '실제 분포용', s.sampleScope !== 'all') +
+      opt('all', '보강분 포함(분포 아님)', s.sampleScope === 'all') + '</select></label>' +
+      '<label>분류 출처<select name="labelSource">' + opt('', '전체', !s.labelSource) +
+      opt('gvl_manual', 'GVL 직접 분류', s.labelSource === 'gvl_manual') +
+      opt('team', '팀원 규칙·AI 분류', s.labelSource === 'team') + '</select></label>' +
       '<label>게임<select name="gameId">' + opt('', '전체', !s.gameId) +
       d.games.map(function (g) { return opt(g.gameId, g.name, s.gameId === g.gameId); }).join('') + '</select></label>' +
       '<label>스토어<select name="platform">' + opt('', '전체', !s.platform) +
       platforms.map(function (p) { return opt(p, p, s.platform === p); }).join('') + '</select></label>' +
-      '<label>작성일(KST)<span class="date-pair">' +
+      '<label title="날짜 기준은 데이터 출처 탭 참고">작성일<span class="date-pair">' +
       '<input type="date" name="dateFrom" value="' + esc(s.dateFrom || '') + '"' + (range.min ? ' min="' + range.min + '" max="' + range.max + '"' : '') + ' aria-label="시작일">' +
       '<span class="muted">~</span>' +
       '<input type="date" name="dateTo" value="' + esc(s.dateTo || '') + '"' + (range.min ? ' min="' + range.min + '" max="' + range.max + '"' : '') + ' aria-label="종료일">' +
@@ -80,6 +86,8 @@
   FilterBar.prototype.read = function (target) {
     var f = this.form, s = this.state;
     s.dataType = f.dataType.value || null;
+    s.sampleScope = f.sampleScope.value === 'all' ? 'all' : 'distribution';
+    s.labelSource = f.labelSource.value || null;
     s.gameId = f.gameId.value || null;
     s.platform = f.platform.value || null;
     s.dateFrom = f.dateFrom.value || null;
@@ -114,6 +122,8 @@
   /** 현재 필터를 사람이 읽는 문장으로 */
   FilterBar.prototype.describe = function () {
     var s = this.state, d = this.data, parts = [];
+    if (s.sampleScope === 'all') parts.push('수집 범위: 보강분 포함');
+    if (s.labelSource) parts.push('분류 출처: ' + (s.labelSource === 'team' ? '팀원 규칙·AI' : 'GVL 직접 분류'));
     var g = d.games.find(function (x) { return x.gameId === s.gameId; });
     if (g) parts.push('게임: ' + g.name);
     if (s.platform) parts.push('스토어: ' + s.platform);

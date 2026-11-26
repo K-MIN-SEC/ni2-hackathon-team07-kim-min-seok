@@ -12,6 +12,8 @@
   var OTHER_TYPES = ['suggestion', 'neutral', 'question', 'unknown'];
   var STATUSES = ['unreviewed', 'verified', 'corrected', 'on_hold'];
   var EXCERPT_MAX = 40;
+  var SAMPLE_ROLES = ['distribution', 'supplement'];
+  var LABEL_SOURCES = ['gvl_manual', 'team_rule', 'team_ai'];
   var DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
   function isStr(v) { return typeof v === 'string' && v.trim() !== ''; }
@@ -74,6 +76,9 @@
       if (!isStr(r.collectedAt)) err(id + ': collectedAt 누락');
       if (!(typeof r.sourceUrl === 'string' && /^https?:\/\//.test(r.sourceUrl))) err(id + ': sourceUrl이 URL이 아님');
       if (!isStrOrNull(r.externalReviewId)) err(id + ': externalReviewId 형식 오류');
+      if (r.sampleRole !== undefined && SAMPLE_ROLES.indexOf(r.sampleRole) < 0) err(id + ': 잘못된 sampleRole ' + r.sampleRole);
+      if (r.labelSource !== undefined && LABEL_SOURCES.indexOf(r.labelSource) < 0) err(id + ': 잘못된 labelSource ' + r.labelSource);
+      if (r.helpfulCount !== undefined && r.helpfulCount !== null && !(Number.isInteger(r.helpfulCount) && r.helpfulCount >= 0)) err(id + ': helpfulCount는 0 이상 정수 또는 null');
       if (r.externalReviewId) {
         var k = r.platform + '|' + r.externalReviewId;
         if (ext[k]) err(id + ': 동일 스토어 리뷰 중복 등록(' + ext[k] + ')');
@@ -100,6 +105,7 @@
       if (STATUSES.indexOf(o.verificationStatus) < 0) err(id + ': 잘못된 verificationStatus ' + o.verificationStatus);
       if ((o.verificationStatus === 'on_hold') !== isStr(o.holdReason)) err(id + ': 판단 보류는 holdReason 필수, 그 외는 null');
       if (!isStr(o.summary)) err(id + ': summary 누락');
+      if (o.labelSource !== undefined && LABEL_SOURCES.indexOf(o.labelSource) < 0) err(id + ': 잘못된 labelSource ' + o.labelSource);
       if (o.evidenceText !== null && !(typeof o.evidenceText === 'string' && Array.from(o.evidenceText).length <= EXCERPT_MAX)) err(id + ': evidenceText는 ' + EXCERPT_MAX + '자 이하');
     });
 

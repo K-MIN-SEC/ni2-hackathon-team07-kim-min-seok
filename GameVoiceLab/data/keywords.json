@@ -322,5 +322,275 @@
     "keyword": "눈 피로",
     "categoryId": "CAT-013",
     "aliases": []
+  },
+  {
+    "keyword": "UI",
+    "categoryId": "CAT-006",
+    "aliases": []
+  },
+  {
+    "keyword": "UX/UI 기타 표현",
+    "categoryId": "CAT-006",
+    "aliases": []
+  },
+  {
+    "keyword": "가이드·설명",
+    "categoryId": "CAT-006",
+    "aliases": []
+  },
+  {
+    "keyword": "결제 미지급",
+    "categoryId": "CAT-003",
+    "aliases": []
+  },
+  {
+    "keyword": "결제·환불",
+    "categoryId": "CAT-003",
+    "aliases": []
+  },
+  {
+    "keyword": "계정 문제",
+    "categoryId": "CAT-011",
+    "aliases": []
+  },
+  {
+    "keyword": "계정 복구 요청",
+    "categoryId": "CAT-011",
+    "aliases": []
+  },
+  {
+    "keyword": "과금",
+    "categoryId": "CAT-003",
+    "aliases": []
+  },
+  {
+    "keyword": "광고",
+    "categoryId": "CAT-003",
+    "aliases": []
+  },
+  {
+    "keyword": "광고보상 미지급",
+    "categoryId": "CAT-007",
+    "aliases": []
+  },
+  {
+    "keyword": "광고제거",
+    "categoryId": "CAT-003",
+    "aliases": []
+  },
+  {
+    "keyword": "귀여움",
+    "categoryId": "CAT-009",
+    "aliases": []
+  },
+  {
+    "keyword": "기술·안정성 기타 표현",
+    "categoryId": "CAT-007",
+    "aliases": []
+  },
+  {
+    "keyword": "난이도",
+    "categoryId": "CAT-001",
+    "aliases": []
+  },
+  {
+    "keyword": "던전·모드",
+    "categoryId": "CAT-005",
+    "aliases": []
+  },
+  {
+    "keyword": "랭킹 격차",
+    "categoryId": "CAT-001",
+    "aliases": []
+  },
+  {
+    "keyword": "렉",
+    "categoryId": "CAT-007",
+    "aliases": []
+  },
+  {
+    "keyword": "로딩·용량",
+    "categoryId": "CAT-007",
+    "aliases": []
+  },
+  {
+    "keyword": "무과금",
+    "categoryId": "CAT-003",
+    "aliases": []
+  },
+  {
+    "keyword": "버그·오류",
+    "categoryId": "CAT-007",
+    "aliases": []
+  },
+  {
+    "keyword": "보상·재화",
+    "categoryId": "CAT-002",
+    "aliases": []
+  },
+  {
+    "keyword": "보스",
+    "categoryId": "CAT-005",
+    "aliases": []
+  },
+  {
+    "keyword": "뽑기",
+    "categoryId": "CAT-003",
+    "aliases": []
+  },
+  {
+    "keyword": "사운드",
+    "categoryId": "CAT-009",
+    "aliases": []
+  },
+  {
+    "keyword": "설정·옵션",
+    "categoryId": "CAT-006",
+    "aliases": []
+  },
+  {
+    "keyword": "설치·로그인지연",
+    "categoryId": "CAT-007",
+    "aliases": []
+  },
+  {
+    "keyword": "성장",
+    "categoryId": "CAT-001",
+    "aliases": []
+  },
+  {
+    "keyword": "성장 기타 표현",
+    "categoryId": "CAT-001",
+    "aliases": []
+  },
+  {
+    "keyword": "소통·CS",
+    "categoryId": "CAT-008",
+    "aliases": []
+  },
+  {
+    "keyword": "수익화 기타 표현",
+    "categoryId": "CAT-003",
+    "aliases": []
+  },
+  {
+    "keyword": "스킬·장비",
+    "categoryId": "CAT-004",
+    "aliases": []
+  },
+  {
+    "keyword": "스토리·챕터",
+    "categoryId": "CAT-005",
+    "aliases": []
+  },
+  {
+    "keyword": "아트·사운드 기타 표현",
+    "categoryId": "CAT-009",
+    "aliases": []
+  },
+  {
+    "keyword": "업데이트",
+    "categoryId": "CAT-005",
+    "aliases": []
+  },
+  {
+    "keyword": "업데이트불가",
+    "categoryId": "CAT-007",
+    "aliases": []
+  },
+  {
+    "keyword": "오프라인 보상",
+    "categoryId": "CAT-002",
+    "aliases": []
+  },
+  {
+    "keyword": "운영 기타 표현",
+    "categoryId": "CAT-008",
+    "aliases": []
+  },
+  {
+    "keyword": "이벤트·보상 미지급",
+    "categoryId": "CAT-008",
+    "aliases": []
+  },
+  {
+    "keyword": "이벤트·콜라보",
+    "categoryId": "CAT-005",
+    "aliases": []
+  },
+  {
+    "keyword": "이용제한",
+    "categoryId": "CAT-008",
+    "aliases": []
+  },
+  {
+    "keyword": "전반적 불만",
+    "categoryId": "CAT-012",
+    "aliases": []
+  },
+  {
+    "keyword": "전반적 언급",
+    "categoryId": "CAT-012",
+    "aliases": []
+  },
+  {
+    "keyword": "절전모드",
+    "categoryId": "CAT-006",
+    "aliases": []
+  },
+  {
+    "keyword": "지루함",
+    "categoryId": "CAT-005",
+    "aliases": []
+  },
+  {
+    "keyword": "진행·기능 오류",
+    "categoryId": "CAT-007",
+    "aliases": []
+  },
+  {
+    "keyword": "캐릭터",
+    "categoryId": "CAT-009",
+    "aliases": []
+  },
+  {
+    "keyword": "컨텐츠",
+    "categoryId": "CAT-005",
+    "aliases": []
+  },
+  {
+    "keyword": "콘텐츠 기타 표현",
+    "categoryId": "CAT-005",
+    "aliases": []
+  },
+  {
+    "keyword": "쿠폰",
+    "categoryId": "CAT-008",
+    "aliases": []
+  },
+  {
+    "keyword": "패스·패키지",
+    "categoryId": "CAT-003",
+    "aliases": []
+  },
+  {
+    "keyword": "편의",
+    "categoryId": "CAT-006",
+    "aliases": []
+  },
+  {
+    "keyword": "현질",
+    "categoryId": "CAT-003",
+    "aliases": []
+  },
+  {
+    "keyword": "화면",
+    "categoryId": "CAT-006",
+    "aliases": []
+  },
+  {
+    "keyword": "확률",
+    "categoryId": "CAT-003",
+    "aliases": []
   }
 ]

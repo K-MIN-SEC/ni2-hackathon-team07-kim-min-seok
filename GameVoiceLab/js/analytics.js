@@ -11,6 +11,8 @@
   var SENTIMENT_LABEL = { positive: '긍정', negative: '부정', other: '기타' };
   var OTHER_TYPE_LABEL = { suggestion: '건의', neutral: '중립', question: '질문', unknown: '판단 불가' };
   var STATUS_LABEL = { unreviewed: '미검수', verified: '검수 완료', corrected: '수정됨', on_hold: '판단 보류' };
+  var LABEL_SOURCE_LABEL = { gvl_manual: 'GVL 직접 분류', team_rule: '팀원 규칙 분류', team_ai: '팀원 AI 판정' };
+  var SAMPLE_ROLE_LABEL = { distribution: '실제 분포용', supplement: '별점 보강분' };
 
   /** 비율(%) 계산. 분모 0이면 null (화면에서 N/A). */
   function pct(n, d) {
@@ -30,6 +32,7 @@
   function emptyFilters() {
     return {
       dataType: null, gameId: null, platform: null, dateFrom: null, dateTo: null, rating: null,
+      sampleScope: 'distribution', labelSource: null,
       categoryId: null, sentiment: null, otherType: null, keyword: null,
     };
   }
@@ -59,8 +62,15 @@
     var dateActive = !!(f.dateFrom || f.dateTo);
     var excludedNoDate = 0;
 
+    var excludedSupplement = 0;
     var baseReviews = data.reviews.filter(function (r) {
       if (f.dataType && r.dataType !== f.dataType) return false;
+      // 수집 범위: 기본은 실제 분포용만. 별점 필터로 추가한 보강분(supplement)은 'all'일 때만 포함
+      if (f.sampleScope !== 'all' && (r.sampleRole || 'distribution') !== 'distribution') { excludedSupplement++; return false; }
+      if (f.labelSource) {
+        var src = r.labelSource || 'gvl_manual';
+        if (f.labelSource === 'team' ? src.indexOf('team_') !== 0 : src !== f.labelSource) return false;
+      }
       if (f.gameId && r.gameId !== f.gameId) return false;
       if (f.platform && r.platform !== f.platform) return false;
       if (f.rating !== null && f.rating !== undefined && r.rating !== f.rating) return false;
@@ -93,6 +103,8 @@
       opinionFilterActive: opinionFilterActive,
       dateFilterActive: dateActive,
       excludedNoDate: excludedNoDate,
+      excludedSupplement: excludedSupplement,
+      sampleScope: f.sampleScope === 'all' ? 'all' : 'distribution',
     };
   }
 
@@ -196,6 +208,7 @@
   var api = {
     SENTIMENTS: SENTIMENTS, OTHER_TYPES: OTHER_TYPES,
     SENTIMENT_LABEL: SENTIMENT_LABEL, OTHER_TYPE_LABEL: OTHER_TYPE_LABEL, STATUS_LABEL: STATUS_LABEL,
+    LABEL_SOURCE_LABEL: LABEL_SOURCE_LABEL, SAMPLE_ROLE_LABEL: SAMPLE_ROLE_LABEL,
     pct: pct, fmtPct: fmtPct, fmtAvg: fmtAvg,
     emptyFilters: emptyFilters, isOpinionFilterActive: isOpinionFilterActive, applyFilters: applyFilters,
     reviewStats: reviewStats, sentimentStats: sentimentStats, categoryStats: categoryStats,
