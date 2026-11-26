@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Game Voice Lab — 유저 리뷰 감성 분석 대시보드</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>Game Voice Lab</h1>
+    <span class="subtitle">스토어 리뷰 의견 단위 감성·주제 분석</span>
+    <div class="badges" id="headerBadges"></div>
+  </header>
+
+  <form class="filters" id="filters" aria-label="공통 필터" onsubmit="return false"></form>
+
+  <nav class="tabs" role="tablist" aria-label="화면 이동" id="tabs">
+    <button role="tab" data-tab="overview" aria-selected="true">전체 현황</button>
+    <button role="tab" data-tab="topics" aria-selected="false">주제별 분석</button>
+    <button role="tab" data-tab="keywords" aria-selected="false">키워드 분석</button>
+    <button role="tab" data-tab="others" aria-selected="false">기타·건의 사항</button>
+    <button role="tab" data-tab="explore" aria-selected="false">의견 탐색</button>
+    <button role="tab" data-tab="sources" aria-selected="false">데이터 출처</button>
+  </nav>
+
+  <main>
+    <div id="notices"></div>
+    <section data-panel="overview" id="panel-overview"></section>
+    <section data-panel="topics" id="panel-topics" class="hidden"></section>
+    <section data-panel="keywords" id="panel-keywords" class="hidden"></section>
+    <section data-panel="others" id="panel-others" class="hidden"></section>
+    <section data-panel="explore" id="panel-explore" class="hidden"></section>
+    <section data-panel="sources" id="panel-sources" class="hidden"></section>
+  </main>
+
+  <dialog id="reviewDialog" aria-labelledby="dlgTitle">
+    <div class="dlg-head">
+      <div>
+        <h3 id="dlgTitle">리뷰 상세</h3>
+        <div class="small muted" id="dlgSub"></div>
+      </div>
+      <button class="btn close" type="button" id="dlgClose">닫기</button>
+    </div>
+    <div class="dlg-body" id="dlgBody"></div>
+  </dialog>
+
+  <div id="tooltip" role="tooltip"></div>
+
+  <noscript><p style="padding:24px">이 대시보드는 JavaScript가 필요합니다.</p></noscript>
+
+  <script src="js/analytics.js"></script>
+  <script src="js/data-loader.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/filters.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

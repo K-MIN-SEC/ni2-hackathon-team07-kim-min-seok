@@ -1,0 +1,68 @@
+[
+  {
+    "gameId": "maple",
+    "name": "메이플 키우기",
+    "companyRelation": "넥슨과 에이블게임즈 공동 개발(에이블게임즈 공식 홈페이지 연혁 2025.11). 스토어 개발자 표기는 NEXON Company",
+    "storeListings": [
+      {
+        "platform": "Google Play",
+        "storeAppId": "com.nexon.ma",
+        "storeUrl": "https://play.google.com/store/apps/details?id=com.nexon.ma",
+        "storeDeveloperName": "NEXON Company",
+        "snapshot": {
+          "checkedAt": "2026-11-26",
+          "rating": 4.6,
+          "ratingCountText": "리뷰 12.3만개",
+          "downloadsText": "500만+",
+          "lastUpdated": "2026-11-21"
+        }
+      },
+      {
+        "platform": "App Store",
+        "storeAppId": "6739616715",
+        "storeUrl": "https://apps.apple.com/kr/app/id6739616715",
+        "storeDeveloperName": null,
+        "snapshot": {
+          "checkedAt": "2026-11-26",
+          "rating": 4.5,
+          "ratingCountText": "2.6만개의 평가",
+          "downloadsText": null,
+          "lastUpdated": null
+        }
+      }
+    ]
+  },
+  {
+    "gameId": "daltoki",
+    "name": "달토끼 키우기",
+    "companyRelation": "에이블게임즈 자체 개발·서비스(공식 홈페이지 연혁 2021.06 국내 출시)",
+    "storeListings": [
+      {
+        "platform": "Google Play",
+        "storeAppId": "com.AbleGames.DalToKi",
+        "storeUrl": "https://play.google.com/store/apps/details?id=com.AbleGames.DalToKi",
+        "storeDeveloperName": "Ablegames",
+        "snapshot": {
+          "checkedAt": "2026-11-26",
+          "rating": 4.7,
+          "ratingCountText": "리뷰 7.34만개",
+          "downloadsText": "100만+",
+          "lastUpdated": "2026-10-29"
+        }
+      },
+      {
+        "platform": "App Store",
+        "storeAppId": "1599684924",
+        "storeUrl": "https://apps.apple.com/kr/app/id1599684924",
+        "storeDeveloperName": null,
+        "snapshot": {
+          "checkedAt": "2026-11-26",
+          "rating": 4.7,
+          "ratingCountText": "2.5천개의 평가",
+          "downloadsText": null,
+          "lastUpdated": null
+        }
+      }
+    ]
+  }
+]

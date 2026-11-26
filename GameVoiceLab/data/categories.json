@@ -1,0 +1,67 @@
+[
+  {
+    "categoryId": "CAT-001",
+    "name": "성장",
+    "scope": "레벨업, 강화, 성장 속도"
+  },
+  {
+    "categoryId": "CAT-002",
+    "name": "경제",
+    "scope": "재화 수급, 소비, 강화 비용, 게임 내 상점"
+  },
+  {
+    "categoryId": "CAT-003",
+    "name": "수익화",
+    "scope": "과금, 유료 상품, 확률형 아이템(뽑기), 광고"
+  },
+  {
+    "categoryId": "CAT-004",
+    "name": "전투",
+    "scope": "전투 재미, 스킬, 난이도, 캐릭터 성능"
+  },
+  {
+    "categoryId": "CAT-005",
+    "name": "콘텐츠",
+    "scope": "스테이지, 던전, 스토리, 반복성, 일일 과제·접속 부담(방치 가능성)"
+  },
+  {
+    "categoryId": "CAT-006",
+    "name": "UX/UI",
+    "scope": "인터페이스, 가시성, 조작, 편의성"
+  },
+  {
+    "categoryId": "CAT-007",
+    "name": "기술·안정성",
+    "scope": "버그, 서버, 발열, 프레임, 튕김, 로딩, 앱 용량, 기기 호환"
+  },
+  {
+    "categoryId": "CAT-008",
+    "name": "운영",
+    "scope": "점검, 공지, 이벤트, 고객 대응"
+  },
+  {
+    "categoryId": "CAT-009",
+    "name": "아트·사운드",
+    "scope": "그래픽, 디자인, 음악, 효과음"
+  },
+  {
+    "categoryId": "CAT-010",
+    "name": "소셜",
+    "scope": "길드, 파티, 유저 간 상호작용, PVP·랭킹·길드전 등 경쟁 시스템"
+  },
+  {
+    "categoryId": "CAT-011",
+    "name": "계정·데이터",
+    "scope": "로그인, 연동, 계정 복구, 데이터 손실"
+  },
+  {
+    "categoryId": "CAT-012",
+    "name": "전체 경험",
+    "scope": "특정 요소를 지칭하지 않는 게임 전체 평가"
+  },
+  {
+    "categoryId": "CAT-013",
+    "name": "기타",
+    "scope": "기존 카테고리에 포함되지 않는 의견"
+  }
+]

@@ -1,0 +1,94 @@
+[
+  {
+    "collectionId": "C-maple-google",
+    "gameId": "maple",
+    "platform": "Google Play",
+    "selectionMethod": "웹 스토어 > 리뷰 모두 보기 > 기기 \"전화\"(기본값) > 정렬 \"최신\" > 처음 로드된 20건",
+    "sortOrder": "newest",
+    "deviceFilter": "전화",
+    "requestedCount": 20,
+    "locale": "ko-KR",
+    "collectedAt": "2026-11-26",
+    "collectionTool": "브라우저 화면 열람(자동 수집 도구·비공식 API 미사용)",
+    "excludedFields": [
+      "작성자 닉네임",
+      "프로필 이미지",
+      "유용함 수",
+      "개발자 답변",
+      "리뷰 원문 전문"
+    ],
+    "dataType": "actual",
+    "collectedCount": 20,
+    "publishedAtMin": "2026-11-20",
+    "publishedAtMax": "2026-11-25"
+  },
+  {
+    "collectionId": "C-maple-apple",
+    "gameId": "maple",
+    "platform": "App Store",
+    "selectionMethod": "웹 스토어 평가 및 리뷰 페이지(see-all=reviews, iPhone)의 기본 노출 리뷰 전체. 정렬 옵션 없음",
+    "sortOrder": "store_default",
+    "deviceFilter": "iPhone",
+    "requestedCount": null,
+    "locale": "ko-KR",
+    "collectedAt": "2026-11-26",
+    "collectionTool": "브라우저 화면 열람(자동 수집 도구·비공식 API 미사용)",
+    "excludedFields": [
+      "작성자 닉네임",
+      "프로필 이미지",
+      "유용함 수",
+      "개발자 답변",
+      "리뷰 원문 전문"
+    ],
+    "dataType": "actual",
+    "collectedCount": 10,
+    "publishedAtMin": "2025-11-07",
+    "publishedAtMax": "2026-07-22"
+  },
+  {
+    "collectionId": "C-daltoki-google",
+    "gameId": "daltoki",
+    "platform": "Google Play",
+    "selectionMethod": "웹 스토어 > 리뷰 모두 보기 > 기기 \"전화\"(기본값) > 정렬 \"최신\" > 처음 로드된 20건",
+    "sortOrder": "newest",
+    "deviceFilter": "전화",
+    "requestedCount": 20,
+    "locale": "ko-KR",
+    "collectedAt": "2026-11-26",
+    "collectionTool": "브라우저 화면 열람(자동 수집 도구·비공식 API 미사용)",
+    "excludedFields": [
+      "작성자 닉네임",
+      "프로필 이미지",
+      "유용함 수",
+      "개발자 답변",
+      "리뷰 원문 전문"
+    ],
+    "dataType": "actual",
+    "collectedCount": 20,
+    "publishedAtMin": "2026-08-16",
+    "publishedAtMax": "2026-11-17"
+  },
+  {
+    "collectionId": "C-daltoki-apple",
+    "gameId": "daltoki",
+    "platform": "App Store",
+    "selectionMethod": "웹 스토어 평가 및 리뷰 페이지(see-all=reviews, iPhone)의 기본 노출 리뷰 전체. 정렬 옵션 없음",
+    "sortOrder": "store_default",
+    "deviceFilter": "iPhone",
+    "requestedCount": null,
+    "locale": "ko-KR",
+    "collectedAt": "2026-11-26",
+    "collectionTool": "브라우저 화면 열람(자동 수집 도구·비공식 API 미사용)",
+    "excludedFields": [
+      "작성자 닉네임",
+      "프로필 이미지",
+      "유용함 수",
+      "개발자 답변",
+      "리뷰 원문 전문"
+    ],
+    "dataType": "actual",
+    "collectedCount": 10,
+    "publishedAtMin": "2022-06-13",
+    "publishedAtMax": "2025-05-17"
+  }
+]

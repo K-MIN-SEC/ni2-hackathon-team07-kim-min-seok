@@ -1,0 +1,326 @@
+[
+  {
+    "keyword": "전반적 만족",
+    "categoryId": "CAT-012",
+    "aliases": [
+      "무난함",
+      "시간 보내기 좋음",
+      "게임 품질"
+    ]
+  },
+  {
+    "keyword": "재미",
+    "categoryId": "CAT-012",
+    "aliases": []
+  },
+  {
+    "keyword": "재미 없음",
+    "categoryId": "CAT-012",
+    "aliases": []
+  },
+  {
+    "keyword": "양산형",
+    "categoryId": "CAT-012",
+    "aliases": []
+  },
+  {
+    "keyword": "경쟁작 대비 부족",
+    "categoryId": "CAT-012",
+    "aliases": []
+  },
+  {
+    "keyword": "직업 변경",
+    "categoryId": "CAT-001",
+    "aliases": []
+  },
+  {
+    "keyword": "부캐릭터 혜택",
+    "categoryId": "CAT-001",
+    "aliases": []
+  },
+  {
+    "keyword": "유저 간 격차",
+    "categoryId": "CAT-001",
+    "aliases": []
+  },
+  {
+    "keyword": "성장 정체",
+    "categoryId": "CAT-001",
+    "aliases": []
+  },
+  {
+    "keyword": "성장 외형 변화",
+    "categoryId": "CAT-001",
+    "aliases": []
+  },
+  {
+    "keyword": "보상 풍부",
+    "categoryId": "CAT-002",
+    "aliases": []
+  },
+  {
+    "keyword": "과금 요소 존재",
+    "categoryId": "CAT-003",
+    "aliases": []
+  },
+  {
+    "keyword": "멤버십 결제 단위",
+    "categoryId": "CAT-003",
+    "aliases": []
+  },
+  {
+    "keyword": "확률형 아이템 불만",
+    "categoryId": "CAT-003",
+    "aliases": [
+      "확률형 아이템 불신",
+      "뽑기 확률 낮음"
+    ]
+  },
+  {
+    "keyword": "광고 부담",
+    "categoryId": "CAT-003",
+    "aliases": [
+      "광고 길이",
+      "광고 과다",
+      "광고 표시 불편"
+    ]
+  },
+  {
+    "keyword": "과금 유도",
+    "categoryId": "CAT-003",
+    "aliases": []
+  },
+  {
+    "keyword": "무과금 친화",
+    "categoryId": "CAT-003",
+    "aliases": []
+  },
+  {
+    "keyword": "스킬 슬롯 부족",
+    "categoryId": "CAT-004",
+    "aliases": []
+  },
+  {
+    "keyword": "동료 중요도",
+    "categoryId": "CAT-004",
+    "aliases": []
+  },
+  {
+    "keyword": "엘리트 몬스터 사냥",
+    "categoryId": "CAT-004",
+    "aliases": []
+  },
+  {
+    "keyword": "스킬",
+    "categoryId": "CAT-004",
+    "aliases": []
+  },
+  {
+    "keyword": "접속 부담",
+    "categoryId": "CAT-005",
+    "aliases": [
+      "길드 참여 강제"
+    ]
+  },
+  {
+    "keyword": "콘텐츠 확장성 부족",
+    "categoryId": "CAT-005",
+    "aliases": []
+  },
+  {
+    "keyword": "스토리",
+    "categoryId": "CAT-005",
+    "aliases": []
+  },
+  {
+    "keyword": "이벤트 던전",
+    "categoryId": "CAT-005",
+    "aliases": []
+  },
+  {
+    "keyword": "이벤트 던전 재개",
+    "categoryId": "CAT-005",
+    "aliases": []
+  },
+  {
+    "keyword": "인벤토리 확장",
+    "categoryId": "CAT-006",
+    "aliases": []
+  },
+  {
+    "keyword": "조작 입력 지연",
+    "categoryId": "CAT-006",
+    "aliases": []
+  },
+  {
+    "keyword": "화면 요소 작음",
+    "categoryId": "CAT-006",
+    "aliases": [
+      "캐릭터 크기 작음"
+    ]
+  },
+  {
+    "keyword": "텍스트 과다 UI",
+    "categoryId": "CAT-006",
+    "aliases": []
+  },
+  {
+    "keyword": "조작 유연",
+    "categoryId": "CAT-006",
+    "aliases": []
+  },
+  {
+    "keyword": "보안인증 오류",
+    "categoryId": "CAT-007",
+    "aliases": []
+  },
+  {
+    "keyword": "비정상 종료",
+    "categoryId": "CAT-007",
+    "aliases": []
+  },
+  {
+    "keyword": "발열",
+    "categoryId": "CAT-007",
+    "aliases": []
+  },
+  {
+    "keyword": "서버 불안정",
+    "categoryId": "CAT-007",
+    "aliases": []
+  },
+  {
+    "keyword": "접속 불가",
+    "categoryId": "CAT-007",
+    "aliases": []
+  },
+  {
+    "keyword": "앱 용량",
+    "categoryId": "CAT-007",
+    "aliases": []
+  },
+  {
+    "keyword": "발열 적음",
+    "categoryId": "CAT-007",
+    "aliases": []
+  },
+  {
+    "keyword": "튕김 적음",
+    "categoryId": "CAT-007",
+    "aliases": []
+  },
+  {
+    "keyword": "버퍼링",
+    "categoryId": "CAT-007",
+    "aliases": []
+  },
+  {
+    "keyword": "쿠폰 사용 범위",
+    "categoryId": "CAT-008",
+    "aliases": []
+  },
+  {
+    "keyword": "보상 미지급",
+    "categoryId": "CAT-008",
+    "aliases": []
+  },
+  {
+    "keyword": "서버 선택",
+    "categoryId": "CAT-008",
+    "aliases": []
+  },
+  {
+    "keyword": "운영 불만",
+    "categoryId": "CAT-008",
+    "aliases": []
+  },
+  {
+    "keyword": "이벤트 미션 설계",
+    "categoryId": "CAT-008",
+    "aliases": []
+  },
+  {
+    "keyword": "운영 정성",
+    "categoryId": "CAT-008",
+    "aliases": []
+  },
+  {
+    "keyword": "빠른 고객 대응",
+    "categoryId": "CAT-008",
+    "aliases": []
+  },
+  {
+    "keyword": "쿠폰 지급",
+    "categoryId": "CAT-008",
+    "aliases": []
+  },
+  {
+    "keyword": "점검 시간",
+    "categoryId": "CAT-008",
+    "aliases": []
+  },
+  {
+    "keyword": "효과음",
+    "categoryId": "CAT-009",
+    "aliases": []
+  },
+  {
+    "keyword": "캐릭터·외형 디자인",
+    "categoryId": "CAT-009",
+    "aliases": [
+      "귀여운 디자인",
+      "캐릭터 디자인",
+      "코스튬"
+    ]
+  },
+  {
+    "keyword": "음악",
+    "categoryId": "CAT-009",
+    "aliases": []
+  },
+  {
+    "keyword": "그래픽",
+    "categoryId": "CAT-009",
+    "aliases": []
+  },
+  {
+    "keyword": "친구와 함께 플레이",
+    "categoryId": "CAT-010",
+    "aliases": []
+  },
+  {
+    "keyword": "길드 가입 어려움",
+    "categoryId": "CAT-010",
+    "aliases": []
+  },
+  {
+    "keyword": "파티 사냥",
+    "categoryId": "CAT-010",
+    "aliases": []
+  },
+  {
+    "keyword": "커뮤니티 활성",
+    "categoryId": "CAT-010",
+    "aliases": []
+  },
+  {
+    "keyword": "진행 데이터 손실",
+    "categoryId": "CAT-011",
+    "aliases": []
+  },
+  {
+    "keyword": "어지러움",
+    "categoryId": "CAT-013",
+    "aliases": []
+  },
+  {
+    "keyword": "판단 불가",
+    "categoryId": "CAT-013",
+    "aliases": []
+  },
+  {
+    "keyword": "눈 피로",
+    "categoryId": "CAT-013",
+    "aliases": []
+  }
+]
