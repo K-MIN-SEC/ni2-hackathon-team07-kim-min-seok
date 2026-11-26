@@ -227,6 +227,20 @@ details.formula .body { margin-top: 8px; color: var(--ink-2); }
 .quote .more { padding: 4px 2px; min-height: 26px; }
 .toolbar .actions { flex-wrap: wrap; }
 .toolbar .actions .theme, .toolbar .actions label.upload { white-space: nowrap; min-height: 32px; }
+/* ---- 문구 정리 (2026-11-27): 숫자 중심 ---- */
+#scope:empty { display: none; }
+.tile { position: relative; }
+.tile.clk::after { content: "›"; position: absolute; right: 14px; top: 8px; font-size: 22px; line-height: 1; color: var(--muted); }
+.tile.clk:hover::after { color: var(--accent); }
+.tile .note { font-size: 14px; }
+.summary li { font-size: 15px; align-items: center; }
+.summary li .go { font-size: 15px; font-weight: 700; }
+table.kv th { width: 4.5em; color: var(--ink-2); font-weight: 600; font-size: 14px; }
+table.kv td { font-size: 15px; }
+.steps { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; max-width: none; }
+.steps li { padding: 6px 12px; border-radius: 999px; }
+.steps b { margin: 0; font-size: 14px; }
+.good-ratio { margin: 4px 0 8px; font-size: 15px; } .good-ratio b { font-size: 22px; color: var(--pos); }
 /* ---- 첫 화면: 파일 첨부 ---- */
 body.is-empty main, body.is-empty #printBtn, body.is-empty #resetBtn, body.is-empty #addBtn { display: none !important; }
 body:not(.is-empty) #emptyState { display: none; }
@@ -300,36 +314,35 @@ dialog#mergeDlg::backdrop { background: rgba(0,0,0,.35); }
   <div class="callout small upload-note" id="uploadNote" role="status" aria-live="polite"></div>
   <section id="emptyState" aria-labelledby="h-empty">
     <div class="drop">
-      <h2 id="h-empty">리뷰 CSV를 넣으면 바로 분석합니다</h2>
-      <p class="lead">감성·주제 라벨이 붙은 스토어 리뷰 파일을 넣으면, 주제별 긍정·부정과 고쳐야 할 우선순위, 지켜야 할 장점, 버전별 추이를 이 화면에서 바로 계산해 보여 줍니다.</p>
+      <h2 id="h-empty">리뷰 CSV를 넣어 주세요</h2>
+      <p class="lead">감성·주제 라벨이 붙은 리뷰 파일 → 바로 집계</p>
       <label class="big">CSV 파일 선택<input type="file" id="csvInputBig" accept=".csv,text/csv" hidden></label>
-      <p class="or">또는 이 화면 아무 곳에나 파일을 끌어다 놓으세요 · 파일은 브라우저 밖으로 전송되지 않습니다</p>
+      <p class="or">또는 끌어다 놓기 · 파일은 외부로 전송되지 않음</p>
       <ol class="steps">
-        <li><b>1. 파일 넣기</b>파일을 여러 개 넣으면 누적할지 교체할지 고를 수 있습니다</li>
-        <li><b>2. 바로 집계</b>감성 분포, 주제별 긍정·부정, 키워드를 다시 계산합니다</li>
-        <li><b>3. 결과 확인</b>개선 우선순위와 장점, 숫자마다 근거 리뷰까지</li>
+        <li><b>1. CSV 넣기</b></li>
+        <li><b>2. 누적 또는 교체</b></li>
+        <li><b>3. 결과 확인</b></li>
       </ol>
       <div class="sub-actions">
-        <button class="linkish count" type="button" id="exampleLink">예시 자료(달토끼 키우기 6,349건)로 보기</button>
-        <button class="linkish count" type="button" id="helpLink">CSV 형식 안내</button>
+        <button class="linkish count" type="button" id="exampleLink">예시 자료 보기 (6,349건)</button>
       </div>
     </div>
   </section>
   <dialog id="mergeDlg" aria-labelledby="mergeTitle">
     <div class="body">
-      <h3 id="mergeTitle">새 파일을 어떻게 반영할까요?</h3>
+      <h3 id="mergeTitle">새 파일 반영</h3>
       <p id="mergeDesc"></p>
     </div>
     <div class="opts">
-      <button class="opt primary" type="button" data-v="add"><b>누적</b><span id="mergeAddDesc">지금 자료에 더해서 다시 계산</span></button>
-      <button class="opt" type="button" data-v="replace"><b>교체</b><span id="mergeRepDesc">새 파일만으로 다시 계산</span></button>
+      <button class="opt primary" type="button" data-v="add"><b>누적</b><span id="mergeAddDesc"></span></button>
+      <button class="opt" type="button" data-v="replace"><b>교체</b><span id="mergeRepDesc"></span></button>
       <button class="cancel" type="button" data-v="cancel">취소</button>
     </div>
   </dialog>
   <details class="small csv-help" id="csvHelp">
     <summary>CSV 형식 안내</summary>
     <div class="csv-help-body">
-      <p>이 대시보드는 <b>분류(라벨)가 끝난 리뷰 CSV</b>를 읽어 브라우저 안에서 모든 수치를 계산합니다. 파일은 어디에도 전송되지 않습니다.</p>
+      <p>라벨이 붙은 리뷰 CSV만 읽습니다. 계산은 브라우저 안에서만 합니다.</p>
       <table>
         <tr><th>열</th><th>필수</th><th>설명</th></tr>
         <tr><td><code>content</code></td><td>필수</td><td>리뷰 본문</td></tr>
@@ -352,9 +365,8 @@ dialog#mergeDlg::backdrop { background: rgba(0,0,0,.35); }
   </section>
 
   <div class="card summary" id="summaryCard">
-    <h2>한눈에 보기</h2>
+    <h2>요약</h2>
     <ul id="summaryList"></ul>
-    <p class="hint">요약은 아래 각 섹션의 계산 결과에서 자동으로 뽑은 문장입니다. 근거는 "자세히"를 눌러 해당 섹션에서 확인하세요.</p>
   </div>
 
   <nav id="secNav" aria-label="섹션 바로가기">
@@ -364,7 +376,7 @@ dialog#mergeDlg::backdrop { background: rgba(0,0,0,.35); }
 
   <section id="s-topic">
     <h2>주제별 긍정·부정 비율</h2>
-    <p class="sub">각 리뷰가 언급한 주제마다 따로 매긴 감성입니다. 리뷰 하나가 여러 주제에 들어갈 수 있습니다. 막대 오른쪽 숫자는 그 주제를 언급한 리뷰 수와 전체 대비 비중입니다. 모든 차트는 아래 '표로 보기'로 정확한 수치를 확인할 수 있습니다.</p>
+    <p class="sub">막대 오른쪽: 언급 리뷰 수 · 전체 대비</p>
     <div class="card">
       <ul class="legend" id="sentLegend" aria-label="색 범례"></ul>
       <div class="chart" id="topicChart"></div>
@@ -373,19 +385,19 @@ dialog#mergeDlg::backdrop { background: rgba(0,0,0,.35); }
     </div>
     <div class="grid g2" style="margin-top:12px">
       <div class="card">
-        <h3 class="sm-title">리뷰 전체 감성 (내용 기준)</h3>
+        <h3 class="sm-title">전체 감성</h3>
         <div class="chart" id="overallChart"></div>
       </div>
       <div class="card">
-        <h3 class="sm-title">별점과 내용 감성의 차이</h3>
+        <h3 class="sm-title">별점 분포</h3>
         <div id="ratingNote" class="small"></div>
       </div>
     </div>
   </section>
 
   <section id="s-kw">
-    <h2>감성 × 주제별 키워드 분포</h2>
-    <p class="sub">선택한 주제·감성 리뷰 중 각 키워드를 언급한 리뷰의 비율입니다(한 리뷰가 여러 키워드를 언급할 수 있어 합계가 100%를 넘을 수 있음). 키워드는 커뮤니티 표현을 묶은 대표어입니다. 예를 들어 '튕김'에는 튕김·팅김·강제종료가 들어갑니다.</p>
+    <h2>주제별 키워드</h2>
+    <p class="sub">선택한 리뷰 중 키워드 언급 비율 (중복 언급 가능)</p>
     <div class="card">
       <div class="controls">
         <div class="seg" id="kwTopic" role="group" aria-label="주제 선택"></div>
@@ -394,8 +406,7 @@ dialog#mergeDlg::backdrop { background: rgba(0,0,0,.35); }
       <div id="kwHead" class="small muted" style="margin-bottom:6px" aria-live="polite"></div>
       <div class="grid g2">
         <div><h3 class="sm-title">대표 키워드</h3><div class="chart" id="kwChart"></div></div>
-        <div><h3 class="sm-title">자주 나온 표현 (원문 단어)</h3><div class="chart" id="termChart"></div>
-          <p class="hint">원문 단어를 그대로 센 값이라 "하지", "스킬도"처럼 의미가 약한 단어가 섞일 수 있습니다. 해석은 왼쪽 대표 키워드를 기준으로 하세요.</p></div>
+        <div><h3 class="sm-title">원문 단어 <span class="muted">(참고)</span></h3><div class="chart" id="termChart"></div></div>
       </div>
     </div>
   </section>
@@ -408,7 +419,7 @@ dialog#mergeDlg::backdrop { background: rgba(0,0,0,.35); }
       <div class="scroll" style="margin-top:10px" tabindex="0" role="region" aria-label="키워드 단위 우선순위 표 (가로 스크롤)"><table id="prioTable"></table></div>
     </div>
     <div class="card" style="margin-top:12px">
-      <h3 class="sm-title">주제 단위 요약 점수 (같은 산식, 주제 전체 기준)</h3>
+      <h3 class="sm-title">주제별 점수</h3>
       <div class="scroll" tabindex="0" role="region" aria-label="주제 단위 우선순위 표 (가로 스크롤)"><table id="prioTopicTable"></table></div>
     </div>
   </section>
@@ -421,18 +432,17 @@ dialog#mergeDlg::backdrop { background: rgba(0,0,0,.35); }
 
   <section id="s-ver">
     <h2>버전별 추이</h2>
-    <p class="sub" id="verSub">리뷰를 쓴 시점의 앱 버전(마이너 버전, 예: v1.32.x) 기준입니다. 막대·점을 클릭하면 그 버전의 리뷰를 볼 수 있습니다.</p>
+    <p class="sub" id="verSub">리뷰 작성 시점의 앱 버전(v1.32.x 단위)</p>
     <div class="grid g2">
-      <div class="card"><h3 class="sm-title">버전별 리뷰 수 <span class="muted">(전체 버전)</span></h3><div class="chart" id="verVolChart"></div></div>
-      <div class="card"><h3 class="sm-title">버전별 부정·혼합 리뷰 비율 <span class="muted" id="verMinNote"></span></h3><div class="chart" id="verChart"></div></div>
+      <div class="card"><h3 class="sm-title">버전별 리뷰 수</h3><div class="chart" id="verVolChart"></div></div>
+      <div class="card"><h3 class="sm-title">버전별 불만 비율 <span class="muted" id="verMinNote"></span></h3><div class="chart" id="verChart"></div></div>
     </div>
     <div class="card" style="margin-top:12px">
-      <h3 class="sm-title">버전별 주제별 부정·혼합 언급 수</h3>
-      <p class="small muted" style="margin:0 0 8px">작은 차트마다 세로축 척도가 다릅니다. 어느 버전에서 튀었는지 모양을 보는 용도입니다(리뷰가 충분한 버전만).</p>
+      <h3 class="sm-title">주제별 불만 언급 수 <span class="muted">(차트마다 세로축 다름)</span></h3>
       <div class="sm-grid" id="smallMultiples"></div>
     </div>
     <div class="card" style="margin-top:12px">
-      <h3 class="sm-title">직전 버전 대비 변화가 컸던 업데이트</h3>
+      <h3 class="sm-title">불만 비율 변화가 큰 업데이트</h3>
       <div class="scroll" tabindex="0" role="region" aria-label="버전별 변화 표 (가로 스크롤)"><table id="verTable"></table></div>
     </div>
     <div class="card" style="margin-top:12px">
@@ -897,7 +907,7 @@ function niceMax(v) {
 function header() {
   const m = D.meta;
   const stores = Object.values(m.store_stats).map(s => `${s.name} ${fmt(s.n)}건(${s.start}~${s.end})`).join(" · ");
-  document.getElementById("scope").textContent = stores + (DS.kind === "example" ? " · 국가 kr, 언어 ko" : "");
+  document.getElementById("scope").textContent = stores;
   const b = document.getElementById("dsBadge");
   b.className = "ds-badge " + (DS.kind === "example" ? "example" : "user");
   b.textContent = DS.kind === "example" ? "예시 자료 · 달토끼 키우기" : `불러온 파일 · ${DS.name}`;
@@ -909,13 +919,13 @@ function header() {
   const dCount = (a, b) => P && a !== b ? ` <span class="delta">${a > b ? "+" : "−"}${fmt(Math.abs(a - b))}건</span>` : "";
   const dPct = (a, b) => { if (!P) return ""; const d = (a - b) * 100; return Math.abs(d) < 0.05 ? ` <span class="delta">변화 없음</span>` : ` <span class="delta">${d > 0 ? "▲" : "▼"}${Math.abs(d).toFixed(1)}%p</span>`; };
   const tiles = [
-    {cls: "hero", label: "분석한 리뷰", value: fmt(n), delta: P && dCount(n, P.n), note: `평균 별점 ${m.avg_rating}` + (m.label_source.manual ? ` · AI가 판정 기준서로 판정 ${fmt(m.label_source.manual)}건` : ""), sel: SEL.all()},
+    {cls: "hero", label: "분석한 리뷰", value: fmt(n), delta: P && dCount(n, P.n), note: `평균 ★${m.avg_rating}` + (m.label_source.manual ? ` · AI 판정 ${fmt(m.label_source.manual)}건` : ""), sel: SEL.all()},
     {label: "내용상 긍정", value: pct(so["긍정"] / n), delta: P && dPct(so["긍정"] / n, P.pos), note: `${fmt(so["긍정"])}건`, sel: SEL.sent("긍정")},
-    {label: "부정 또는 혼합", value: pct(negmix), delta: P && dPct(negmix, P.negmix), note: `부정 ${fmt(so["부정"])} · 혼합 ${fmt(so["혼합"])}`, sel: SEL.negmix()},
-    {label: "최근 6개월 리뷰", value: fmt(m.recent_n), delta: P && dCount(m.recent_n, P.recent), note: `${m.recent_start} 이후 · 최근 30일 ${m.last30_n}건`, sel: SEL.recent()},
+    {label: "불만 (부정+혼합)", value: pct(negmix), delta: P && dPct(negmix, P.negmix), note: `부정 ${fmt(so["부정"])} · 혼합 ${fmt(so["혼합"])}`, sel: SEL.negmix()},
+    {label: "최근 6개월 리뷰", value: fmt(m.recent_n), delta: P && dCount(m.recent_n, P.recent), note: `${m.recent_start}~ · 30일 ${m.last30_n}건`, sel: SEL.recent()},
   ];
   document.getElementById("kpis").innerHTML = tiles.map(t =>
-    `<div class="card tile clk ${t.cls || ""}${t.delta ? " changed" : ""}" tabindex="0" role="button" title="클릭하면 해당 리뷰 보기" ${selAttr(t.sel)}><div class="label">${t.label}</div><div class="value">${t.value}${t.delta || ""}</div><div class="note">${t.note} <span style="color:var(--accent)">· 리뷰 보기 →</span></div></div>`).join("");
+    `<div class="card tile clk ${t.cls || ""}${t.delta ? " changed" : ""}" tabindex="0" role="button" title="클릭하면 해당 리뷰 보기" ${selAttr(t.sel)}><div class="label">${t.label}</div><div class="value">${t.value}${t.delta || ""}</div><div class="note">${t.note}</div></div>`).join("");
   document.getElementById("sentLegend").innerHTML = SENTS.map(s => `<li><i style="background:var(${SVAR[s]})" aria-hidden="true"></i>${s}</li>`).join("");
 }
 
@@ -991,8 +1001,7 @@ function ratingNote() {
   const rd = D.meta.rating_dist, n = D.meta.n;
   const five = (rd["5"] || 0) / n, so = D.sentiment_overall;
   document.getElementById("ratingNote").innerHTML =
-    `<p style="margin:0 0 6px">별점 5점이 <b>${pct(five, 1)}</b>지만, 내용상 긍정은 <b>${pct(so["긍정"] / n, 1)}</b>입니다. ` +
-    `별점은 높게 주면서 문제를 신고하거나 불만을 함께 적는 리뷰(혼합 ${fmt(so["혼합"])}건)가 많아서, 감성은 별점이 아니라 내용으로 판정했습니다.</p>` +
+    `<p style="margin:0 0 6px">★5 <b>${pct(five, 1)}</b> · 내용상 긍정 <b>${pct(so["긍정"] / n, 1)}</b> <span class="muted">(감성은 별점이 아니라 내용 기준)</span></p>` +
     `<table><tr><th>별점</th>${["1","2","3","4","5"].map(k => `<th class="num">★${k}</th>`).join("")}</tr>` +
     `<tr><td>건수</td>${["1","2","3","4","5"].map(k => `<td class="num"><button class="linkish count" title="★${k} 리뷰 보기" ${selAttr(SEL.rating(k))}>${fmt(rd[k] || 0)}</button></td>`).join("")}</tr>` +
     `<tr><td>비율</td>${["1","2","3","4","5"].map(k => `<td class="num">${pct((rd[k] || 0) / n, 1)}</td>`).join("")}</tr></table>`;
@@ -1036,7 +1045,7 @@ function kwRender() {
   const {topic, sent} = kwState;
   hbarList("kwChart", cell.keywords.slice(0, 10), color, "대표 키워드 비중", it => SEL.kw(topic, sent, it.kw, it.n));
   hbarList("termChart", cell.terms.slice(0, 10), color, "원문 단어 비중", it => SEL.term(topic, sent, it.kw, it.n));
-  head.innerHTML = `${kwState.sent}·${kwState.topic} 리뷰 <button class="linkish count" ${selAttr(SEL.topicSent(topic, sent, cell.n))}>${fmt(cell.n)}건</button> 기준 · 막대나 이름을 클릭하면 그 키워드를 언급한 리뷰를 봅니다`;
+  head.innerHTML = `${kwState.sent}·${kwState.topic} 리뷰 <button class="linkish count" ${selAttr(SEL.topicSent(topic, sent, cell.n))}>${fmt(cell.n)}건</button>`;
 }
 function kwControls() {
   const topics = [...new Set(D.keywords.map(k => k.topic))];
@@ -1065,7 +1074,7 @@ const preview = (t, n = 38) => { const s = String(t).replace(/\s+/g, " ").trim()
 // 대표 리뷰 묶음: 기본은 접고, 첫 리뷰의 앞부분을 미리보기로 보여준다
 function quotesBlock(quotes, label = "대표 리뷰") {
   if (!quotes || !quotes.length) return "";
-  return `<details><summary>${label} ${quotes.length}개 보기<span class="preview">“${esc(preview(quotes[0].text))}”</span></summary>${quotes.map(quoteHTML).join("")}</details>`;
+  return `<details><summary>${label} ${quotes.length}개</summary>${quotes.map(quoteHTML).join("")}</details>`;
 }
 // '전체 보기'는 실제로 3줄을 넘겨 잘린 리뷰에만 보여준다(보이는 상태에서만 측정 가능)
 function fitMoreButtons(root = document) {
@@ -1085,10 +1094,10 @@ document.addEventListener("click", ev => {
 function prio() {
   const m = D.meta;
   document.getElementById("prioSub").textContent =
-    `주제/키워드 단위로 점수를 매겼습니다. 대상은 그 주제에 대한 감성이 부정 또는 혼합인 리뷰이고, 언급이 8건 이상인 항목만 넣었습니다. 최근 추세는 최근 6개월(${m.recent_start} 이후 ${m.recent_n}건)과 그 이전(${fmt(m.base_n)}건)의 언급률을 비교합니다.`;
+    `불만(부정·혼합) 언급 8건 이상 · 최근 = ${m.recent_start} 이후 ${fmt(m.recent_n)}건`;
   document.getElementById("formula").innerHTML =
-    `<p class="plain"><b>점수가 높을수록 먼저 고칠 항목입니다.</b> 불만(부정·혼합) 리뷰가 많을수록(50%), 그 리뷰가 좋아요를 많이 받을수록(30%), 최근 6개월에 언급이 늘었을수록(20%) 점수가 올라갑니다.</p>` +
-    `<details class="formula"><summary>점수 계산식 자세히</summary><div class="body">` +
+    `<p class="plain"><b>점수</b> = 불만 리뷰 수 50% + 좋아요 30% + 최근 증가 20%</p>` +
+    `<details class="formula"><summary>계산식</summary><div class="body">` +
     `Score = 100 × (0.5·N/N<sub>max</sub> + 0.3·W/W<sub>max</sub> + 0.2·G)<br>` +
     `N = 부정·혼합 리뷰 수 · W = Σ log₂(1 + 좋아요) · G = min(r, 3) / 3, ` +
     `r = 최근 6개월 언급률(평활) ÷ 이전 언급률, 평활 언급률 = (n<sub>최근</sub> + 20·p<sub>이전</sub>) ÷ (R<sub>최근</sub> + 20). ` +
@@ -1106,9 +1115,9 @@ function prio() {
       const more = i >= SHOW ? ' class="more"' : "", moreQ = i >= SHOW ? " more" : "";
       return `<tr${more}><td class="rank">${i + 1}</td><td class="item"><button class="linkish" title="부정·혼합 리뷰 ${it.n}건 보기" ${selAttr(SEL.prio(it))}><b>${esc(it.topic)}</b> · ${esc(it.kw)}</button></td>` +
         `<td class="num"><span class="bar-track"><span class="bar-inline" style="width:${(it.score / maxS * 100).toFixed(0)}%"></span></span>${it.score.toFixed(1)}</td>` +
-        `<td class="num">${fmt(it.n)}건</td><td class="num">${fmt(it.thumbs)}</td><td class="num">${it.recent_n}건 (${pct(it.recent_rate, 1)})</td>` +
+        `<td class="num"><button class="linkish count" title="불만 리뷰 ${it.n}건 보기" ${selAttr(SEL.prio(it))}>${fmt(it.n)}건</button></td><td class="num">${fmt(it.thumbs)}</td><td class="num">${it.recent_n}건 (${pct(it.recent_rate, 1)})</td>` +
         `<td class="num">${trend} <span class="muted small">${it.ratio.toFixed(2)}</span></td></tr>` +
-        `<tr class="qrow${moreQ}"><td></td><td colspan="6" style="padding-top:0">${quotesBlock(it.quotes)} <button type="button" class="allbtn" ${selAttr(SEL.prio(it))}>리뷰 ${fmt(it.n)}건 모두 보기</button></td></tr>`;
+        `<tr class="qrow${moreQ}"><td></td><td colspan="6" style="padding-top:0">${quotesBlock(it.quotes)}</td></tr>`;
     }).join("");
   // 상위 5개만 먼저 보이고, 나머지는 버튼으로 펼친다
   const tbl = document.getElementById("prioTable");
@@ -1138,14 +1147,13 @@ function prio() {
 function good() {
   const g = D.general_positive;
   document.getElementById("goodSub").innerHTML =
-    `주제별로 긍정 판정을 받은 리뷰를 기준으로 했습니다. 주제 없이 "재밌어요" 같은 전반적 호평만 남긴 리뷰도 <button class="linkish count" ${selAttr(SEL.general(g))}><b>${fmt(g.n)}건</b></button> 있습니다(자주 나온 말: ${g.terms.slice(0, 8).map(t => esc(t.kw)).join(", ")}).`;
+    `주제별 긍정 리뷰 기준 · 주제 없는 호평 <button class="linkish count" ${selAttr(SEL.general(g))}><b>${fmt(g.n)}건</b></button> 별도`;
   document.getElementById("goodCards").innerHTML = D.strengths.slice(0, 6).map(s =>
     `<div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline"><button class="linkish" ${selAttr(SEL.strength(s))}><b style="font-size:15px">${s.topic}</b></button>` +
     `<span class="small muted">긍정 <button class="linkish count" ${selAttr(SEL.strength(s))}>${fmt(s.n)}</button> · 부정 ${fmt(s.neg_n)}</span></div>` +
-    `<div class="small" style="margin:4px 0 6px">긍정 비중 <b>${pct(s.pos_ratio)}</b> <span class="muted">(긍정 ÷ (긍정+부정))</span></div>` +
+    `<div class="good-ratio"><b>${pct(s.pos_ratio)}</b> <span class="muted">긍정</span></div>` +
     `<div>${s.keywords.map(k => `<button type="button" class="pill clk linkish" title="'${esc(k.kw)}' 언급 긍정 리뷰 ${k.n}건 보기" ${selAttr(SEL.strengthKw(s, k))}>${esc(k.kw)} ${pct(k.pct)}</button>`).join("")}</div>` +
-    (s.quotes[0] ? quoteHTML(s.quotes[0]) : "") +
-    (s.quotes.length > 1 ? `<details><summary>원문 더 보기</summary>${s.quotes.slice(1).map(quoteHTML).join("")}</details>` : "") +
+    quotesBlock(s.quotes) +
     `</div>`).join("");
 }
 
@@ -1224,7 +1232,7 @@ function versions() {
     dataTable("smallMultiples", "버전별 주제별 부정·혼합 언급 수", `<p class="muted small">버전 정보가 있는 리뷰가 없습니다.</p>`);
     return;
   }
-  document.getElementById("verMinNote").textContent = `(리뷰 ${D.ver_min}건 이상인 버전 ${vs.length}개)`;
+  document.getElementById("verMinNote").textContent = `(리뷰 ${D.ver_min}건 이상, ${vs.length}개 버전)`;
   const step = n => Math.max(1, Math.ceil(n / 8));
   // 1) 버전별 리뷰 수 — 월별 리뷰 수 막대와 같은 형태
   columnChart("verVolChart", va, "n", {
@@ -1293,44 +1301,40 @@ function summary() {
   const up = D.version_changes.filter(c => c.diff > 0).sort((a, b) => b.diff - a.diff)[0];
   const topItem = D.priority[0];
   const items = [
-    {c: "--pos", i: "감", t: `리뷰 내용상 <b>긍정 ${pct(so["긍정"] / n)}</b>, 부정·혼합 <b>${pct((so["부정"] + so["혼합"]) / n)}</b> (별점이 아니라 내용 기준, ${fmt(n)}건)`, href: "#s-topic"},
-    worst && worst.n > 0 && {c: "--neg", i: "불", t: `부정·혼합 언급이 가장 많은 주제는 <b>${esc(worst.topic)}</b> (${fmt(worst.n)}건).` + (topItem ? ` 점수 1위 세부 항목은 <b>${esc(topItem.topic)} · ${esc(topItem.kw)}</b>` : ""), href: "#s-prio"},
-    best && {c: "--pos", i: "강", t: `가장 큰 강점은 <b>${esc(best.topic)}</b> — 긍정 비중 <b>${pct(best.pos_ratio)}</b> (긍정 ${fmt(best.n)} · 부정 ${fmt(best.neg_n)})`, href: "#s-good"},
-    up && {c: "--mix", i: "변", t: `부정·혼합 비율이 가장 크게 오른 업데이트: <b>v${esc(up.from)} → v${esc(up.to)}</b> (${up.to_first}~, ${pct(up.from_share)} → ${pct(up.to_share)})`, href: "#s-ver"},
-    {c: "--neu", i: "!", t: `최근 6개월 리뷰는 <b>${fmt(D.meta.recent_n)}건</b>(최근 30일 ${D.meta.last30_n}건)${D.meta.recent_n < 100 ? "뿐이라 최근 추세는 표본이 작다는 점을 감안해야 합니다" : "입니다"}`, href: "#s-ver"},
+    {c: "--pos", i: "감", t: `긍정 <b>${pct(so["긍정"] / n)}</b> · 불만 <b>${pct((so["부정"] + so["혼합"]) / n)}</b> <span class="muted">(${fmt(n)}건)</span>`, href: "#s-topic"},
+    worst && worst.n > 0 && {c: "--neg", i: "불", t: `불만 최다 <b>${esc(worst.topic)}</b> ${fmt(worst.n)}건` + (topItem ? ` · 1순위 <b>${esc(topItem.topic)} · ${esc(topItem.kw)}</b>` : ""), href: "#s-prio"},
+    best && {c: "--pos", i: "강", t: `강점 <b>${esc(best.topic)}</b> 긍정 ${pct(best.pos_ratio)} <span class="muted">(${fmt(best.n)} : ${fmt(best.neg_n)})</span>`, href: "#s-good"},
+    up && {c: "--mix", i: "변", t: `불만 급증 <b>v${esc(up.from)} → v${esc(up.to)}</b> ${pct(up.from_share)} → ${pct(up.to_share)}`, href: "#s-ver"},
+    {c: "--neu", i: "!", t: `최근 6개월 <b>${fmt(D.meta.recent_n)}건</b> <span class="muted">(30일 ${D.meta.last30_n}건)${D.meta.recent_n < 100 ? " · 표본 적음" : ""}</span>`, href: "#s-ver"},
   ].filter(Boolean);
   document.getElementById("summaryList").innerHTML = items.map(x =>
-    `<li><span class="ico" style="background:var(${x.c})">${x.i}</span><span>${x.t} <a class="go" href="${x.href}">자세히 →</a></span></li>`).join("");
+    `<li><span class="ico" style="background:var(${x.c})">${x.i}</span><span>${x.t} <a class="go" href="${x.href}" aria-label="해당 섹션으로">→</a></span></li>`).join("");
 }
 
 /* ---------- 방법·검수 ---------- */
 function method() {
   const m = D.meta, ls = m.label_source, g = m.grouping;
-  const other = g.other_topics.length ? `${g.other_topics.join(", ")} (전체 대비 ${pct(g.other_threshold)} 미만 → '기타'로 묶음)` : "없음";
+  const other = g.other_topics.length ? `${g.other_topics.join(", ")} (${pct(g.other_threshold)} 미만)` : "없음";
   if (DS.kind !== "example") {
     document.getElementById("methodCard").innerHTML =
-      `<b>불러온 파일</b> ${esc(DS.name)} · 리뷰 ${fmt(m.n)}건${DS.skipped ? ` (형식 오류로 ${fmt(DS.skipped)}행 제외)` : ""}<br>` +
-      `<b>계산</b> 파일에 들어 있는 감성·주제 라벨을 그대로 사용해, 예시 자료와 같은 규칙(scripts/analyze.py)으로 브라우저 안에서 다시 계산했습니다. 파일은 외부로 전송되지 않습니다.<br>` +
-      `<b>주제</b> ${esc(m.topics.join(", "))}${m.topics_shown.includes("일반") ? " + 일반" : ""}. 기타 처리: ${other}.<br>` +
-      (Object.keys(ls).length ? `<b>라벨 출처</b> ${Object.entries(ls).map(([k, v]) => `${esc(k)} ${fmt(v)}건`).join(" · ")}` : "");
-    document.getElementById("auditCard").innerHTML = `<b>검수</b><p class="muted">불러온 파일에는 검수 결과가 없습니다. 라벨 정확도는 파일을 만든 쪽에서 확인해야 합니다.</p>`;
+      `<table class="kv"><tr><th scope="row">파일</th><td>${esc(DS.name)} · ${fmt(m.n)}건${DS.skipped ? ` <span class="muted">(${fmt(DS.skipped)}행 제외)</span>` : ""}</td></tr>` +
+      `<tr><th scope="row">주제</th><td>${esc(m.topics.join(", "))}${m.topics_shown.includes("일반") ? " + 일반" : ""} <span class="muted">· 기타: ${other}</span></td></tr>` +
+      (Object.keys(ls).length ? `<tr><th scope="row">분류</th><td>${Object.entries(ls).map(([k, v]) => `${k === "rule" ? "규칙" : k === "manual" ? "AI 판정" : esc(k)} ${fmt(v)}건`).join(" · ")}</td></tr>` : "") + `</table>`;
+    document.getElementById("auditCard").innerHTML = `<b>검수</b><p class="muted">불러온 파일: 검수 결과 없음</p>`;
     return;
   }
   document.getElementById("methodCard").innerHTML =
-    `<b>분류 절차</b><ol style="padding-left:18px;margin:6px 0">` +
-    `<li>키워드 규칙을 1차로 적용했습니다(커뮤니티 표현 포함: 현질·가챠·확률·뽑기 → 과금, 튕김·렉·접속불가·버벅 → 버그 등). 부정어 처리도 넣었습니다("렉 없음" → 긍정).</li>` +
-    `<li>짧고 감성이 하나뿐이라 규칙으로 확신할 수 있는 <b>${fmt(ls.rule || 0)}건</b>은 규칙 판정을 그대로 썼습니다.</li>` +
-    `<li>나머지 <b>${fmt(ls.manual || 0)}건</b>은 AI가 판정 기준서(work/manual/RUBRIC.md)에 따라 내용을 읽고 판정했습니다(별점은 보여 주지 않음). 대상은 길거나, 주제가 여럿이거나, 긍·부정이 섞였거나, 별점과 내용이 어긋난 리뷰입니다.</li></ol>` +
-    `<b>감성</b> 별점이 아니라 내용으로 판정했습니다. 문의형 리뷰는 구체적 문제가 보이면 부정, 애매하면 중립입니다.<br>` +
-    `<b>주제</b> 과금·버그·콘텐츠 + 데이터를 보고 추가한 운영·밸런스/성장·UI/편의성·캐릭터/아트·광고. 기타 처리: ${other}. 주제 없는 전반 평가는 '일반'.<br>` +
-    `<b>데이터</b> Google Play는 스토어 표기 리뷰 수와 거의 같은 전량, App Store는 공개 RSS 피드의 전량(150건)입니다.`;
+    `<table class="kv"><tr><th scope="row">분류</th><td>규칙 ${fmt(ls.rule || 0)}건 · AI 판정 ${fmt(ls.manual || 0)}건 <span class="muted">(판정 기준서, 별점 숨김)</span></td></tr>` +
+    `<tr><th scope="row">감성</th><td>별점이 아니라 내용 기준</td></tr>` +
+    `<tr><th scope="row">주제</th><td>${esc(m.topics.join(", "))} + 일반 <span class="muted">· 기타: ${other}</span></td></tr>` +
+    `<tr><th scope="row">데이터</th><td>Google Play 전량 · App Store 공개 RSS 150건</td></tr></table>`;
   const a = DS.audit;
   const ac = document.getElementById("auditCard");
   if (!a) { ac.innerHTML = `<b>검수</b><p class="muted">검수 결과 없음</p>`; return; }
-  ac.innerHTML = `<b>무작위 ${a.n}건 직접 검수</b>` +
+  ac.innerHTML = `<b>무작위 ${a.n}건 사람 검수</b>` +
     `<table style="margin-top:6px"><tr><th>항목</th><th class="num">정확도</th></tr>` +
     a.metrics.map(x => `<tr><td>${esc(x.name)}</td><td class="num">${x.ok}/${a.n} (${pct(x.ok / a.n)})</td></tr>`).join("") + `</table>` +
-    (a.notes ? `<p class="small" style="margin-top:8px">${esc(a.notes)}</p>` : "") +
+    (a.notes ? `<details><summary>검수 메모</summary><p class="small">${esc(a.notes)}</p></details>` : "") +
     (a.errors && a.errors.length ? `<details><summary>오판 사례 ${a.errors.length}건</summary>${a.errors.map(e => `<div class="quote">${esc(e.text)}<div class="meta">판정: ${esc(e.got)} → 올바른 값: ${esc(e.want)}</div></div>`).join("")}</details>` : "");
 }
 
@@ -1396,7 +1400,7 @@ function showEmpty() {
   closeDrawer(); hideTip();
   document.body.classList.add("is-empty");
   const b = document.getElementById("dsBadge"); b.className = "ds-badge"; b.textContent = "자료 없음";
-  document.getElementById("scope").textContent = "라벨이 붙은 리뷰 CSV를 넣으면 이곳에 스토어별 건수와 기간이 표시됩니다.";
+  document.getElementById("scope").textContent = "";
   document.getElementById("exampleBtn").hidden = true;
   note("");
   scrollTo({top: 0});
@@ -1406,7 +1410,7 @@ function useExample() {
   LOADED = {files: [], map: new Map(), topics: [], hasGeneral: false};
   loadDataset(EMBED.reviews, {kind: "example", name: "달토끼 키우기", audit: EMBED.audit || null, topics: EXAMPLE_TOPICS, hasGeneral: true});
   syncData(); kwState.topic = null; closeDrawer(); showResults(); render(); scrollTo({top: 0});
-  note(`지금 보이는 수치는 <b>예시 자료</b>(달토끼 키우기 스토어 리뷰 ${fmt(D.meta.n)}건 전체)입니다. 오른쪽 위 <b>CSV 추가</b>로 다른 리뷰 파일을 넣으면 그 파일 기준으로 다시 계산합니다.`);
+  note("");
 }
 function note(html, err) { const n = document.getElementById("uploadNote"); n.innerHTML = html; n.classList.toggle("err", !!err); }
 // 지금 수치를 기억해 두었다가, 누적 후 요약 칸에 바뀐 만큼 표시
@@ -1420,10 +1424,10 @@ function askMerge(fileName, nNew, nDup) {
   const dlg = document.getElementById("mergeDlg");
   const cur = D.meta.n;
   document.getElementById("mergeDesc").innerHTML =
-    `지금 <b>${fmt(cur)}건</b>(${LOADED.files.length}개 파일)이 들어 있습니다. <b>${esc(fileName)}</b>에는 리뷰 <b>${fmt(nNew)}건</b>이 있습니다.`;
+    `현재 <b>${fmt(cur)}건</b> · 새 파일 <b>${esc(fileName)}</b> ${fmt(nNew)}건`;
   document.getElementById("mergeAddDesc").textContent =
-    `지금 자료에 더해 ${fmt(cur + nNew - nDup)}건으로 다시 계산` + (nDup ? ` (이미 있는 리뷰 ${fmt(nDup)}건은 한 번만 셈)` : "");
-  document.getElementById("mergeRepDesc").textContent = `지금 자료를 비우고 새 파일 ${fmt(nNew)}건만으로 다시 계산`;
+    `→ ${fmt(cur + nNew - nDup)}건` + (nDup ? ` (중복 ${fmt(nDup)}건 제외)` : "");
+  document.getElementById("mergeRepDesc").textContent = `→ ${fmt(nNew)}건`;
   return new Promise(resolve => {
     const done = v => { dlg.removeEventListener("close", onClose); dlg.onclick = null; if (dlg.open) dlg.close(); resolve(v); };
     const onClose = () => done("cancel");                         // Esc로 닫으면 취소
@@ -1435,7 +1439,7 @@ function askMerge(fileName, nNew, nDup) {
 }
 function filesHTML(newName) {
   if (!LOADED.files.length) return "";
-  return `<div class="files"><span class="small muted">불러온 파일:</span>` +
+  return `<div class="files">` +
     LOADED.files.map(f => `<span class="f${f.name === newName ? " new" : ""}">${esc(f.name)} · ${fmt(f.added)}건</span>`).join("") + `</div>`;
 }
 async function readFile(file) {
@@ -1457,12 +1461,12 @@ async function useFile(file) {
     if (DS.kind === "user" && LOADED.files.length) {
       note("");
       mode = await askMerge(file.name, parsed.rows.length, nDup);
-      if (mode === "cancel") { note(`'${esc(file.name)}' 반영을 취소했습니다. 화면은 그대로입니다.` + filesHTML()); return; }
+      if (mode === "cancel") { note(`취소됨` + filesHTML()); return; }
     }
     const prev = mode === "add" ? snap() : null;
     if (mode === "replace") LOADED = {files: [], map: new Map(), topics: [], hasGeneral: false};
     if (mode === "add" && nDup === parsed.rows.length) {
-      note(`<b>${esc(file.name)}</b>의 리뷰 ${fmt(nDup)}건은 이미 모두 들어 있어서 새로 더해진 리뷰가 없습니다. 화면은 그대로입니다.` + filesHTML());
+      note(`<b>${esc(file.name)}</b>: 새 리뷰 없음 (${fmt(nDup)}건 모두 중복)` + filesHTML());
       return;
     }
     let added = 0;
@@ -1474,22 +1478,20 @@ async function useFile(file) {
     loadDataset([...LOADED.map.values()], {kind: "user", name: label, audit: null, topics: LOADED.topics, hasGeneral: LOADED.hasGeneral, skipped: parsed.skipped});
     DS.prev = prev;
     syncData(); kwState.topic = null; closeDrawer(); showResults(); render(); scrollTo({top: 0});
-    const dupNote = parsed.rows.length - added ? ` 이미 있던 리뷰 ${fmt(parsed.rows.length - added)}건은 한 번만 셌습니다.` : "";
+    const dupNote = parsed.rows.length - added ? ` <span class="muted">(중복 ${fmt(parsed.rows.length - added)}건 제외)</span>` : "";
     note((mode === "add"
-        ? `<b>${esc(file.name)}</b>의 리뷰 ${fmt(added)}건을 더해 <b>${fmt(D.meta.n)}건</b>으로 다시 계산했습니다.${dupNote} 요약 칸의 파란 숫자가 바뀐 만큼입니다.`
-        : `<b>${esc(file.name)}</b> 리뷰 <b>${fmt(D.meta.n)}건</b>으로 계산했습니다. 파일을 더 넣으면 누적할지 교체할지 고를 수 있습니다.`) +
-      (parsed.skipped ? ` 날짜·별점·감성 값을 읽을 수 없는 ${fmt(parsed.skipped)}행은 제외했습니다(예: ${parsed.errs.join(", ")}).` : "") +
+        ? `<b>+${fmt(added)}건</b> → 총 <b>${fmt(D.meta.n)}건</b>${dupNote}`
+        : `총 <b>${fmt(D.meta.n)}건</b>`) +
+      (parsed.skipped ? ` <span class="muted">· 읽을 수 없는 ${fmt(parsed.skipped)}행 제외 (${parsed.errs.join(", ")})</span>` : "") +
       filesHTML(file.name));
   } catch (e) {
-    note(`<b>'${esc(file.name)}'을(를) 불러오지 못했습니다.</b> ${esc(e.message)} ` +
-      (D ? "화면은 이전 자료를 그대로 보여줍니다. " : "") + `"CSV 형식 안내"를 확인하세요.` + filesHTML(), true);
+    note(`<b>불러오기 실패: ${esc(file.name)}</b> — ${esc(e.message)}` + filesHTML(), true);
     document.getElementById("csvHelp").open = true;
   } finally { busy = false; }
 }
 ["csvInput", "csvInputBig"].forEach(id => document.getElementById(id).addEventListener("change", ev => { useFile(ev.target.files[0]); ev.target.value = ""; }));
 document.getElementById("exampleBtn").onclick = useExample;
 document.getElementById("exampleLink").onclick = useExample;
-document.getElementById("helpLink").onclick = () => { const h = document.getElementById("csvHelp"); h.open = true; h.scrollIntoView({block: "nearest"}); h.querySelector("summary").focus(); };
 document.getElementById("resetBtn").onclick = showEmpty;
 addEventListener("dragover", ev => { ev.preventDefault(); document.body.classList.add("dragging"); });
 addEventListener("dragleave", ev => { if (!ev.relatedTarget) document.body.classList.remove("dragging"); });
