@@ -1,0 +1,1288 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>오토 밸런싱</title>
+<meta name="description" content="방치형 RPG 성장·재화 시뮬레이션과 이벤트 전후 비교 도구 (가상 샘플 데이터)">
+<style>
+:root {
+  --bg: #f4f6fa; --panel: #ffffff; --panel-2: #f8fafc; --line: #e2e8f0; --line-2: #cbd5e1;
+  --text: #0f172a; --muted: #64748b; --accent: #2563eb; --accent-soft: #dbeafe;
+  --event: #ea580c; --event-soft: rgba(234, 88, 12, .10); --ok: #15803d; --ok-soft: #dcfce7;
+  --warn: #b45309; --warn-soft: #fef3c7; --err: #b91c1c; --err-soft: #fee2e2;
+  --radius: 12px; --shadow: 0 1px 2px rgba(15, 23, 42, .06), 0 4px 16px rgba(15, 23, 42, .04);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b1120; --panel: #111a2e; --panel-2: #0f172a; --line: #1e293b; --line-2: #334155;
+    --text: #e2e8f0; --muted: #94a3b8; --accent: #60a5fa; --accent-soft: #1e3a5f;
+    --event: #fb923c; --event-soft: rgba(251, 146, 60, .14); --ok: #4ade80; --ok-soft: #14532d;
+    --warn: #fbbf24; --warn-soft: #422006; --err: #f87171; --err-soft: #450a0a;
+    --shadow: none;
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: system-ui, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  font-size: 15px; line-height: 1.5; -webkit-text-size-adjust: 100%;
+}
+button, input, select { font: inherit; color: inherit; }
+.num { font-variant-numeric: tabular-nums; }
+
+header.top {
+  background: var(--panel); border-bottom: 1px solid var(--line);
+  padding: 14px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px;
+}
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand-mark { width: 30px; height: 30px; border-radius: 8px; background: var(--accent); display: grid; place-items: center; }
+.brand h1 { font-size: 19px; margin: 0; letter-spacing: -.02em; }
+.brand p { margin: 0; color: var(--muted); font-size: 13px; }
+.badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: var(--warn-soft); color: var(--warn); }
+.top-actions { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+
+.btn { border: 1px solid var(--line-2); background: var(--panel); border-radius: 8px; padding: 7px 12px; cursor: pointer; font-size: 14px; }
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.small { padding: 4px 9px; font-size: 13px; }
+.btn.ghost { border-color: transparent; background: transparent; color: var(--muted); }
+.btn.ghost:hover { color: var(--err); }
+
+nav.tabs { position: sticky; top: 0; z-index: 20; background: var(--bg); border-bottom: 1px solid var(--line); display: flex; gap: 4px; padding: 8px 20px 0; overflow-x: auto; }
+nav.tabs button { border: 0; background: transparent; padding: 9px 14px; border-bottom: 3px solid transparent; cursor: pointer; white-space: nowrap; color: var(--muted); font-weight: 600; }
+nav.tabs button[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+nav.tabs .tab-result { display: none; }
+
+.layout { display: grid; grid-template-columns: minmax(340px, 420px) 1fr; gap: 20px; padding: 20px; max-width: 1500px; margin: 0 auto; }
+.inputs .panel { display: none; }
+.inputs .panel.active { display: block; }
+.results { min-width: 0; }
+
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; margin-bottom: 14px; }
+.card h2 { font-size: 16px; margin: 0 0 4px; }
+.card h3 { font-size: 14px; margin: 0 0 8px; }
+.card .desc { color: var(--muted); font-size: 13px; margin: 0 0 12px; }
+.row-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; justify-content: space-between; margin-bottom: 8px; }
+
+.fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; }
+.field { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.field.full { grid-column: 1 / -1; }
+.field label { font-size: 13px; color: var(--muted); }
+.input-wrap { display: flex; align-items: center; border: 1px solid var(--line-2); border-radius: 8px; background: var(--panel-2); overflow: hidden; }
+.input-wrap:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.input-wrap input, .input-wrap select { border: 0; background: transparent; padding: 7px 9px; width: 100%; min-width: 0; outline: none; }
+.input-wrap .unit { padding: 0 9px; color: var(--muted); font-size: 13px; white-space: nowrap; }
+.field.invalid .input-wrap { border-color: var(--err); }
+.field .err { color: var(--err); font-size: 12px; display: none; }
+.field.invalid .err { display: block; }
+.check { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
+.check input { width: 18px; height: 18px; accent-color: var(--accent); }
+
+.presets { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.preset { border: 1px solid var(--line-2); background: var(--panel-2); border-radius: 10px; padding: 8px 12px; cursor: pointer; text-align: left; }
+.preset strong { display: block; font-size: 14px; }
+.preset span { font-size: 12px; color: var(--muted); }
+.preset.on { border-color: var(--accent); background: var(--accent-soft); }
+
+.event-item { border: 1px solid var(--line); border-left: 4px solid var(--event); border-radius: 10px; padding: 12px; margin-bottom: 10px; background: var(--panel-2); }
+.event-item.off { opacity: .55; border-left-color: var(--line-2); }
+.event-item .row-head strong { font-size: 14px; }
+.empty { color: var(--muted); font-size: 14px; padding: 12px; border: 1px dashed var(--line-2); border-radius: 10px; text-align: center; }
+
+.status { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px; }
+.pill { font-size: 13px; padding: 4px 10px; border-radius: 999px; background: var(--panel); border: 1px solid var(--line); }
+.pill.ok { background: var(--ok-soft); color: var(--ok); border-color: transparent; }
+.pill.err { background: var(--err-soft); color: var(--err); border-color: transparent; }
+.pill.warn { background: var(--warn-soft); color: var(--warn); border-color: transparent; }
+
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+.kpi { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; box-shadow: var(--shadow); min-width: 0; }
+.kpi .label { color: var(--muted); font-size: 12px; }
+.kpi .value { font-size: 22px; font-weight: 700; letter-spacing: -.02em; }
+.kpi .delta { font-size: 12px; color: var(--event); font-weight: 600; min-height: 18px; }
+
+table.cmp { width: 100%; border-collapse: collapse; font-size: 14px; }
+table.cmp th, table.cmp td { padding: 7px 8px; border-bottom: 1px solid var(--line); text-align: right; }
+table.cmp th:first-child, table.cmp td:first-child { text-align: left; color: var(--muted); }
+table.cmp thead th { font-size: 12px; color: var(--muted); font-weight: 600; }
+table.cmp td.diff { color: var(--event); font-weight: 600; }
+table.cmp td.num { white-space: nowrap; }
+.table-scroll { overflow-x: auto; }
+
+.chart-box { position: relative; width: 100%; }
+.chart-box svg { display: block; width: 100%; height: auto; touch-action: pan-y; }
+.chart-tip { position: absolute; pointer-events: none; background: var(--panel); border: 1px solid var(--line-2); border-radius: 8px; padding: 6px 9px; font-size: 12px; box-shadow: var(--shadow); white-space: nowrap; display: none; z-index: 5; }
+.legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--muted); margin-top: 6px; }
+.legend i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 5px; }
+.legend i.shade { height: 10px; background: var(--event-soft); border: 1px solid var(--event); }
+.seg { display: inline-flex; border: 1px solid var(--line-2); border-radius: 8px; overflow: hidden; }
+.seg button { border: 0; background: var(--panel); padding: 5px 10px; font-size: 13px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line-2); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.share-row { margin-bottom: 12px; }
+.share-row .cap { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+.share-bar { display: flex; height: 22px; border-radius: 6px; overflow: hidden; background: var(--panel-2); border: 1px solid var(--line); }
+.share-bar span { display: block; height: 100%; }
+.share-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; margin-top: 6px; color: var(--muted); }
+.share-legend b { color: var(--text); font-weight: 600; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+
+ul.analysis { list-style: none; margin: 0; padding: 0; }
+ul.analysis li { padding: 10px 0; border-bottom: 1px solid var(--line); }
+ul.analysis li:last-child { border-bottom: 0; }
+ul.analysis .msg { font-weight: 600; }
+ul.analysis .basis { color: var(--muted); font-size: 13px; }
+ul.analysis .tag { font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 999px; margin-right: 6px; vertical-align: 1px; }
+.tag.base { background: var(--accent-soft); color: var(--accent); }
+.tag.evt { background: var(--event-soft); color: var(--event); }
+.tag.chk { background: var(--ok-soft); color: var(--ok); }
+
+.timeline { display: grid; gap: 8px; }
+.tl-item { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel-2); }
+.tl-item .name { font-weight: 600; }
+.tl-item .cond { color: var(--muted); font-size: 12px; }
+.tl-item .when { text-align: right; }
+.tl-item .when .ev { color: var(--event); font-size: 13px; font-weight: 600; }
+
+details.rules summary { cursor: pointer; font-weight: 600; }
+details.rules ol { padding-left: 20px; margin: 10px 0 0; font-size: 14px; }
+details.rules li { margin-bottom: 4px; }
+footer { color: var(--muted); font-size: 12px; text-align: center; padding: 10px 20px 30px; }
+.banner-err { background: var(--err-soft); color: var(--err); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 14px; font-size: 14px; display: none; }
+.results.unreliable .kpis, .results.unreliable .card { opacity: .55; }
+
+@media (max-width: 1100px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; padding: 14px 16px; gap: 0; }
+  nav.tabs { padding: 6px 12px 0; }
+  nav.tabs .tab-result { display: inline-block; margin-left: auto; color: var(--accent); }
+  .results { display: none; }
+  body[data-tab="result"] .results { display: block; }
+  body[data-tab="result"] .inputs { display: none; }
+  header.top { padding: 12px 16px; }
+  .top-actions { margin-left: 0; width: 100%; }
+}
+@media (max-width: 420px) {
+  .fields { grid-template-columns: 1fr; }
+  nav.tabs { gap: 0; }
+  nav.tabs button { padding: 9px 10px; }
+  .tab-long { display: none; }
+  .tl-item { grid-template-columns: 1fr; }
+  .tl-item .when { text-align: left; }
+  table.cmp { font-size: 13px; }
+  table.cmp th, table.cmp td { padding: 6px 5px; }
+  .kpi .value { font-size: 19px; }
+}
+</style>
+</head>
+<body data-tab="game">
+
+<header class="top">
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M5 16l4-5 4 3 6-8"/></svg>
+    </div>
+    <div>
+      <h1>오토 밸런싱</h1>
+      <p>방치형 RPG 성장·재화 시뮬레이션 + 이벤트 전후 비교</p>
+    </div>
+  </div>
+  <span class="badge" title="에이블게임즈 실제 데이터가 아닌 실습용 가상 수치입니다">⚠ 가상 샘플 데이터</span>
+  <div class="top-actions">
+    <button class="btn small" id="btnCsv" type="button">결과 CSV 내려받기</button>
+    <button class="btn small" id="btnReset" type="button">샘플 값으로 초기화</button>
+  </div>
+</header>
+
+<nav class="tabs" role="tablist" aria-label="화면 이동">
+  <button role="tab" data-tab="game" aria-selected="true">① <span class="tab-long">게임 </span>수치</button>
+  <button role="tab" data-tab="player" aria-selected="false">② 유저<span class="tab-long"> 모델·기간</span></button>
+  <button role="tab" data-tab="event" aria-selected="false">③ 이벤트</button>
+  <button role="tab" data-tab="result" aria-selected="false" class="tab-result">📊 결과<span class="tab-long"> 보기</span></button>
+</nav>
+
+<div class="layout">
+  <section class="inputs" aria-label="입력">
+    <div class="panel active" data-panel="game" id="panelGame"></div>
+
+    <div class="panel" data-panel="player">
+      <div class="card">
+        <h2>유저 모델</h2>
+        <p class="desc">하루는 00:00에 접속해서 정해진 시간만큼 플레이하고, 나머지 시간은 오프라인으로 계산합니다. 실제 이용자 데이터가 아닌 설정값에 따른 예측입니다.</p>
+        <div class="presets" id="playerPresets"></div>
+        <div class="fields" id="playerFields"></div>
+      </div>
+      <div class="card">
+        <h2>시뮬레이션 기간</h2>
+        <p class="desc">계산은 1분 단위로 진행되고, 그래프는 1시간 간격으로 기록합니다.</p>
+        <div class="fields" id="simFields"></div>
+      </div>
+    </div>
+
+    <div class="panel" data-panel="event">
+      <div class="card">
+        <h2>이벤트 실험</h2>
+        <p class="desc">이벤트는 원본 밸런스를 바꾸지 않습니다. 같은 설정·같은 유저 모델로 <b>기준</b>과 <b>이벤트 적용</b>을 따로 계산해서 비교합니다.</p>
+        <div class="row-head"><h3 style="margin:0">빠른 추가</h3></div>
+        <div class="presets" id="eventTemplates"></div>
+        <div id="eventList"></div>
+        <button class="btn" id="btnAddEvent" type="button">+ 빈 이벤트 추가</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="results" aria-label="결과" id="results">
+    <div class="banner-err" id="errBanner"></div>
+    <div class="banner-err" id="unreliableBanner"></div>
+    <div class="status" id="status"></div>
+    <div class="kpis" id="kpis"></div>
+
+    <div class="card">
+      <div class="row-head">
+        <h2>성장 곡선</h2>
+        <div class="seg" id="growthSeg"></div>
+      </div>
+      <div class="chart-box" id="growthChart"></div>
+      <div class="legend" id="growthLegend"></div>
+    </div>
+
+    <div class="card">
+      <div class="row-head">
+        <h2>재화 흐름</h2>
+        <div class="controls">
+          <div class="seg" id="econCurSeg"></div>
+          <div class="seg" id="econModeSeg"></div>
+        </div>
+      </div>
+      <div class="chart-box" id="econChart"></div>
+      <div class="legend" id="econLegend"></div>
+    </div>
+
+    <div class="card">
+      <h2>콘텐츠 해금 · 목표 도달 시간</h2>
+      <p class="desc">시뮬레이션 시작부터 걸린 시간입니다.</p>
+      <div class="fields" style="margin-bottom:12px">
+        <div class="field">
+          <label for="msType">확인할 목표</label>
+          <div class="input-wrap"><select id="msType"><option value="level">레벨</option><option value="stage">스테이지</option></select></div>
+        </div>
+        <div class="field">
+          <label for="msValue">목표값</label>
+          <div class="input-wrap"><input id="msValue" type="number" inputmode="numeric" min="1" step="1"></div>
+        </div>
+      </div>
+      <div class="timeline" id="timeline"></div>
+    </div>
+
+    <div class="card">
+      <h2>수급처별 비중</h2>
+      <p class="desc">시뮬레이션 기간 동안 실제로 들어온 양 기준입니다.</p>
+      <div id="shares"></div>
+    </div>
+
+    <div class="card">
+      <h2>기준 대비 결과 비교</h2>
+      <div class="table-scroll"><table class="cmp" id="cmpTable"></table></div>
+    </div>
+
+    <div class="card">
+      <h2>자동 분석</h2>
+      <p class="desc">계산 결과에 정해진 규칙을 적용해 만든 문장입니다. 각 문장 아래에 근거 수치를 적었습니다.</p>
+      <ul class="analysis" id="analysis"></ul>
+    </div>
+
+    <div class="card">
+      <details class="rules">
+        <summary>계산 규칙 보기 (처리 순서와 가정)</summary>
+        <ol>
+          <li>1분 단위 이산 시간 시뮬레이션입니다. 같은 입력이면 항상 같은 결과가 나옵니다(확률 요소 없음).</li>
+          <li>매일 00:00: ① 던전 입장권 충전(하루 지급량까지, 남은 입장권은 유지)과 이벤트 지급·입장권 추가는 접속 여부와 상관없이 발생해 바로 반영 → ② 그날 접속하면(하루 접속 시간 &gt; 0분) 쌓인 방치 보상 수령과 일일 보상(출석) → ③ 레벨업·강화·스테이지 갱신. 접속하지 않으면 방치 보상은 최대 누적 시간까지만 쌓이고 수령되지 않습니다.</li>
+          <li>접속 중 매 분: 해금된 던전에 입장권이 있고 남은 접속 시간이 던전 소요 시간 이상이면 던전을 먼저 돌고(골드 던전 → 경험치 던전 순), 아니면 자동사냥합니다. 던전을 도는 동안에는 사냥 보상이 없습니다.</li>
+          <li>사냥 보상/분 = 분당 처치 수 × 처치당 보상 × 스테이지당 보상 배율^(스테이지−1) × 이벤트 배율.</li>
+          <li>공격력 = (기본 공격력 + 레벨당 공격력 × (레벨−1)) × (1 + 강화당 증가율)^강화 단계. 공격력이 다음 스테이지 요구 공격력 이상이면 자동으로 진행합니다.</li>
+          <li>경험치가 필요량 이상이면 여러 레벨을 한 번에 올립니다. 강화는 <b>접속 중에만</b>, 골드가 비용 이상일 때 반복합니다(자동 강화를 켠 경우).</li>
+          <li>오프라인 중에는 행동하지 않습니다. 방치 보상 = 사냥 기본 보상 × 방치 효율이며, 최대 누적 시간까지만 쌓이고 다음 접속 때 받습니다. 기간 마지막에 쌓였지만 받지 못한 보상은 합계에서 뺍니다.</li>
+          <li>던전 보상 = 기본 보상 × 단계당 배율^(던전 단계−1), 던전 단계 = 1 + ⌊(스테이지−1) ÷ 단계당 스테이지 수⌋. 입장 시점 스테이지 기준입니다.</li>
+          <li>이벤트: 배율 이벤트가 겹치면 곱하고, 할인은 (1−a)(1−b)로 합칩니다. 재화 지급은 시작일 접속 때 한 번 받습니다. ‘레벨 N 이하’ 조건은 적용 시점의 레벨로 판단합니다. 이벤트가 끝나도 그동안 얻은 재화와 성장은 그대로 남습니다.</li>
+          <li><b>모델 한계:</b> 공격력은 몬스터 처치 속도를 바꾸지 않습니다. 공격력은 스테이지를 올리고, 스테이지가 처치당 보상을 키우는 방식으로만 사냥 수급에 영향을 줍니다.</li>
+          <li>재화는 소수점까지 계산하고, 화면에는 반올림해서 표시합니다. 큰 수는 만·억·조 단위로 줄여 보여줍니다.</li>
+        </ol>
+      </details>
+    </div>
+  </section>
+</div>
+
+<footer>
+  오토 밸런싱 · 2026 NI2.0 AID 해커톤 7팀 카페인 중독 (서일대학교 AI게임융합학과) · 모든 수치는 가상 샘플 데이터이며 ㈜에이블게임즈의 실제 데이터가 아닙니다.
+</footer>
+
+<script>
+// ===== ENGINE START =====
+const Engine = (() => {
+  const MIN_PER_DAY = 1440;
+  const LOOP_GUARD = 100000;
+
+  const expReq = (p, L) => p.level.expBase * Math.pow(p.level.expGrowth, L - 1);
+  const enhCost = (p, e) => p.enhance.costBase * Math.pow(p.enhance.costGrowth, e);
+  const stageReq = (p, s) => p.stage.reqAtkBase * Math.pow(p.stage.reqAtkGrowth, s - 1);
+  const goldPerKill = (p, s) => p.hunt.goldPerKill * Math.pow(p.hunt.rewardGrowth, s - 1);
+  const expPerKill = (p, s) => p.hunt.expPerKill * Math.pow(p.hunt.rewardGrowth, s - 1);
+  const calcAtk = (p, st) => (p.atk.base + p.atk.perLevel * (st.level - 1)) * Math.pow(1 + p.atk.enhancePct / 100, st.enh);
+  const dungeonTier = (d, stage) => 1 + Math.floor((stage - 1) / d.tierStages);
+  const dungeonReward = (d, stage) => d.rewardBase * Math.pow(d.rewardGrowth, dungeonTier(d, stage) - 1);
+
+  function eventApplies(ev, level) {
+    return ev.enabled !== false && (!(ev.levelMax > 0) || level <= ev.levelMax);
+  }
+  function eventActiveAt(ev, t) {
+    const s = (ev.startDay - 1) * MIN_PER_DAY;
+    return t >= s && t < s + ev.days * MIN_PER_DAY;
+  }
+  // 같은 종류의 이벤트가 겹치면 배율은 곱하고, 할인은 (1-a)(1-b) 방식으로 합친다.
+  function mods(events, t, level) {
+    let goldMult = 1, expMult = 1, keep = 1;
+    for (const ev of events) {
+      if (!eventApplies(ev, level) || !eventActiveAt(ev, t)) continue;
+      if (ev.type === 'goldMult') goldMult *= ev.value;
+      else if (ev.type === 'expMult') expMult *= ev.value;
+      else if (ev.type === 'discount') keep *= 1 - ev.value / 100;
+    }
+    return { goldMult, expMult, discount: 1 - keep };
+  }
+
+  function simulate(p, events = []) {
+    const total = Math.round(p.sim.days) * MIN_PER_DAY;
+    const onlineMin = p.player.onlineMin;
+    const offlineCap = p.offline.capHours * 60;
+    const eventsOn = events.filter(e => e.enabled !== false);
+    const st = { gold: p.start.gold, exp: 0, level: p.start.level, enh: 0, stage: 1, atk: 0 };
+    st.atk = calcAtk(p, st);
+
+    const goldGain = { hunt: 0, offline: 0, daily: 0, event: 0 };
+    const expGain = { hunt: 0, offline: 0, daily: 0, event: 0 };
+    const ds = p.dungeons.map((d, i) => {
+      const key = 'dungeon' + i;
+      (d.reward === 'gold' ? goldGain : expGain)[key] = 0;
+      return { d, key, unlocked: false, unlockAt: null, tickets: 0, runs: 0 };
+    });
+    const ledger = { gold: { gain: goldGain, spend: { enhance: 0 } }, exp: { gain: expGain, spend: { levelup: 0 } } };
+    const levelAt = [];   // levelAt[L] = L레벨에 처음 도달한 시각(분)
+    const stageAt = [];
+    const counters = { enhances: 0, levelups: 0 };
+    let guardHit = false, overflow = false;
+    const issues = new Set();  // 결과를 믿을 수 없게 만드는 문제 목록
+    const LIMIT = 1e300;
+    const flag = msg => { overflow = true; issues.add(msg); };
+
+    levelAt[st.level] = 0;
+    let k0 = 0;
+    while (st.stage < p.stage.maxStage && st.atk >= stageReq(p, st.stage + 1) && k0++ < LOOP_GUARD) st.stage++;
+    for (let s = 1; s <= st.stage; s++) stageAt[s] = 0;
+
+    let busy = 0, run = null, pendingGold = 0, pendingExp = 0, offAccrued = 0;
+    const series = [];
+    const sum = o => Object.values(o).reduce((a, b) => a + b, 0);
+
+    function gain(cur, src, amt) {
+      if (!isFinite(amt)) { flag('획득량이 무한대가 되어 계산할 수 없습니다'); return; }
+      if (!(amt > 0)) return;
+      if (amt > LIMIT || st[cur] + amt > LIMIT) flag('재화량이 1e300을 넘어 정밀도를 보장할 수 없습니다');
+      st[cur] += amt;
+      ledger[cur].gain[src] += amt;
+    }
+    function meets(d) {
+      if (d.unlockType === 'level') return st.level >= d.unlockValue;
+      if (d.unlockType === 'stage') return st.stage >= d.unlockValue;
+      return st.atk >= d.unlockValue;
+    }
+    function progress(now, online) {
+      let k = 0;
+      while (st.level < p.level.maxLevel) {
+        const r = expReq(p, st.level);
+        if (!isFinite(r)) { flag(`${st.level}레벨 필요 경험치가 무한대입니다`); break; }
+        if (!(st.exp >= r)) break;
+        st.exp -= r; ledger.exp.spend.levelup += r; st.level++; counters.levelups++;
+        if (levelAt[st.level] === undefined) levelAt[st.level] = now;
+        if (++k > LOOP_GUARD) { guardHit = true; break; }
+      }
+      st.atk = calcAtk(p, st);
+      if (online && p.player.autoEnhance) {
+        const m = mods(eventsOn, Math.min(now, total - 1), st.level);
+        k = 0;
+        while (st.enh < p.enhance.maxEnh) {
+          const c = enhCost(p, st.enh) * (1 - m.discount);
+          if (!isFinite(c)) { flag(`강화 ${st.enh}단계 비용이 무한대입니다`); break; }
+          if (!(st.gold >= c)) break;
+          st.gold -= c; ledger.gold.spend.enhance += c; st.enh++; counters.enhances++;
+          if (++k > LOOP_GUARD) { guardHit = true; break; }
+        }
+        st.atk = calcAtk(p, st);
+      }
+      if (!isFinite(st.atk) || st.atk > LIMIT) flag('공격력이 너무 커서 계산할 수 없습니다');
+      if (st.stage < p.stage.maxStage && !isFinite(stageReq(p, st.stage + 1))) flag(`${st.stage + 1}스테이지 요구 공격력이 무한대입니다`);
+      k = 0;
+      while (st.stage < p.stage.maxStage && st.atk >= stageReq(p, st.stage + 1)) {
+        st.stage++;
+        if (stageAt[st.stage] === undefined) stageAt[st.stage] = now;
+        if (++k > LOOP_GUARD) { guardHit = true; break; }
+      }
+      if (guardHit) issues.add('한 번에 처리하는 반복 횟수가 한도(10만 회)를 넘었습니다');
+      for (const x of ds) if (!x.unlocked && meets(x.d)) { x.unlocked = true; x.unlockAt = now; }
+    }
+    function snapshot(t) {
+      series.push({
+        t, level: st.level, atk: st.atk, stage: st.stage, enh: st.enh, gold: st.gold, exp: st.exp,
+        goldGain: sum(ledger.gold.gain), goldSpend: sum(ledger.gold.spend),
+        expGain: sum(ledger.exp.gain), expSpend: sum(ledger.exp.spend),
+      });
+    }
+    function finishRun(now) {
+      const m = mods(eventsOn, now - 1, st.level);
+      const d = run.x.d;
+      gain(d.reward, run.x.key, dungeonReward(d, run.stage) * (d.reward === 'gold' ? m.goldMult : m.expMult));
+      run.x.runs++;
+      run = null;
+    }
+
+    for (const x of ds) if (meets(x.d)) { x.unlocked = true; x.unlockAt = 0; }
+    snapshot(0);
+
+    for (let t = 0; t < total; t++) {
+      const mod = t % MIN_PER_DAY;
+      const day = Math.floor(t / MIN_PER_DAY); // 0부터 시작 (0 = 1일 차)
+      if (mod === 0) {
+        // 발생 조건과 수령 조건을 나눈다.
+        // - 입장권 충전·이벤트 지급: 접속과 무관하게 매일 00:00에 발생해서 바로 계정에 반영
+        // - 방치 보상: 미접속 중 한도까지 쌓이고, 실제로 접속할 때만 수령
+        // - 일일 보상(출석): 그날 실제로 접속할 때만 발생
+        const login = onlineMin > 0;
+        for (const x of ds) x.tickets = Math.max(x.tickets, x.d.ticketsPerDay);
+        for (const ev of eventsOn) {
+          if (!eventApplies(ev, st.level)) continue;
+          if (ev.type === 'grant' && ev.startDay - 1 === day) gain(ev.currency, 'event', ev.value);
+          if (ev.type === 'tickets' && eventActiveAt(ev, t)) for (const x of ds) x.tickets += ev.value;
+        }
+        if (login) {
+          gain('gold', 'offline', pendingGold); gain('exp', 'offline', pendingExp);
+          pendingGold = 0; pendingExp = 0; offAccrued = 0;
+          gain('gold', 'daily', p.daily.gold); gain('exp', 'daily', p.daily.exp);
+        }
+        progress(t, login);
+      }
+      const m = mods(eventsOn, t, st.level);
+      if (mod < onlineMin) {
+        if (busy > 0) {
+          busy--;
+          if (busy === 0) finishRun(t + 1);
+        } else {
+          let started = false;
+          if (p.player.useDungeons) {
+            const remaining = onlineMin - mod;
+            for (const x of ds) {
+              if (x.unlocked && x.tickets >= 1 && remaining >= x.d.runMin) {
+                x.tickets--; run = { x, stage: st.stage }; busy = x.d.runMin - 1; started = true;
+                if (busy === 0) finishRun(t + 1);
+                break;
+              }
+            }
+          }
+          if (!started) {
+            gain('gold', 'hunt', p.hunt.killsPerMin * goldPerKill(p, st.stage) * m.goldMult);
+            gain('exp', 'hunt', p.hunt.killsPerMin * expPerKill(p, st.stage) * m.expMult);
+          }
+        }
+        progress(t + 1, true);
+      } else if (offAccrued < offlineCap) {
+        const r = p.offline.ratePct / 100;
+        pendingGold += p.hunt.killsPerMin * goldPerKill(p, st.stage) * r * m.goldMult;
+        pendingExp += p.hunt.killsPerMin * expPerKill(p, st.stage) * r * m.expMult;
+        offAccrued++;
+        if (!isFinite(pendingGold) || !isFinite(pendingExp)) flag('방치 보상이 무한대가 되어 계산할 수 없습니다');
+      }
+      if ((t + 1) % 60 === 0) snapshot(t + 1);
+    }
+
+    const check = cur => {
+      const start = cur === 'gold' ? p.start.gold : 0;
+      const expected = start + sum(ledger[cur].gain) - sum(ledger[cur].spend);
+      const diff = Math.abs(expected - st[cur]);
+      return { expected, actual: st[cur], ok: diff <= 1e-9 * Math.max(1, Math.abs(expected), sum(ledger[cur].gain)) };
+    };
+    return {
+      final: { ...st }, series, ledger, levelAt, stageAt, counters, guardHit, overflow,
+      reliable: issues.size === 0, issues: [...issues],
+      dungeons: ds.map(x => ({ key: x.key, name: x.d.name, reward: x.d.reward, unlockAt: x.unlockAt, runs: x.runs, unlockType: x.d.unlockType, unlockValue: x.d.unlockValue })),
+      pendingUnclaimed: { gold: pendingGold, exp: pendingExp },
+      check: { gold: check('gold'), exp: check('exp') },
+      nextEnhanceCost: st.enh < p.enhance.maxEnh ? enhCost(p, st.enh) : null,
+      nextLevelExp: st.level < p.level.maxLevel ? expReq(p, st.level) : null,
+      totalMin: total,
+    };
+  }
+
+  // 입력값끼리의 관계 검증 (개별 칸의 범위 검증은 화면에서 함께 한다)
+  function validateRelations(p, events = []) {
+    const errors = [];
+    if (p.start.level > p.level.maxLevel) errors.push({ path: 'start.level', msg: `시작 레벨은 최대 레벨(${p.level.maxLevel}) 이하여야 합니다` });
+    events.forEach((ev, i) => {
+      if (ev.startDay > p.sim.days) errors.push({ ev: i, key: 'startDay', msg: `시작 일 차는 시뮬레이션 기간(${p.sim.days}일) 이하여야 합니다` });
+    });
+    return errors;
+  }
+
+  return { simulate, validateRelations, expReq, enhCost, stageReq, goldPerKill, expPerKill, dungeonReward, calcAtk, MIN_PER_DAY };
+})();
+
+// 가상 샘플 프로젝트 (에이블게임즈 실제 수치 아님)
+const SAMPLE = {
+  sim: { days: 7 },
+  start: { gold: 0, level: 1 },
+  level: { expBase: 100, expGrowth: 1.09, maxLevel: 300 },
+  atk: { base: 10, perLevel: 4, enhancePct: 3 },
+  enhance: { costBase: 100, costGrowth: 1.05, maxEnh: 1000 },
+  stage: { reqAtkBase: 10, reqAtkGrowth: 1.10, maxStage: 1000 },
+  hunt: { killsPerMin: 6, goldPerKill: 5, expPerKill: 4, rewardGrowth: 1.08 },
+  offline: { ratePct: 30, capHours: 8 },
+  daily: { gold: 500, exp: 300 },
+  player: { onlineMin: 120, useDungeons: true, autoEnhance: true },
+  dungeons: [
+    { name: '골드 던전', reward: 'gold', unlockType: 'level', unlockValue: 70, ticketsPerDay: 2, runMin: 3, rewardBase: 3000, rewardGrowth: 2.1, tierStages: 10 },
+    { name: '경험치 던전', reward: 'exp', unlockType: 'stage', unlockValue: 105, ticketsPerDay: 2, runMin: 3, rewardBase: 2500, rewardGrowth: 2.1, tierStages: 10 },
+  ],
+};
+// ===== ENGINE END =====
+
+if (typeof window !== 'undefined') (function () {
+'use strict';
+const DAY = 1440;
+const STORE_KEY = 'autoBalancing.v1';
+const clone = o => JSON.parse(JSON.stringify(o));
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+// ---------- 숫자·시간 표기 ----------
+function fmt(n, digits) {
+  if (n === null || n === undefined || !isFinite(n)) return '—';
+  const a = Math.abs(n), s = n < 0 ? '-' : '';
+  const units = [[1e16, '경'], [1e12, '조'], [1e8, '억'], [1e4, '만']];
+  for (const [v, u] of units) if (a >= v) {
+    const x = a / v;
+    return s + (x >= 100 ? Math.round(x).toLocaleString('ko-KR') : x.toFixed(x >= 10 ? 1 : 2).replace(/\.?0+$/, '')) + u;
+  }
+  if (digits !== undefined) return s + a.toLocaleString('ko-KR', { maximumFractionDigits: digits });
+  return s + (a >= 100 ? Math.round(a).toLocaleString('ko-KR') : (Math.round(a * 10) / 10).toLocaleString('ko-KR'));
+}
+function fmtDur(min) {
+  if (min === null || min === undefined) return '기간 내 미도달';
+  if (min === 0) return '시작 즉시';
+  const d = Math.floor(min / DAY), h = Math.floor((min % DAY) / 60), m = Math.round(min % 60);
+  const parts = [];
+  if (d) parts.push(d + '일');
+  if (h) parts.push(h + '시간');
+  if (m) parts.push(m + '분');
+  return parts.join(' ');
+}
+function fmtDurDiff(a, b) { // b - a
+  if (a === null || b === null || a === undefined || b === undefined) return '';
+  const d = b - a;
+  if (d === 0) return '변화 없음';
+  return fmtDur(Math.abs(d)) + (d < 0 ? ' 빨라짐' : ' 늦어짐');
+}
+function fmtDelta(a, b) {
+  if (!isFinite(a) || !isFinite(b)) return '';
+  const d = b - a;
+  if (Math.abs(d) < 1e-9) return '0';
+  const pct = a !== 0 ? ` (${d > 0 ? '+' : ''}${(d / Math.abs(a) * 100).toFixed(1)}%)` : '';
+  return (d > 0 ? '+' : '') + fmt(d) + pct;
+}
+
+// ---------- 입력 스키마 ----------
+const UNLOCK_TYPES = [['level', '레벨'], ['stage', '스테이지'], ['atk', '공격력']];
+function F(path, label, unit, opt = {}) { return { path, label, unit, ...opt }; }
+const GAME_GROUPS = [
+  { title: '시작 상태', desc: '시뮬레이션 시작 시점의 값입니다.', fields: [
+    F('start.gold', '시작 골드', 'G', { min: 0 }),
+    F('start.level', '시작 레벨', 'Lv', { min: 1, int: true }),
+  ]},
+  { title: '자동사냥 (수급처)', desc: '접속 중 1분마다 보상을 받습니다. 스테이지가 오를수록 처치당 보상이 커집니다.', fields: [
+    F('hunt.killsPerMin', '분당 처치 수', '마리', { min: 0 }),
+    F('hunt.rewardGrowth', '스테이지당 보상 배율', '×', { min: 1, max: 3, step: 0.01 }),
+    F('hunt.goldPerKill', '처치당 골드 (1스테이지)', 'G', { min: 0 }),
+    F('hunt.expPerKill', '처치당 경험치 (1스테이지)', 'EXP', { min: 0 }),
+  ]},
+  { title: '오프라인 방치 (수급처)', desc: '오프라인 동안 쌓이고 다음 접속 때 받습니다.', fields: [
+    F('offline.ratePct', '방치 효율 (사냥 대비)', '%', { min: 0, max: 1000 }),
+    F('offline.capHours', '최대 누적 시간', '시간', { min: 0, max: 24 }),
+  ]},
+  { title: '일일 보상 (수급처)', desc: '매일 접속 때 한 번 받습니다.', fields: [
+    F('daily.gold', '일일 골드', 'G', { min: 0 }),
+    F('daily.exp', '일일 경험치', 'EXP', { min: 0 }),
+  ]},
+  { title: '레벨업 (경험치 소모처)', desc: '필요 경험치 = 기본값 × 배율^(레벨−1). 충분하면 여러 레벨을 한 번에 올립니다.', fields: [
+    F('level.expBase', '1→2레벨 필요 경험치', 'EXP', { min: 0.0001 }),
+    F('level.expGrowth', '레벨당 필요량 배율', '×', { min: 1, max: 3, step: 0.01 }),
+    F('level.maxLevel', '최대 레벨', 'Lv', { min: 1, max: 100000, int: true }),
+    F('atk.perLevel', '레벨당 공격력', '+', { min: 0 }),
+  ]},
+  { title: '공격력 강화 (골드 소모처)', desc: '강화 비용 = 기본 비용 × 배율^현재 단계. 공격력은 단계마다 %로 곱해집니다.', fields: [
+    F('enhance.costBase', '0→1단계 비용', 'G', { min: 0 }),
+    F('enhance.costGrowth', '단계당 비용 배율', '×', { min: 1, max: 3, step: 0.01 }),
+    F('atk.enhancePct', '단계당 공격력 증가', '%', { min: 0, max: 100, step: 0.1 }),
+    F('enhance.maxEnh', '최대 강화 단계', '단계', { min: 0, max: 100000, int: true }),
+  ]},
+  { title: '스테이지 (성장 → 수급 연결)', desc: '공격력이 다음 스테이지 요구 공격력 이상이면 자동으로 넘어갑니다.', fields: [
+    F('atk.base', '기본 공격력', '', { min: 0.0001 }),
+    F('stage.reqAtkBase', '1스테이지 요구 공격력', '', { min: 0.0001 }),
+    F('stage.reqAtkGrowth', '스테이지당 요구 배율', '×', { min: 1, max: 3, step: 0.01 }),
+    F('stage.maxStage', '최대 스테이지', '', { min: 1, max: 100000, int: true }),
+  ]},
+];
+function dungeonGroup(i) {
+  const pre = 'dungeons.' + i + '.';
+  return { title: '', dungeon: i, desc: '보상 = 기본 보상 × 단계당 배율^(던전 단계−1). 던전 단계는 스테이지에 따라 올라갑니다.', fields: [
+    F(pre + 'unlockType', '해금 조건', '', { type: 'select', options: UNLOCK_TYPES }),
+    F(pre + 'unlockValue', '해금 기준값', '이상', { min: 0 }),
+    F(pre + 'ticketsPerDay', '하루 입장권', '장', { min: 0, max: 1000, int: true }),
+    F(pre + 'runMin', '1회 소요 시간', '분', { min: 1, max: 1440, int: true }),
+    F(pre + 'rewardBase', '기본 보상', '', { min: 0 }),
+    F(pre + 'rewardGrowth', '단계당 보상 배율', '×', { min: 1, max: 10, step: 0.01 }),
+    F(pre + 'tierStages', '단계당 스테이지 수', '', { min: 1, max: 100000, int: true }),
+  ]};
+}
+const PLAYER_FIELDS = [
+  F('player.onlineMin', '하루 접속 시간', '분', { min: 0, max: 1440, int: true, full: true }),
+  F('player.useDungeons', '입장권이 있으면 던전 이용', '', { type: 'check', full: true }),
+  F('player.autoEnhance', '골드가 있으면 바로 강화', '', { type: 'check', full: true }),
+];
+const SIM_FIELDS = [
+  F('sim.days', '기간', '', { type: 'select', options: [[7, '7일'], [14, '14일'], [30, '30일']], num: true }),
+];
+const PLAYER_PRESETS = [
+  { name: '캐주얼', min: 30, note: '하루 30분' },
+  { name: '일반', min: 120, note: '하루 2시간' },
+  { name: '헤비', min: 480, note: '하루 8시간' },
+];
+const EVENT_TYPES = {
+  grant: { label: '재화 지급', unit: '', hasDays: false },
+  goldMult: { label: '골드 획득 배율', unit: '×', hasDays: true },
+  expMult: { label: '경험치 획득 배율', unit: '×', hasDays: true },
+  discount: { label: '강화 비용 할인', unit: '%', hasDays: true },
+  tickets: { label: '던전 입장권 추가 (던전별, 매일)', unit: '장', hasDays: true },
+};
+const EVENT_TEMPLATES = [
+  { title: '경험치 2배', note: '3일 차부터 3일간', ev: { type: 'expMult', startDay: 3, days: 3, value: 2, levelMax: 0 } },
+  { title: '골드 100만 지급', note: '2일 차 접속 시', ev: { type: 'grant', currency: 'gold', startDay: 2, days: 1, value: 1000000, levelMax: 0 } },
+  { title: '강화 비용 30% 할인', note: '4일 차부터 3일간', ev: { type: 'discount', startDay: 4, days: 3, value: 30, levelMax: 0 } },
+  { title: '신규 유저 입장권 +2', note: '레벨 100 이하, 7일간', ev: { type: 'tickets', startDay: 1, days: 7, value: 2, levelMax: 100 } },
+];
+const SOURCE_LABEL = { hunt: '자동사냥', offline: '오프라인 방치', daily: '일일 보상', event: '이벤트 지급', enhance: '강화', levelup: '레벨업' };
+const SOURCE_COLOR = { hunt: '#3b82f6', offline: '#8b5cf6', daily: '#64748b', event: '#ef4444', dungeon0: '#f59e0b', dungeon1: '#10b981' };
+
+// ---------- 상태 ----------
+let state = loadState();
+let lastRun = null;
+let timer = null;
+
+function defaultState() {
+  return { params: clone(SAMPLE), events: [clone(EVENT_TEMPLATES[0].ev)], ui: { growth: 'level', econCur: 'gold', econMode: 'balance', msType: 'level', msValue: 130 } };
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) {
+      const s = JSON.parse(raw);
+      if (s && s.params && s.params.dungeons && Array.isArray(s.events)) return { ...defaultState(), ...s, ui: { ...defaultState().ui, ...(s.ui || {}) } };
+    }
+  } catch (e) { /* 저장소를 못 쓰는 환경: 샘플로 시작 */ }
+  return defaultState();
+}
+function saveState() {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) { /* 무시 */ }
+}
+function getPath(o, path) { return path.split('.').reduce((x, k) => (x == null ? x : x[k]), o); }
+function setPath(o, path, v) {
+  const ks = path.split('.'); let x = o;
+  while (ks.length > 1) x = x[ks.shift()];
+  x[ks[0]] = v;
+}
+
+// ---------- 폼 렌더링 ----------
+function fieldHTML(f, value, idPrefix = '') {
+  const id = 'f_' + idPrefix + f.path.replace(/\./g, '_');
+  const cls = 'field' + (f.full ? ' full' : '');
+  if (f.type === 'check') {
+    return `<div class="${cls}"><label class="check"><input type="checkbox" id="${id}" data-path="${f.path}" ${value ? 'checked' : ''}> ${esc(f.label)}</label></div>`;
+  }
+  if (f.type === 'select') {
+    const opts = f.options.map(([v, l]) => `<option value="${v}" ${String(v) === String(value) ? 'selected' : ''}>${esc(l)}</option>`).join('');
+    return `<div class="${cls}"><label for="${id}">${esc(f.label)}</label><div class="input-wrap"><select id="${id}" data-path="${f.path}" ${f.num ? 'data-num="1"' : ''}>${opts}</select></div></div>`;
+  }
+  return `<div class="${cls}" data-field="${f.path}">
+    <label for="${id}">${esc(f.label)}</label>
+    <div class="input-wrap"><input id="${id}" type="number" inputmode="decimal" step="${f.step || 'any'}" data-path="${f.path}" value="${value}">${f.unit ? `<span class="unit">${esc(f.unit)}</span>` : ''}</div>
+    <div class="err"></div>
+  </div>`;
+}
+function groupHTML(g) {
+  const p = state.params;
+  let title = g.title;
+  if (g.dungeon !== undefined) {
+    const d = p.dungeons[g.dungeon];
+    title = `${d.name} (${d.reward === 'gold' ? '골드' : '경험치'} 수급처)`;
+  }
+  return `<div class="card"><h2>${esc(title)}</h2><p class="desc">${esc(g.desc)}</p>
+    <div class="fields">${g.fields.map(f => fieldHTML(f, getPath(p, f.path))).join('')}</div></div>`;
+}
+function renderForms() {
+  const groups = [...GAME_GROUPS.slice(0, 4), dungeonGroup(0), dungeonGroup(1), ...GAME_GROUPS.slice(4)];
+  $('#panelGame').innerHTML = groups.map(groupHTML).join('');
+  $('#playerFields').innerHTML = PLAYER_FIELDS.map(f => fieldHTML(f, getPath(state.params, f.path))).join('');
+  $('#simFields').innerHTML = SIM_FIELDS.map(f => fieldHTML(f, getPath(state.params, f.path))).join('');
+  renderPresets();
+}
+function renderPresets() {
+  $('#playerPresets').innerHTML = PLAYER_PRESETS.map((pr, i) =>
+    `<button type="button" class="preset ${state.params.player.onlineMin === pr.min ? 'on' : ''}" data-preset="${i}"><strong>${pr.name}</strong><span>${pr.note}</span></button>`).join('');
+}
+function renderEvents() {
+  $('#eventTemplates').innerHTML = EVENT_TEMPLATES.map((t, i) =>
+    `<button type="button" class="preset" data-tpl="${i}"><strong>+ ${esc(t.title)}</strong><span>${esc(t.note)}</span></button>`).join('');
+  if (!state.events.length) {
+    $('#eventList').innerHTML = '<div class="empty">등록된 이벤트가 없습니다. 위에서 빠르게 추가하거나 빈 이벤트를 추가하세요.</div>';
+    return;
+  }
+  $('#eventList').innerHTML = state.events.map((ev, i) => {
+    const T = EVENT_TYPES[ev.type];
+    const typeOpts = Object.entries(EVENT_TYPES).map(([k, v]) => `<option value="${k}" ${k === ev.type ? 'selected' : ''}>${v.label}</option>`).join('');
+    const unit = ev.type === 'grant' ? (ev.currency === 'gold' ? 'G' : 'EXP') : T.unit;
+    return `<div class="event-item ${ev.enabled === false ? 'off' : ''}" data-ev="${i}">
+      <div class="row-head">
+        <label class="check"><input type="checkbox" data-evk="enabled" ${ev.enabled === false ? '' : 'checked'}> <strong>이벤트 ${i + 1}</strong></label>
+        <button type="button" class="btn small ghost" data-evdel="${i}">삭제</button>
+      </div>
+      <div class="fields">
+        <div class="field full"><label>종류</label><div class="input-wrap"><select data-evk="type">${typeOpts}</select></div></div>
+        ${ev.type === 'grant' ? `<div class="field"><label>지급 재화</label><div class="input-wrap"><select data-evk="currency"><option value="gold" ${ev.currency === 'gold' ? 'selected' : ''}>골드</option><option value="exp" ${ev.currency === 'exp' ? 'selected' : ''}>경험치</option></select></div></div>` : ''}
+        <div class="field" data-evf="value"><label>${ev.type === 'grant' ? '지급량' : ev.type === 'discount' ? '할인율' : ev.type === 'tickets' ? '추가 입장권' : '배율'}</label><div class="input-wrap"><input type="number" inputmode="decimal" step="any" data-evk="value" value="${ev.value}"><span class="unit">${unit}</span></div><div class="err"></div></div>
+        <div class="field" data-evf="startDay"><label>${T.hasDays ? '시작' : '지급'} 일 차</label><div class="input-wrap"><input type="number" inputmode="numeric" step="1" data-evk="startDay" value="${ev.startDay}"><span class="unit">일 차</span></div><div class="err"></div></div>
+        ${T.hasDays ? `<div class="field" data-evf="days"><label>기간</label><div class="input-wrap"><input type="number" inputmode="numeric" step="1" data-evk="days" value="${ev.days}"><span class="unit">일</span></div><div class="err"></div></div>` : ''}
+        <div class="field" data-evf="levelMax"><label>대상 (레벨 N 이하, 0 = 전체)</label><div class="input-wrap"><input type="number" inputmode="numeric" step="1" data-evk="levelMax" value="${ev.levelMax || 0}"><span class="unit">Lv</span></div><div class="err"></div></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ---------- 검증 ----------
+function allNumberFields() {
+  return [...GAME_GROUPS.flatMap(g => g.fields), ...dungeonGroup(0).fields, ...dungeonGroup(1).fields, ...PLAYER_FIELDS, ...SIM_FIELDS]
+    .filter(f => !f.type);
+}
+function checkNumber(v, f) {
+  if (typeof v !== 'number' || !isFinite(v)) return '숫자를 입력하세요';
+  if (f.min !== undefined && v < f.min) return `${f.min} 이상이어야 합니다`;
+  if (f.max !== undefined && v > f.max) return `${f.max} 이하여야 합니다`;
+  if (f.int && !Number.isInteger(v)) return '정수만 입력할 수 있습니다';
+  return '';
+}
+function validate() {
+  const errors = [];
+  for (const f of allNumberFields()) {
+    const msg = checkNumber(getPath(state.params, f.path), f);
+    if (msg) errors.push({ path: f.path, label: f.label, msg });
+  }
+  const days = state.params.sim.days;
+  state.events.forEach((ev, i) => {
+    const rules = {
+      value: ev.type === 'discount' ? { min: 0, max: 100 } : ev.type === 'tickets' ? { min: 0, max: 1000, int: true } : ev.type === 'grant' ? { min: 0 } : { min: 0, max: 100 },
+      startDay: { min: 1, int: true },
+      days: { min: 1, max: 365, int: true },
+      levelMax: { min: 0, int: true },
+    };
+    for (const k of Object.keys(rules)) {
+      if (k === 'days' && !EVENT_TYPES[ev.type].hasDays) continue;
+      const msg = checkNumber(ev[k], rules[k]);
+      if (msg) errors.push({ ev: i, key: k, label: `이벤트 ${i + 1}`, msg });
+    }
+  });
+  for (const e of Engine.validateRelations(state.params, state.events)) {
+    errors.push(e.path ? { ...e, label: (allNumberFields().find(f => f.path === e.path) || {}).label || e.path } : { ...e, label: `이벤트 ${e.ev + 1}` });
+  }
+  // 화면 표시
+  document.querySelectorAll('.field.invalid').forEach(el => el.classList.remove('invalid'));
+  for (const e of errors) {
+    const el = e.path ? document.querySelector(`[data-field="${e.path}"]`) : document.querySelector(`[data-ev="${e.ev}"] [data-evf="${e.key}"]`);
+    if (el) { el.classList.add('invalid'); el.querySelector('.err').textContent = e.msg; }
+  }
+  return errors;
+}
+
+// ---------- 실행 ----------
+function schedule() {
+  clearTimeout(timer);
+  timer = setTimeout(runAll, 200);
+}
+function runAll() {
+  const errors = validate();
+  const banner = $('#errBanner');
+  if (errors.length) {
+    banner.style.display = 'block';
+    banner.innerHTML = `<b>입력 오류 ${errors.length}개</b> — 고칠 때까지 아래 결과는 마지막으로 계산한 값입니다.<br>` +
+      errors.slice(0, 4).map(e => `· ${esc(e.label)}: ${esc(e.msg)}`).join('<br>');
+    renderStatus(true);
+    return;
+  }
+  banner.style.display = 'none';
+  saveState();
+  const t0 = performance.now();
+  const p = clone(state.params);
+  const activeEvents = state.events.filter(e => e.enabled !== false);
+  const base = Engine.simulate(p, []);
+  const evt = activeEvents.length ? Engine.simulate(p, clone(activeEvents)) : null;
+  lastRun = { base, evt, params: p, events: clone(activeEvents), ms: performance.now() - t0 };
+  renderResults();
+}
+
+// ---------- 결과 렌더링 ----------
+function renderStatus(stale) {
+  if (!lastRun) { $('#status').innerHTML = ''; return; }
+  const { base, evt, ms } = lastRun;
+  const allOk = [base, evt].filter(Boolean).every(r => r.check.gold.ok && r.check.exp.ok);
+  const bad = [['기준', base], ['이벤트 적용', evt]].filter(([, r]) => r && !r.reliable);
+  const ub = $('#unreliableBanner');
+  ub.style.display = bad.length ? 'block' : 'none';
+  ub.innerHTML = bad.length ? '<b>⚠ 계산 결과를 신뢰할 수 없습니다.</b> 수치가 너무 커서 일부 계산을 할 수 없었습니다. 아래 결과는 참고용이며, 이 설정은 밸런싱 근거로 쓰지 마세요.<br>' +
+    bad.map(([n, r]) => `· ${n}: ${r.issues.map(esc).join(' / ')}`).join('<br>') : '';
+  document.querySelector('.results').classList.toggle('unreliable', bad.length > 0);
+  $('#status').innerHTML =
+    (stale ? '<span class="pill err">입력 오류 — 이전 결과 표시 중</span>' : `<span class="pill">자동 계산 완료 · ${ms.toFixed(0)}ms</span>`) +
+    `<span class="pill">${lastRun.params.sim.days}일 · ${lastRun.params.player.onlineMin > 0 ? '하루 ' + fmtDur(lastRun.params.player.onlineMin) + ' 접속' : '접속하지 않음'}</span>` +
+    `<span class="pill">${evt ? `기준 vs 이벤트 ${lastRun.events.length}개` : '이벤트 없음 (기준만 표시)'}</span>` +
+    `<span class="pill ${allOk ? 'ok' : 'err'}" title="시작값 + 누적 획득 − 누적 소모 = 현재 보유량">${allOk ? '✓ 재화 잔액 검증 통과' : '✕ 재화 잔액 불일치'}</span>` +
+    (bad.length ? '<span class="pill err">신뢰 불가 결과</span>' : '');
+}
+function renderResults() {
+  renderStatus(false);
+  renderKpis();
+  renderGrowthChart();
+  renderEconChart();
+  renderTimeline();
+  renderShares();
+  renderTable();
+  renderAnalysis();
+}
+function renderKpis() {
+  const { base, evt } = lastRun;
+  const items = [
+    ['최종 레벨', r => r.final.level, v => 'Lv ' + fmt(v)],
+    ['최종 공격력', r => r.final.atk, fmt],
+    ['최종 스테이지', r => r.final.stage, fmt],
+    ['누적 골드 획득', r => Object.values(r.ledger.gold.gain).reduce((a, b) => a + b, 0), v => fmt(v) + ' G'],
+  ];
+  $('#kpis').innerHTML = items.map(([label, get, f]) => {
+    const b = get(base);
+    const e = evt ? get(evt) : null;
+    return `<div class="kpi"><div class="label">${label}</div><div class="value num">${f(b)}</div>
+      <div class="delta num">${evt ? '이벤트 ' + f(e) + ' · ' + fmtDelta(b, e) : ''}</div></div>`;
+  }).join('');
+}
+
+function seg(el, options, current, onPick) {
+  el.innerHTML = options.map(([v, l]) => `<button type="button" data-v="${v}" aria-pressed="${v === current}">${l}</button>`).join('');
+  el.onclick = e => { const b = e.target.closest('button'); if (b) onPick(b.dataset.v); };
+}
+const GROWTH_METRICS = [['level', '레벨'], ['atk', '공격력'], ['stage', '스테이지'], ['enh', '강화 단계']];
+function renderGrowthChart() {
+  const m = state.ui.growth;
+  seg($('#growthSeg'), GROWTH_METRICS, m, v => { state.ui.growth = v; saveState(); renderGrowthChart(); });
+  const label = GROWTH_METRICS.find(x => x[0] === m)[1];
+  drawChart($('#growthChart'), $('#growthLegend'), buildSeries(s => s[m]), label, v => fmt(v));
+}
+function renderEconChart() {
+  const cur = state.ui.econCur, mode = state.ui.econMode;
+  seg($('#econCurSeg'), [['gold', '골드'], ['exp', '경험치']], cur, v => { state.ui.econCur = v; saveState(); renderEconChart(); });
+  seg($('#econModeSeg'), [['balance', '보유량'], ['gain', '누적 획득'], ['spend', '누적 소모']], mode, v => { state.ui.econMode = v; saveState(); renderEconChart(); });
+  const key = mode === 'balance' ? cur : cur + (mode === 'gain' ? 'Gain' : 'Spend');
+  const unit = cur === 'gold' ? 'G' : 'EXP';
+  const title = (cur === 'gold' ? '골드' : '경험치') + ' ' + ({ balance: '보유량', gain: '누적 획득', spend: '누적 소모' })[mode];
+  drawChart($('#econChart'), $('#econLegend'), buildSeries(s => s[key]), title, v => fmt(v) + ' ' + unit);
+}
+function buildSeries(get) {
+  const { base, evt } = lastRun;
+  const out = [{ name: '기준 밸런스', color: 'var(--accent)', pts: base.series.map(s => [s.t, get(s)]) }];
+  if (evt) out.push({ name: '이벤트 적용', color: 'var(--event)', pts: evt.series.map(s => [s.t, get(s)]) });
+  return out;
+}
+function niceStep(range, target) {
+  const raw = range / target;
+  const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  const n = raw / mag;
+  return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10) * mag;
+}
+function drawChart(box, legendEl, series, title, yFmt) {
+  const W = Math.max(260, Math.floor(box.clientWidth || 600));
+  if (!box.clientWidth) { box.dataset.pending = '1'; }
+  const H = W < 520 ? 210 : 260;
+  const M = { l: W < 520 ? 48 : 60, r: 12, t: 14, b: 28 };
+  const iw = W - M.l - M.r, ih = H - M.t - M.b;
+  const total = lastRun.base.totalMin;
+  let ymax = 0;
+  for (const s of series) for (const [, y] of s.pts) if (isFinite(y) && y > ymax) ymax = y;
+  if (ymax <= 0) ymax = 1;
+  const step = niceStep(ymax, 4);
+  ymax = Math.ceil(ymax / step) * step;
+  const X = t => M.l + (t / total) * iw;
+  const Y = v => M.t + ih - (Math.max(0, Math.min(v, ymax)) / ymax) * ih;
+  const days = total / DAY;
+  const dStep = days <= 7 ? 1 : days <= 14 ? 2 : 5;
+  let g = '';
+  for (let v = 0; v <= ymax + 1e-9; v += step) {
+    g += `<line x1="${M.l}" x2="${W - M.r}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)" />`;
+    g += `<text x="${M.l - 6}" y="${Y(v) + 4}" text-anchor="end" font-size="11" fill="var(--muted)">${esc(fmt(v))}</text>`;
+  }
+  for (let d = 0; d <= days; d += dStep) {
+    g += `<text x="${X(d * DAY)}" y="${H - 8}" text-anchor="middle" font-size="11" fill="var(--muted)">${d}일</text>`;
+    g += `<line x1="${X(d * DAY)}" x2="${X(d * DAY)}" y1="${M.t + ih}" y2="${M.t + ih + 4}" stroke="var(--line-2)" />`;
+  }
+  // 이벤트 구간 표시
+  let shades = '';
+  const hasEvt = series.length > 1;
+  if (hasEvt) for (const ev of lastRun.events) {
+    const s = (ev.startDay - 1) * DAY;
+    if (s >= total) continue;
+    if (EVENT_TYPES[ev.type].hasDays) {
+      const e = Math.min(total, s + ev.days * DAY);
+      shades += `<rect x="${X(s)}" y="${M.t}" width="${Math.max(1, X(e) - X(s))}" height="${ih}" fill="var(--event-soft)" />`;
+    } else {
+      shades += `<line x1="${X(s)}" x2="${X(s)}" y1="${M.t}" y2="${M.t + ih}" stroke="var(--event)" stroke-dasharray="3 3" />`;
+    }
+  }
+  const paths = series.map((s, i) => {
+    const d = s.pts.map(([t, y], j) => (j ? 'L' : 'M') + X(t).toFixed(1) + ',' + Y(y).toFixed(1)).join('');
+    return `<path d="${d}" fill="none" stroke="${s.color}" stroke-width="${i ? 2 : 2.2}" ${i ? 'stroke-dasharray="6 4"' : ''} stroke-linejoin="round" />`;
+  }).join('');
+  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc(title)} 그래프">
+    ${shades}${g}<line x1="${M.l}" x2="${W - M.r}" y1="${M.t + ih}" y2="${M.t + ih}" stroke="var(--line-2)" />${paths}
+    <line class="cursor" x1="0" x2="0" y1="${M.t}" y2="${M.t + ih}" stroke="var(--muted)" stroke-width="1" style="display:none" />
+    <rect x="${M.l}" y="${M.t}" width="${iw}" height="${ih}" fill="transparent" class="hit" />
+  </svg><div class="chart-tip"></div>`;
+  legendEl.innerHTML = series.map((s, i) => `<span><i style="background:${s.color}"></i>${s.name}</span>`).join('') +
+    (hasEvt && lastRun.events.length ? '<span><i class="shade"></i>이벤트 기간</span>' : '') + `<span>세로축: ${esc(title)}</span>`;
+  const svg = box.querySelector('svg'), tip = box.querySelector('.chart-tip'), cursor = svg.querySelector('.cursor');
+  const move = ev => {
+    const rect = svg.getBoundingClientRect();
+    const px = (ev.clientX - rect.left) * (W / rect.width);
+    const t = Math.max(0, Math.min(total, ((px - M.l) / iw) * total));
+    const idx = Math.round(t / 60);
+    const pt = series[0].pts[Math.min(idx, series[0].pts.length - 1)];
+    if (!pt) return;
+    cursor.setAttribute('x1', X(pt[0])); cursor.setAttribute('x2', X(pt[0])); cursor.style.display = '';
+    tip.innerHTML = `<b>${fmtDur(pt[0]) || '시작'}</b><br>` + series.map(s => {
+      const q = s.pts[Math.min(idx, s.pts.length - 1)];
+      return `<span style="color:${s.color}">●</span> ${s.name}: <b class="num">${esc(yFmt(q[1]))}</b>`;
+    }).join('<br>');
+    tip.style.display = 'block';
+    const bx = box.getBoundingClientRect();
+    let left = ev.clientX - bx.left + 12;
+    if (left + tip.offsetWidth > bx.width) left = ev.clientX - bx.left - tip.offsetWidth - 12;
+    tip.style.left = Math.max(0, left) + 'px';
+    tip.style.top = '8px';
+  };
+  svg.addEventListener('pointermove', move);
+  svg.addEventListener('pointerdown', move);
+  svg.addEventListener('pointerleave', () => { tip.style.display = 'none'; cursor.style.display = 'none'; });
+}
+
+function milestoneAt(r) {
+  const v = Math.floor(state.ui.msValue);
+  if (!(v >= 1)) return null;
+  const arr = state.ui.msType === 'stage' ? r.stageAt : r.levelAt;
+  if (arr[v] !== undefined) return arr[v];
+  // 시작값이 이미 목표 이상인 경우
+  const startVal = state.ui.msType === 'stage' ? r.series[0].stage : r.series[0].level;
+  return startVal >= v ? 0 : null;
+}
+function renderTimeline() {
+  const { base, evt } = lastRun;
+  $('#msType').value = state.ui.msType;
+  $('#msValue').value = state.ui.msValue;
+  const typeName = { level: '레벨', stage: '스테이지', atk: '공격력' };
+  const items = base.dungeons.map((d, i) => ({
+    name: d.name + ' 해금', cond: `조건: ${typeName[d.unlockType]} ${fmt(d.unlockValue)} 이상`,
+    b: d.unlockAt, e: evt ? evt.dungeons[i].unlockAt : undefined,
+  }));
+  items.push({
+    name: `목표: ${typeName[state.ui.msType]} ${fmt(state.ui.msValue)} 도달`, cond: '위에서 목표를 바꿀 수 있습니다',
+    b: milestoneAt(base), e: evt ? milestoneAt(evt) : undefined,
+  });
+  $('#timeline').innerHTML = items.map(it => `<div class="tl-item">
+    <div><div class="name">${esc(it.name)}</div><div class="cond">${esc(it.cond)}</div></div>
+    <div class="when"><div class="num">${fmtDur(it.b)}</div>
+      ${evt ? `<div class="ev num">이벤트: ${fmtDur(it.e)}${it.b !== null && it.e !== null ? ' · ' + fmtDurDiff(it.b, it.e) : ''}</div>` : ''}</div>
+  </div>`).join('');
+}
+function sourceName(key, r) {
+  if (key.startsWith('dungeon')) return r.dungeons.find(d => d.key === key).name;
+  return SOURCE_LABEL[key] || key;
+}
+function shareBlock(r, cur, caption) {
+  const g = r.ledger[cur].gain;
+  const total = Object.values(g).reduce((a, b) => a + b, 0);
+  const entries = Object.entries(g).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
+  const bar = entries.map(([k, v]) => `<span title="${esc(sourceName(k, r))} ${(v / total * 100).toFixed(1)}%" style="width:${v / total * 100}%;background:${SOURCE_COLOR[k] || '#999'}"></span>`).join('');
+  const leg = entries.map(([k, v]) => `<span><i class="dot" style="background:${SOURCE_COLOR[k] || '#999'}"></i>${esc(sourceName(k, r))} <b>${(v / total * 100).toFixed(1)}%</b> <span class="num">(${fmt(v)})</span></span>`).join('');
+  return `<div class="share-row"><div class="cap">${caption} · 합계 ${fmt(total)} ${cur === 'gold' ? 'G' : 'EXP'}</div>
+    <div class="share-bar">${total > 0 ? bar : ''}</div><div class="share-legend">${leg || '수급 없음'}</div></div>`;
+}
+function renderShares() {
+  const { base, evt } = lastRun;
+  let html = shareBlock(base, 'gold', '골드 · 기준') + (evt ? shareBlock(evt, 'gold', '골드 · 이벤트 적용') : '');
+  html += shareBlock(base, 'exp', '경험치 · 기준') + (evt ? shareBlock(evt, 'exp', '경험치 · 이벤트 적용') : '');
+  $('#shares').innerHTML = html;
+}
+function renderTable() {
+  const { base, evt } = lastRun;
+  const sum = o => Object.values(o).reduce((a, b) => a + b, 0);
+  const rows = [
+    ['최종 레벨', r => r.final.level],
+    ['최종 공격력', r => r.final.atk],
+    ['최종 스테이지', r => r.final.stage],
+    ['최종 강화 단계', r => r.final.enh],
+    ['보유 골드', r => r.final.gold],
+    ['누적 골드 획득', r => sum(r.ledger.gold.gain)],
+    ['누적 골드 소모 (강화)', r => r.ledger.gold.spend.enhance],
+    ['누적 경험치 획득', r => sum(r.ledger.exp.gain)],
+    ['레벨업 횟수', r => r.counters.levelups],
+    ['강화 횟수', r => r.counters.enhances],
+    ...base.dungeons.map((d, i) => [d.name + ' 이용 횟수', r => r.dungeons[i].runs]),
+    ['받지 못한 방치 골드 (기간 종료 시)', r => r.pendingUnclaimed.gold],
+  ];
+  $('#cmpTable').innerHTML = `<thead><tr><th>지표</th><th>기준</th>${evt ? '<th>이벤트 적용</th><th>차이</th>' : ''}</tr></thead><tbody>` +
+    rows.map(([l, f]) => {
+      const b = f(base), e = evt ? f(evt) : null;
+      return `<tr><td>${esc(l)}</td><td class="num">${fmt(b)}</td>${evt ? `<td class="num">${fmt(e)}</td><td class="num diff">${fmtDelta(b, e)}</td>` : ''}</tr>`;
+    }).join('') + '</tbody>';
+}
+
+// ---------- 규칙 기반 분석 ----------
+function analyze(r, p) {
+  const out = [];
+  const total = r.totalMin;
+  // 1. 수급 집중
+  for (const cur of ['gold', 'exp']) {
+    const g = r.ledger[cur].gain;
+    const sumv = Object.values(g).reduce((a, b) => a + b, 0);
+    if (sumv <= 0) continue;
+    const [topK, topV] = Object.entries(g).sort((a, b) => b[1] - a[1])[0];
+    const share = topV / sumv;
+    if (share >= 0.5) out.push({
+      msg: `${cur === 'gold' ? '골드' : '경험치'} 수급의 ${(share * 100).toFixed(0)}%가 ‘${sourceName(topK, r)}’에 몰려 있습니다.`,
+      basis: `${sourceName(topK, r)} ${fmt(topV)} ÷ 전체 ${fmt(sumv)} (기준: 한 수급처가 50% 이상이면 표시)`,
+    });
+  }
+  // 2. 성장 둔화
+  const at = t => r.series.find(s => s.t === t) || r.series[r.series.length - 1];
+  if (total >= 2 * DAY) {
+    const first = at(DAY).level - r.series[0].level;
+    const last = r.final.level - at(total - DAY).level;
+    if (first > 0) out.push({
+      msg: last <= first * 0.2 ? `후반 성장이 크게 느려졌습니다. 마지막 하루 레벨 상승은 첫날의 ${(last / first * 100).toFixed(0)}%입니다.` : `마지막 하루 레벨 상승은 첫날의 ${(last / first * 100).toFixed(0)}%입니다.`,
+      basis: `첫 24시간 +${first}레벨, 마지막 24시간 +${last}레벨 (기준: 20% 이하이면 ‘크게 느려짐’)`,
+    });
+  }
+  // 3. 강화 비용 vs 하루 골드 수급
+  if (total >= DAY && r.nextEnhanceCost !== null) {
+    const dayGold = r.series[r.series.length - 1].goldGain - at(total - DAY).goldGain;
+    if (dayGold > 0) {
+      const ratio = r.nextEnhanceCost / dayGold;
+      out.push({
+        msg: ratio >= 1 ? `다음 강화 1회 비용이 마지막 날 하루 골드 수급의 ${ratio.toFixed(1)}배입니다. 강화가 병목이 되는 구간입니다.`
+          : `다음 강화 1회 비용은 마지막 날 하루 골드 수급의 ${(ratio * 100).toFixed(1)}%입니다.`,
+        basis: `다음 강화 비용 ${fmt(r.nextEnhanceCost)} G ÷ 마지막 24시간 골드 획득 ${fmt(dayGold)} G (기준: 1배 이상이면 병목)`,
+      });
+    }
+    if (!p.player.autoEnhance && r.final.gold > dayGold * 3 && dayGold > 0) out.push({
+      msg: `자동 강화를 꺼서 골드가 쌓이고 있습니다 (보유 ${fmt(r.final.gold)} G).`,
+      basis: `보유 골드가 마지막 하루 수급의 ${(r.final.gold / dayGold).toFixed(1)}배 (기준: 3배 이상)`,
+    });
+  }
+  // 4. 해금
+  for (const d of r.dungeons) {
+    const typeName = { level: '레벨', stage: '스테이지', atk: '공격력' }[d.unlockType];
+    const finalVal = d.unlockType === 'level' ? r.final.level : d.unlockType === 'stage' ? r.final.stage : r.final.atk;
+    if (d.unlockAt === null) out.push({
+      msg: `${d.name}은(는) 기간 안에 해금되지 않습니다.`,
+      basis: `조건 ${typeName} ${fmt(d.unlockValue)} 이상 · 최종 ${typeName} ${fmt(finalVal)}`,
+    });
+    else if (!p.player.useDungeons) out.push({ msg: `${d.name}은(는) ${fmtDur(d.unlockAt)}에 해금되지만, 유저 모델에서 던전 이용을 꺼서 보상을 받지 않습니다.`, basis: '유저 모델 → 던전 이용 꺼짐' });
+  }
+  // 5. 방치 보상 한도
+  const offMin = DAY - p.player.onlineMin;
+  const capMin = p.offline.capHours * 60;
+  if (offMin > capMin && p.offline.ratePct > 0) out.push({
+    msg: `오프라인 ${fmtDur(offMin)} 중 ${fmtDur(offMin - capMin)} 동안은 방치 보상 한도를 넘어 보상이 쌓이지 않습니다.`,
+    basis: `하루 1440분 − 접속 ${p.player.onlineMin}분 = 오프라인 ${offMin}분 > 최대 누적 ${capMin}분`,
+  });
+  return out;
+}
+function analyzeEvent(base, evt, p, events) {
+  const out = [];
+  const T = base.totalMin;
+  const lastEnd = Math.max(...events.map(ev => (ev.startDay - 1 + (EVENT_TYPES[ev.type].hasDays ? ev.days : 0)) * DAY));
+  const at = (r, t) => r.series.find(s => s.t === t) || r.series[r.series.length - 1];
+  out.push({
+    msg: `이벤트 적용 시 기간 종료 시점 레벨이 ${fmtDelta(base.final.level, evt.final.level)} 달라집니다 (Lv ${base.final.level} → ${evt.final.level}).`,
+    basis: `같은 설정·같은 유저 모델로 두 번 계산한 결과 비교 · 공격력 ${fmt(base.final.atk)} → ${fmt(evt.final.atk)}`,
+  });
+  if (lastEnd < T) {
+    const b = at(base, lastEnd), e = at(evt, lastEnd);
+    out.push({
+      msg: `이벤트가 끝난 ${fmtDur(lastEnd)} 시점의 레벨 차이 ${e.level - b.level}이(가) 기간 종료 때는 ${evt.final.level - base.final.level}입니다.`,
+      basis: `이벤트 종료 시점 Lv ${b.level} vs ${e.level} → 기간 종료 Lv ${base.final.level} vs ${evt.final.level} (이벤트로 얻은 성장은 종료 후에도 유지)`,
+    });
+  } else {
+    out.push({ msg: '이벤트가 시뮬레이션 기간 끝까지 이어집니다. 종료 후 효과를 보려면 기간을 늘리세요.', basis: `마지막 이벤트 종료 ${fmtDur(lastEnd)} ≥ 기간 ${fmtDur(T)}` });
+  }
+  base.dungeons.forEach((d, i) => {
+    const a = d.unlockAt, b = evt.dungeons[i].unlockAt;
+    if (a !== b) out.push({
+      msg: `${d.name} 해금이 ${a === null ? `기간 내 미해금 → ${fmtDur(b)}` : b === null ? `${fmtDur(a)} → 기간 내 미해금` : fmtDurDiff(a, b)}입니다.`,
+      basis: `기준 ${fmtDur(a)} · 이벤트 ${fmtDur(b)}`,
+    });
+  });
+  const gb = base.ledger.gold.spend.enhance, ge = evt.ledger.gold.spend.enhance;
+  out.push({
+    msg: `보유 골드는 ${fmtDelta(base.final.gold, evt.final.gold)}, 강화에 쓴 골드는 ${fmtDelta(gb, ge)} 달라집니다.`,
+    basis: `보유 ${fmt(base.final.gold)} → ${fmt(evt.final.gold)} G · 강화 소모 ${fmt(gb)} → ${fmt(ge)} G · 강화 단계 ${base.final.enh} → ${evt.final.enh}`,
+  });
+  return out;
+}
+function renderAnalysis() {
+  const { base, evt, params, events } = lastRun;
+  const items = analyze(base, params).map(x => ({ ...x, tag: 'base' }));
+  if (evt) items.push(...analyzeEvent(base, evt, params, events).map(x => ({ ...x, tag: 'evt' })));
+  const ck = r => `골드 ${fmt(r.check.gold.expected)} = ${fmt(r.check.gold.actual)}, 경험치 ${fmt(r.check.exp.expected)} = ${fmt(r.check.exp.actual)}`;
+  items.push({
+    tag: 'chk', msg: (base.check.gold.ok && base.check.exp.ok && (!evt || (evt.check.gold.ok && evt.check.exp.ok))) ? '재화 잔액 검증을 통과했습니다.' : '재화 잔액이 맞지 않습니다. 계산 규칙을 확인해야 합니다.',
+    basis: `시작값 + 누적 획득 − 누적 소모 = 보유량 · 기준: ${ck(base)}${evt ? ' · 이벤트: ' + ck(evt) : ''}`,
+  });
+  const tagName = { base: '기준', evt: '이벤트', chk: '검증' };
+  $('#analysis').innerHTML = items.map(x => `<li><div class="msg"><span class="tag ${x.tag}">${tagName[x.tag]}</span>${esc(x.msg)}</div><div class="basis">근거: ${esc(x.basis)}</div></li>`).join('');
+}
+
+// ---------- CSV 내보내기 ----------
+function downloadCsv() {
+  if (!lastRun) return;
+  const { base, evt } = lastRun;
+  const cols = ['t', 'level', 'atk', 'stage', 'enh', 'gold', 'goldGain', 'goldSpend', 'exp', 'expGain', 'expSpend'];
+  const KO = { level: '레벨', atk: '공격력', stage: '스테이지', enh: '강화단계', gold: '보유골드', goldGain: '누적골드획득', goldSpend: '누적골드소모', exp: '보유경험치', expGain: '누적경험치획득', expSpend: '누적경험치소모' };
+  const head = ['경과(분)', '경과(일)', ...cols.slice(1).map(c => '기준_' + KO[c]), ...(evt ? cols.slice(1).map(c => '이벤트_' + KO[c]) : [])];
+  const lines = ['# 오토 밸런싱 결과 - 가상 샘플 데이터 (실제 게임 데이터 아님)'];
+  if (!base.reliable || (evt && !evt.reliable)) lines.push('# 경고: 계산 결과를 신뢰할 수 없음 (수치 범위 초과)');
+  lines.push(head.join(','));
+  base.series.forEach((s, i) => {
+    const row = [s.t, (s.t / DAY).toFixed(4), ...cols.slice(1).map(c => +s[c].toPrecision(10))];
+    if (evt) row.push(...cols.slice(1).map(c => +evt.series[i][c].toPrecision(10)));
+    lines.push(row.join(','));
+  });
+  const blob = new Blob(['﻿' + lines.join('\n')], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `auto-balancing-${lastRun.params.sim.days}d.csv`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+// ---------- 이벤트 바인딩 ----------
+function onFieldInput(e) {
+  const el = e.target;
+  const path = el.dataset.path;
+  if (!path) return;
+  let v;
+  if (el.type === 'checkbox') v = el.checked;
+  else if (el.tagName === 'SELECT') v = el.dataset.num ? Number(el.value) : el.value;
+  else v = el.value === '' ? NaN : Number(el.value);
+  setPath(state.params, path, v);
+  if (path === 'player.onlineMin') renderPresets();
+  if (path === 'sim.days') validate();
+  schedule();
+}
+function onEventInput(e) {
+  const el = e.target;
+  const box = el.closest('[data-ev]');
+  if (!box || !el.dataset.evk) return;
+  const ev = state.events[+box.dataset.ev];
+  const k = el.dataset.evk;
+  if (k === 'enabled') { ev.enabled = el.checked; box.classList.toggle('off', !el.checked); }
+  else if (k === 'type') {
+    ev.type = el.value;
+    if (ev.type === 'grant') { ev.currency = ev.currency || 'gold'; ev.value = 100000; }
+    else if (ev.type === 'discount') ev.value = 30;
+    else if (ev.type === 'tickets') ev.value = 2;
+    else ev.value = 2;
+    ev.days = ev.days || 3;
+    renderEvents();
+  } else if (k === 'currency') { ev.currency = el.value; renderEvents(); }
+  else ev[k] = el.value === '' ? NaN : Number(el.value);
+  schedule();
+}
+
+function setTab(tab) {
+  document.body.dataset.tab = tab;
+  document.querySelectorAll('nav.tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === tab)));
+  document.querySelectorAll('.inputs .panel').forEach(p => p.classList.toggle('active', p.dataset.panel === tab));
+  if (tab === 'result' && lastRun) renderResults();
+  try { localStorage.setItem(STORE_KEY + '.tab', tab); } catch (e) { /* 무시 */ }
+  if (window.matchMedia('(max-width: 900px)').matches) window.scrollTo({ top: 0 });
+}
+
+function init() {
+  renderForms();
+  renderEvents();
+  const inputs = document.querySelector('.inputs');
+  inputs.addEventListener('input', e => { if (e.target.closest('#eventList')) onEventInput(e); else onFieldInput(e); });
+  inputs.addEventListener('change', e => {
+    if (e.target.tagName === 'SELECT' || e.target.type === 'checkbox') return; // input 이벤트에서 이미 처리
+  });
+  $('#playerPresets').addEventListener('click', e => {
+    const b = e.target.closest('[data-preset]'); if (!b) return;
+    state.params.player.onlineMin = PLAYER_PRESETS[+b.dataset.preset].min;
+    $('#f_player_onlineMin').value = state.params.player.onlineMin;
+    renderPresets(); schedule();
+  });
+  $('#eventTemplates').addEventListener('click', e => {
+    const b = e.target.closest('[data-tpl]'); if (!b) return;
+    state.events.push(clone(EVENT_TEMPLATES[+b.dataset.tpl].ev));
+    renderEvents(); schedule();
+  });
+  $('#eventList').addEventListener('click', e => {
+    const b = e.target.closest('[data-evdel]'); if (!b) return;
+    state.events.splice(+b.dataset.evdel, 1);
+    renderEvents(); schedule();
+  });
+  $('#btnAddEvent').addEventListener('click', () => {
+    state.events.push({ type: 'goldMult', startDay: 1, days: 3, value: 2, levelMax: 0 });
+    renderEvents(); schedule();
+  });
+  $('#btnReset').addEventListener('click', () => {
+    if (!confirm('모든 입력을 샘플 값으로 되돌릴까요? 지금 입력한 값은 사라집니다.')) return;
+    state = defaultState();
+    renderForms(); renderEvents(); runAll();
+  });
+  $('#btnCsv').addEventListener('click', downloadCsv);
+  document.querySelector('nav.tabs').addEventListener('click', e => { const b = e.target.closest('button[data-tab]'); if (b) setTab(b.dataset.tab); });
+  $('#msType').addEventListener('change', e => { state.ui.msType = e.target.value; saveState(); renderTimeline(); });
+  $('#msValue').addEventListener('input', e => { state.ui.msValue = Number(e.target.value); saveState(); renderTimeline(); });
+  let rz;
+  window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { if (lastRun) { renderGrowthChart(); renderEconChart(); } }, 150); });
+  runAll();
+}
+init();
+})();
+if (typeof module !== 'undefined') module.exports = { Engine, SAMPLE };
+</script>
+</body>
+</html>
