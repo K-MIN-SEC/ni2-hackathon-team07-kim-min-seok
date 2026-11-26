@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>리뷰 분석</title>
+<title>플레이노트 — 리뷰 분석</title>
 <style>
 :root {
   color-scheme: light;
@@ -209,6 +209,8 @@ label.upload:focus-within { outline: 2px solid var(--accent); outline-offset: 2p
 .csv-help-body code { background: var(--surface-2); padding: 0 4px; border-radius: 4px; font-size: 13.5px; }
 body.dragging .wrap { outline: 3px dashed var(--accent); outline-offset: -8px; }
 .upload-note:empty { display: none; }
+h1 a.home { color: inherit; text-decoration: none; }
+h1 a.home:hover { color: var(--accent); }
 .upload-note .fail { color: var(--neg); margin-top: 4px; }
 /* ---- 가독성·편의성 2차 (2026-11-27): 설명문 폭, 누르기 쉬운 버튼, 우선순위 접기 ---- */
 .sub, .drop .lead, #prioSub, #goodSub { max-width: 72ch; }
@@ -238,10 +240,34 @@ details.formula .body { margin-top: 8px; color: var(--ink-2); }
 .summary li .go { font-size: 15px; font-weight: 700; }
 table.kv th { width: 4.5em; color: var(--ink-2); font-weight: 600; font-size: 14px; }
 table.kv td { font-size: 15px; }
-.steps { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; max-width: none; }
-.steps li { padding: 6px 12px; border-radius: 999px; }
-.steps b { margin: 0; font-size: 14px; }
 .good-ratio { margin: 4px 0 8px; font-size: 15px; } .good-ratio b { font-size: 22px; color: var(--pos); }
+/* ---- 모바일 (2026-11-27) ---- */
+@media (max-width: 640px) {
+  nav { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin: 12px -16px 8px; padding: 6px 16px; }
+  nav::-webkit-scrollbar { display: none; }
+  nav a { flex: none; padding: 6px 10px; }
+  section { scroll-margin-top: 60px; }
+  header h1 .ds-badge { display: table; margin: 6px 0 0; white-space: normal; font-size: 12.5px; }
+  .toolbar .actions .theme, .toolbar .actions label.upload { padding: 4px 10px; font-size: 14px; }
+  #printBtn { display: none !important; }
+  .tile .value { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 6px; }
+  .tile .value .delta { margin-left: 0; }
+  .hero .value { font-size: 44px; }
+  #prioTable, #verTable, #prioTopicTable { min-width: 0; }
+  #prioTable tr:not(.qrow) > :nth-child(5), #prioTable tr:not(.qrow) > :nth-child(6), #prioTable .bar-track { display: none; }
+  #prioTable th { white-space: nowrap; }
+  #verTable tr > :nth-child(4), #verTable tr > :nth-child(5) { display: none; }
+  #prioTable td.item { min-width: 0; }
+  #prioTable td .muted.small, #prioTopicTable td .muted.small { display: none; }
+  #prioTable, #verTable, #prioTopicTable { font-size: 14px; }
+  #prioTable th, #prioTable td, #verTable th, #verTable td { padding: 7px 5px; }
+  #verTable td:first-child { min-width: 7.5em; }
+  #verTable td:nth-child(2), #verTable td:nth-child(3) { white-space: nowrap; }
+  #scope { font-size: 13.5px; }
+  #verTable .word { display: none; }
+  #prioTopicTable tr > :nth-child(4) { display: none; }
+  .drop h2 { font-size: 1.375rem; }
+}
 /* ---- 첫 화면: 파일 첨부 ---- */
 body.is-empty main, body.is-empty #printBtn, body.is-empty #resetBtn, body.is-empty #addBtn { display: none !important; }
 body:not(.is-empty) #emptyState { display: none; }
@@ -255,11 +281,11 @@ body.dragging .drop { background: var(--accent-wash); }
 .drop label.big:hover { filter: brightness(1.06); }
 .drop label.big:focus-within { outline: 3px solid var(--focus); outline-offset: 3px; }
 .drop .or { color: var(--muted); font-size: 0.8125rem; margin: 12px 0 0; }
-.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 26px auto 0; max-width: 720px; padding: 0; list-style: none; text-align: left; }
-.steps li { background: var(--page); border: 1px solid var(--grid); border-radius: 10px; padding: 10px 12px; font-size: 0.8125rem; color: var(--ink-2); }
-.steps b { display: block; color: var(--ink); font-size: 0.875rem; margin-bottom: 2px; }
+.steps { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 22px auto 0; padding: 0; list-style: none; }
+.steps li { background: var(--page); border: 1px solid var(--grid); border-radius: 999px; padding: 6px 12px; }
+.steps b { color: var(--ink); font-size: 14px; font-weight: 600; }
 .drop .sub-actions { margin-top: 18px; display: flex; gap: 8px 16px; justify-content: center; flex-wrap: wrap; font-size: 0.8125rem; }
-@media (max-width: 640px) { .steps { grid-template-columns: 1fr; } .drop { padding: 28px 16px; } }
+@media (max-width: 640px) { .drop { padding: 28px 16px; } }
 /* ---- 불러온 파일 목록 ---- */
 .files { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 6px; }
 .files .f { background: var(--surface); border: 1px solid var(--ring); border-radius: 999px; padding: 1px 9px; font-size: 13.5px; }
@@ -299,7 +325,7 @@ dialog#mergeDlg::backdrop { background: rgba(0,0,0,.35); }
 <div class="wrap">
   <div class="toolbar">
     <header>
-      <h1>리뷰 분석 <span class="ds-badge" id="dsBadge"></span></h1>
+      <h1><a class="home" href="../../index.html" title="플레이노트 첫 화면">플레이노트</a> <span class="ds-badge" id="dsBadge"></span></h1>
       <p id="scope"></p>
     </header>
     <div class="actions">
@@ -1285,7 +1311,7 @@ function versions() {
     `<tr><th scope="col">업데이트</th><th scope="col" class="num">부정·혼합 비율</th><th scope="col" class="num">변화</th><th scope="col">가장 많이 바뀐 주제</th><th scope="col">근거 리뷰</th></tr>` +
     D.version_changes.map(c => `<tr><td>v${c.from} → <b>v${c.to}</b><div class="small muted">${c.to_first}~ · <button class="linkish count" title="v${c.to}.x 리뷰 보기" ${selAttr(SEL.minor(c.to, c.n))}>${c.n}건</button></div></td>` +
       `<td class="num">${pct(c.from_share)} → ${pct(c.to_share)}</td>` +
-      `<td class="num" style="color:${c.diff > 0 ? "var(--ink)" : "var(--good-text)"}">${c.diff > 0 ? "▲ 증가" : "▼ 감소"} ${(Math.abs(c.diff) * 100).toFixed(1)}%p</td>` +
+      `<td class="num" style="color:${c.diff > 0 ? "var(--ink)" : "var(--good-text)"}">${c.diff > 0 ? "▲<span class=\"word\"> 증가</span>" : "▼<span class=\"word\"> 감소</span>"} ${(Math.abs(c.diff) * 100).toFixed(1)}%p</td>` +
       `<td>${c.top_topic_changes.map(t => `<span class="pill">${t.topic} ${t.diff > 0 ? "+" : ""}${(t.diff * 100).toFixed(1)}%p</span>`).join("")}</td>` +
       `<td style="min-width:260px">${quotesBlock(c.quotes, "원문")}</td></tr>`).join("");
   document.getElementById("verListTable").innerHTML =

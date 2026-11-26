@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>게임 리뷰 감성 분석 — 7팀 카페인 중독</title>
-<meta name="description" content="2026 NI2.0 AID 해커톤 7팀. 모바일 게임 스토어 리뷰를 감성과 주제로 나눠 운영·기획 담당자가 고칠 점과 지킬 점을 찾도록 돕는 대시보드">
+<title>플레이노트 — 게임 리뷰 감성 분석</title>
+<meta name="description" content="플레이노트 · 2026 NI2.0 AID 해커톤 7팀. 모바일 게임 스토어 리뷰를 감성과 주제로 나눠 운영·기획 담당자가 고칠 점과 지킬 점을 찾도록 돕는 대시보드">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232870cc'/%3E%3Crect x='7' y='17' width='4' height='8' rx='1' fill='%23fff'/%3E%3Crect x='14' y='11' width='4' height='14' rx='1' fill='%23fff'/%3E%3Crect x='21' y='7' width='4' height='18' rx='1' fill='%23fff'/%3E%3C/svg%3E">
 <style>
 :root {
@@ -104,6 +104,11 @@ table.kv tr + tr th, table.kv tr + tr td { border-top: 1px solid var(--grid); }
 .muted { color: var(--muted); font-weight: 400; }
 @media (max-width: 760px) {
   .cards, .grid3, .hero-grid, .grid2 { grid-template-columns: 1fr; }
+  .facts { gap: 6px; margin-top: 18px; }
+  .facts li { display: flex; gap: 12px; align-items: baseline; padding: 8px 12px; }
+  .facts b { margin: 0; flex: none; width: 5.5em; }
+  .stat .v { font-size: 1.125rem; word-break: keep-all; }
+  .hero-card { padding: 18px; }
   .facts { grid-template-columns: 1fr; }
 }
 </style>
@@ -114,8 +119,8 @@ table.kv tr + tr th, table.kv tr + tr td { border-top: 1px solid var(--grid); }
   <header>
     <p class="eyebrow"><span>2026 NI2.0 AID 해커톤 · 7팀 카페인 중독 (서일대학교 AI게임융합학과) · 연계 기업 ㈜에이블게임즈</span>
       <button class="theme" id="themeBtn" type="button">다크 모드로 보기</button></p>
-    <h1>게임 스토어 리뷰 감성 분석</h1>
-    <p class="lead">리뷰 CSV를 넣으면 감성·주제별로 집계해, 고칠 점과 지킬 점을 보여 줍니다.</p>
+    <h1>플레이노트</h1>
+    <p class="lead">게임 스토어 리뷰 감성 분석 · 리뷰 CSV를 넣으면 고칠 점과 지킬 점을 보여 줍니다.</p>
     <ul class="facts" aria-label="과제 요약">
       <li><b>대상 사용자</b><span>게임사 운영·기획 담당자</span></li>
       <li><b>대상 게임</b><span>달토끼 키우기 (에이블게임즈)</span></li>
@@ -127,7 +132,7 @@ table.kv tr + tr th, table.kv tr + tr td { border-top: 1px solid var(--grid); }
     <article class="card hero-card" aria-labelledby="c1">
       <div class="hero-grid">
         <div>
-          <h2 id="c1" class="card-title">리뷰 분석 대시보드</h2>
+          <h2 id="c1" class="card-title">대시보드</h2>
           <ol class="flow">
             <li><b>CSV 넣기</b></li>
             <li><b>누적 또는 교체</b></li>
