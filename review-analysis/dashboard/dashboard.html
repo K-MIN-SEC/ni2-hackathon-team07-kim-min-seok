@@ -209,6 +209,7 @@ label.upload:focus-within { outline: 2px solid var(--accent); outline-offset: 2p
 .csv-help-body code { background: var(--surface-2); padding: 0 4px; border-radius: 4px; font-size: 13.5px; }
 body.dragging .wrap { outline: 3px dashed var(--accent); outline-offset: -8px; }
 .upload-note:empty { display: none; }
+.upload-note .fail { color: var(--neg); margin-top: 4px; }
 /* ---- 가독성·편의성 2차 (2026-11-27): 설명문 폭, 누르기 쉬운 버튼, 우선순위 접기 ---- */
 .sub, .drop .lead, #prioSub, #goodSub { max-width: 72ch; }
 .toggle-table { display: inline-block; padding: 6px 2px; min-height: 32px; }
@@ -303,7 +304,7 @@ dialog#mergeDlg::backdrop { background: rgba(0,0,0,.35); }
     </header>
     <div class="actions">
       <label class="theme upload" id="addBtn" title="CSV를 더 넣으면 기존 자료에 누적할지, 교체할지 고를 수 있습니다">
-        CSV 추가<input type="file" id="csvInput" accept=".csv,text/csv" hidden>
+        CSV 추가<input type="file" id="csvInput" accept=".csv,text/csv" multiple hidden>
       </label>
       <button class="theme" id="resetBtn" type="button" title="불러온 자료를 모두 비우고 첫 화면으로">처음부터 다시</button>
       <button class="theme" id="exampleBtn" type="button" hidden>예시 자료 보기</button>
@@ -316,8 +317,8 @@ dialog#mergeDlg::backdrop { background: rgba(0,0,0,.35); }
     <div class="drop">
       <h2 id="h-empty">리뷰 CSV를 넣어 주세요</h2>
       <p class="lead">감성·주제 라벨이 붙은 리뷰 파일 → 바로 집계</p>
-      <label class="big">CSV 파일 선택<input type="file" id="csvInputBig" accept=".csv,text/csv" hidden></label>
-      <p class="or">또는 끌어다 놓기 · 파일은 외부로 전송되지 않음</p>
+      <label class="big">CSV 파일 선택<input type="file" id="csvInputBig" accept=".csv,text/csv" multiple hidden></label>
+      <p class="or">여러 개 한 번에 선택 가능 · 끌어다 놓기 · 파일은 외부로 전송되지 않음</p>
       <ol class="steps">
         <li><b>1. CSV 넣기</b></li>
         <li><b>2. 누적 또는 교체</b></li>
@@ -1407,7 +1408,7 @@ function showEmpty() {
 }
 function showResults() { document.body.classList.remove("is-empty"); }
 function useExample() {
-  LOADED = {files: [], map: new Map(), topics: [], hasGeneral: false};
+  LOADED = EMPTY_LOADED();
   loadDataset(EMBED.reviews, {kind: "example", name: "달토끼 키우기", audit: EMBED.audit || null, topics: EXAMPLE_TOPICS, hasGeneral: true});
   syncData(); kwState.topic = null; closeDrawer(); showResults(); render(); scrollTo({top: 0});
   note("");
@@ -1424,7 +1425,7 @@ function askMerge(fileName, nNew, nDup) {
   const dlg = document.getElementById("mergeDlg");
   const cur = D.meta.n;
   document.getElementById("mergeDesc").innerHTML =
-    `현재 <b>${fmt(cur)}건</b> · 새 파일 <b>${esc(fileName)}</b> ${fmt(nNew)}건`;
+    `현재 <b>${fmt(cur)}건</b> · 새로 넣은 <b>${esc(fileName)}</b> ${fmt(nNew)}건`;
   document.getElementById("mergeAddDesc").textContent =
     `→ ${fmt(cur + nNew - nDup)}건` + (nDup ? ` (중복 ${fmt(nDup)}건 제외)` : "");
   document.getElementById("mergeRepDesc").textContent = `→ ${fmt(nNew)}건`;
@@ -1437,10 +1438,10 @@ function askMerge(fileName, nNew, nDup) {
     dlg.querySelector(".opt.primary").focus();
   });
 }
-function filesHTML(newName) {
+function filesHTML(newNames = []) {
   if (!LOADED.files.length) return "";
   return `<div class="files">` +
-    LOADED.files.map(f => `<span class="f${f.name === newName ? " new" : ""}">${esc(f.name)} · ${fmt(f.added)}건</span>`).join("") + `</div>`;
+    LOADED.files.map(f => `<span class="f${newNames.includes(f.name) ? " new" : ""}">${esc(f.name)} · ${fmt(f.added)}건</span>`).join("") + `</div>`;
 }
 async function readFile(file) {
   const buf = await file.arrayBuffer();
@@ -1449,53 +1450,67 @@ async function readFile(file) {
   return text;
 }
 let busy = false;
-async function useFile(file) {
-  if (!file || busy) return;
+const EMPTY_LOADED = () => ({files: [], map: new Map(), topics: [], hasGeneral: false});
+// 파일 여러 개를 한 번에 받는다. 이름 순(1_, 2_ …)으로 합치고, 이미 자료가 있으면 누적/교체를 한 번만 묻는다
+async function useFiles(list) {
+  const files = [...list].filter(Boolean).sort((x, y) => x.name.localeCompare(y.name, "ko", {numeric: true}));
+  if (!files.length || busy) return;
   busy = true;
-  note(`'${esc(file.name)}' 읽는 중…`);
+  note(`${esc(files.length === 1 ? files[0].name : `파일 ${files.length}개`)} 읽는 중…`);
   try {
-    const parsed = toRecords(parseCSV(await readFile(file)));
-    const nDup = parsed.rows.filter(r => LOADED.map.has(r._k)).length;
+    const ok = [], fails = [];
+    for (const f of files) {
+      try { ok.push({file: f, parsed: toRecords(parseCSV(await readFile(f)))}); }
+      catch (e) { fails.push(`<b>${esc(f.name)}</b> — ${esc(e.message)}`); }
+    }
+    const failHTML = fails.length ? `<div class="fail">불러오기 실패: ${fails.join(" · ")}</div>` : "";
+    if (!ok.length) { note(failHTML + filesHTML(), true); document.getElementById("csvHelp").open = true; return; }
+    const total = ok.reduce((n, x) => n + x.parsed.rows.length, 0);
+    const seen = new Set(LOADED.map.keys());
+    let fresh = 0;
+    ok.forEach(x => x.parsed.rows.forEach(r => { if (!seen.has(r._k)) { seen.add(r._k); fresh++; } }));
     // 이미 불러온 파일이 있으면 누적/교체를 묻는다 (예시 자료나 첫 화면에서는 그냥 새로 시작)
     let mode = "replace";
     if (DS.kind === "user" && LOADED.files.length) {
       note("");
-      mode = await askMerge(file.name, parsed.rows.length, nDup);
+      mode = await askMerge(ok.length === 1 ? ok[0].file.name : `파일 ${ok.length}개`, total, total - fresh);
       if (mode === "cancel") { note(`취소됨` + filesHTML()); return; }
+      if (mode === "add" && !fresh) { note(`새 리뷰 없음 (${fmt(total)}건 모두 중복)` + failHTML + filesHTML()); return; }
     }
     const prev = mode === "add" ? snap() : null;
-    if (mode === "replace") LOADED = {files: [], map: new Map(), topics: [], hasGeneral: false};
-    if (mode === "add" && nDup === parsed.rows.length) {
-      note(`<b>${esc(file.name)}</b>: 새 리뷰 없음 (${fmt(nDup)}건 모두 중복)` + filesHTML());
-      return;
-    }
-    let added = 0;
-    parsed.rows.forEach(r => { if (!LOADED.map.has(r._k)) { LOADED.map.set(r._k, r); added++; } });
-    LOADED.files.push({name: file.name, added, total: parsed.rows.length});
-    LOADED.topics = [...new Set(LOADED.topics.concat(parsed.topics))];
-    LOADED.hasGeneral = LOADED.hasGeneral || parsed.hasGeneral;
-    const label = LOADED.files.length === 1 ? file.name : `${LOADED.files[0].name} 외 ${LOADED.files.length - 1}개`;
-    loadDataset([...LOADED.map.values()], {kind: "user", name: label, audit: null, topics: LOADED.topics, hasGeneral: LOADED.hasGeneral, skipped: parsed.skipped});
+    if (mode === "replace") LOADED = EMPTY_LOADED();
+    let added = 0, skipped = 0;
+    const errs = [], names = [];
+    ok.forEach(({file, parsed}) => {
+      let n = 0;
+      parsed.rows.forEach(r => { if (!LOADED.map.has(r._k)) { LOADED.map.set(r._k, r); n++; } });
+      LOADED.files.push({name: file.name, added: n, total: parsed.rows.length});
+      LOADED.topics = [...new Set(LOADED.topics.concat(parsed.topics))];
+      LOADED.hasGeneral = LOADED.hasGeneral || parsed.hasGeneral;
+      added += n; skipped += parsed.skipped; names.push(file.name);
+      if (parsed.skipped) errs.push(`${esc(file.name)} ${parsed.errs.join(", ")}`);
+    });
+    const dsName = LOADED.files.length === 1 ? LOADED.files[0].name : `${LOADED.files[0].name} 외 ${LOADED.files.length - 1}개`;
+    loadDataset([...LOADED.map.values()], {kind: "user", name: dsName, audit: null, topics: LOADED.topics, hasGeneral: LOADED.hasGeneral, skipped});
     DS.prev = prev;
     syncData(); kwState.topic = null; closeDrawer(); showResults(); render(); scrollTo({top: 0});
-    const dupNote = parsed.rows.length - added ? ` <span class="muted">(중복 ${fmt(parsed.rows.length - added)}건 제외)</span>` : "";
-    note((mode === "add"
-        ? `<b>+${fmt(added)}건</b> → 총 <b>${fmt(D.meta.n)}건</b>${dupNote}`
-        : `총 <b>${fmt(D.meta.n)}건</b>`) +
-      (parsed.skipped ? ` <span class="muted">· 읽을 수 없는 ${fmt(parsed.skipped)}행 제외 (${parsed.errs.join(", ")})</span>` : "") +
-      filesHTML(file.name));
+    const dupNote = total - added ? ` <span class="muted">(중복 ${fmt(total - added)}건 제외)</span>` : "";
+    note((mode === "add" ? `<b>+${fmt(added)}건</b> → 총 <b>${fmt(D.meta.n)}건</b>` : `총 <b>${fmt(D.meta.n)}건</b>`) + dupNote +
+      (skipped ? ` <span class="muted">· 읽을 수 없는 ${fmt(skipped)}행 제외 (${errs.join(" / ")})</span>` : "") +
+      failHTML + filesHTML(names));
   } catch (e) {
-    note(`<b>불러오기 실패: ${esc(file.name)}</b> — ${esc(e.message)}` + filesHTML(), true);
+    note(`<b>불러오기 실패</b> — ${esc(e.message)}` + filesHTML(), true);
     document.getElementById("csvHelp").open = true;
   } finally { busy = false; }
 }
-["csvInput", "csvInputBig"].forEach(id => document.getElementById(id).addEventListener("change", ev => { useFile(ev.target.files[0]); ev.target.value = ""; }));
+const useFile = file => useFiles([file]);
+["csvInput", "csvInputBig"].forEach(id => document.getElementById(id).addEventListener("change", ev => { const fs = [...ev.target.files]; ev.target.value = ""; useFiles(fs); }));
 document.getElementById("exampleBtn").onclick = useExample;
 document.getElementById("exampleLink").onclick = useExample;
 document.getElementById("resetBtn").onclick = showEmpty;
 addEventListener("dragover", ev => { ev.preventDefault(); document.body.classList.add("dragging"); });
 addEventListener("dragleave", ev => { if (!ev.relatedTarget) document.body.classList.remove("dragging"); });
-addEventListener("drop", ev => { ev.preventDefault(); document.body.classList.remove("dragging"); const f = ev.dataTransfer.files[0]; if (f) useFile(f); });
+addEventListener("drop", ev => { ev.preventDefault(); document.body.classList.remove("dragging"); useFiles([...ev.dataTransfer.files]); });
 document.getElementById("templateBtn").onclick = () => {
   const head = ["review_id", "store", "date", "rating", "version", "title", "content", "thumbs_up", "sentiment", "topics",
     ...EXAMPLE_TOPICS.map(t => "sent_" + t), "sent_일반", "keywords", "label_source"];
