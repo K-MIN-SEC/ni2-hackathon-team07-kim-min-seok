@@ -275,7 +275,7 @@ body.dragging .wrap { outline: 3px dashed var(--accent); outline-offset: -8px; }
 
   <section id="s-topic">
     <h2>주제별 긍정·부정 비율</h2>
-    <p class="sub">각 리뷰가 언급한 주제마다 따로 매긴 감성입니다. 리뷰 하나가 여러 주제에 들어갈 수 있습니다. 막대 오른쪽 숫자는 그 주제를 언급한 리뷰 수와 전체 대비 비중입니다.</p>
+    <p class="sub">각 리뷰가 언급한 주제마다 따로 매긴 감성입니다. 리뷰 하나가 여러 주제에 들어갈 수 있습니다. 막대 오른쪽 숫자는 그 주제를 언급한 리뷰 수와 전체 대비 비중입니다. 모든 차트는 아래 '표로 보기'로 정확한 수치를 확인할 수 있습니다.</p>
     <div class="card">
       <ul class="legend" id="sentLegend" aria-label="색 범례"></ul>
       <div class="chart" id="topicChart"></div>
@@ -883,6 +883,8 @@ function overallChart() {
   });
   const lg = el("text", {x: 0, y: 56, class: "axis-label"}, svg);
   lg.textContent = SENTS.map(s => `${s} ${fmt(so[s])}`).join(" · ");
+  dataTable("overallChart", "리뷰 전체 감성",
+    tableHTML("리뷰 전체 감성 분포 (내용 기준)", ["감성", "리뷰 수", "비율"], SENTS.map(s => [s, fmt(so[s]), pct(so[s] / n, 1)])));
 }
 
 function ratingNote() {
@@ -900,7 +902,13 @@ function ratingNote() {
 let kwState = {topic: null, sent: "부정"};
 function hbarList(boxId, items, color, label, selFor) {
   const box = document.getElementById(boxId); box.innerHTML = "";
-  if (!items.length) { box.innerHTML = `<p class="muted small">해당 리뷰가 없습니다.</p>`; return; }
+  const what = `${kwState.sent}·${kwState.topic} 리뷰의 ${label}`;
+  if (!items.length) {
+    box.innerHTML = `<p class="muted small">해당 리뷰가 없습니다.</p>`;
+    dataTable(boxId, label, `<p class="muted small">해당 리뷰가 없습니다.</p>`);
+    return;
+  }
+  dataTable(boxId, label, tableHTML(what, ["키워드", "리뷰 수", "비율"], items.map(it => [esc(it.kw), fmt(it.n), pct(it.pct, 1)])));
   const W = Math.max(box.clientWidth, 280), labelW = 104, rowH = 24, barH = 14, H = items.length * rowH + 4;
   const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": label}, box);
   const max = Math.max(...items.map(i => i.pct));
@@ -921,7 +929,7 @@ function hbarList(boxId, items, color, label, selFor) {
 function kwRender() {
   const cell = D.keywords.find(k => k.topic === kwState.topic && k.sentiment === kwState.sent);
   const head = document.getElementById("kwHead");
-  if (!cell) { head.textContent = "해당 조합의 리뷰가 없습니다."; hbarList("kwChart", [], "", ""); hbarList("termChart", [], "", ""); return; }
+  if (!cell) { head.textContent = "해당 조합의 리뷰가 없습니다."; hbarList("kwChart", [], "", "대표 키워드 비중"); hbarList("termChart", [], "", "원문 단어 비중"); return; }
   head.textContent = `${kwState.sent}·${kwState.topic} 리뷰 ${fmt(cell.n)}건 기준`;
   const color = `var(${SVAR[kwState.sent]})`;
   const {topic, sent} = kwState;
@@ -1092,13 +1100,14 @@ function versions() {
   if (!va.length) {
     verBox.forEach(id => document.getElementById(id).innerHTML = `<p class="muted small">버전 정보가 있는 리뷰가 없습니다(CSV에 version 열 필요).</p>`);
     document.getElementById("verTable").innerHTML = ""; document.getElementById("verListTable").innerHTML = "";
+    dataTable("smallMultiples", "버전별 주제별 부정·혼합 언급 수", `<p class="muted small">버전 정보가 있는 리뷰가 없습니다.</p>`);
     return;
   }
   document.getElementById("verMinNote").textContent = `(리뷰 ${D.ver_min}건 이상인 버전 ${vs.length}개)`;
   const step = n => Math.max(1, Math.ceil(n / 8));
   // 1) 버전별 리뷰 수 — 월별 리뷰 수 막대와 같은 형태
   columnChart("verVolChart", va, "n", {
-    label: "버전별 리뷰 수",
+    label: "버전별 리뷰 수. 정확한 수치는 아래 '버전별 수치 표로 보기'에 있습니다.",
     tip: r => `<b>v${r.version}.x</b> <span class="muted">${r.first}~${r.last}</span><div class="row"><span>리뷰</span><span>${fmt(r.n)}건</span></div>` +
       `<div class="row"><span>부정·혼합</span><span>${fmt(r.neg_n)}건 (${pct(r.neg_share, 1)})</span></div><div class="row"><span>평균 별점</span><span>${r.avg_rating}</span></div>`,
     xlabel: (r, i) => i % step(va.length) === 0 ? "v" + r.version : "",
@@ -1107,7 +1116,7 @@ function versions() {
   // 2) 버전별 부정·혼합 비율 — 월별 비율 선과 같은 형태 (리뷰가 충분한 버전만)
   const pts = vs.map(v => ({x: v.version, y: v.neg_share, v}));
   if (pts.length) lineChart("verChart", pts, {
-    label: "버전별 부정·혼합 비율", max: niceMax(Math.max(...pts.map(p => p.y))), yfmt: v => pct(v),
+    label: "버전별 부정·혼합 비율. 정확한 수치는 아래 '버전별 수치 표로 보기'에 있습니다.", max: niceMax(Math.max(...pts.map(p => p.y))), yfmt: v => pct(v),
     tip: p => `<b>v${p.x}.x</b> <span class="muted">${p.v.first}~</span><div class="row"><span>부정·혼합</span><span>${pct(p.y, 1)} (${fmt(p.v.neg_n)}건)</span></div><div class="row"><span>리뷰</span><span>${fmt(p.v.n)}건</span></div><div class="row"><span>평균 별점</span><span>${p.v.avg_rating}</span></div>`,
     xlabel: (p, i) => (i % step(pts.length) === 0) ? "v" + p.x : "",
     endLabel: p => "v" + p.x + " " + pct(p.y),
@@ -1138,6 +1147,9 @@ function versions() {
       if (i === 0 || i === vs.length - 1) { const t = el("text", {x: x + w / 2, y: H - 4, "text-anchor": i ? "end" : "start", class: "axis-label"}, svg); t.textContent = "v" + v.version; }
     });
   });
+  dataTable("smallMultiples", "버전별 주제별 부정·혼합 언급 수",
+    tableHTML(`버전별 주제별 부정·혼합 언급 수 (리뷰 ${D.ver_min}건 이상인 버전)`, ["버전", ...TOPICS8, "그 버전 리뷰"],
+      vs.map(v => ["v" + esc(v.version) + ".x", ...TOPICS8.map(tp => fmt(v["negc_" + tp] || 0)), fmt(v.n)])));
   document.getElementById("verTable").innerHTML =
     `<caption class="sr-only">직전 버전 대비 부정·혼합 비율 변화가 컸던 업데이트</caption>` +
     `<tr><th scope="col">업데이트</th><th scope="col" class="num">부정·혼합 비율</th><th scope="col" class="num">변화</th><th scope="col">가장 많이 바뀐 주제</th><th scope="col">근거 리뷰</th></tr>` +
@@ -1202,13 +1214,35 @@ function method() {
 }
 
 /* ---------- 공통 ---------- */
-document.querySelectorAll(".toggle-table").forEach(b => {
-  const label = b.textContent;
-  b.onclick = () => {
-    const t = document.getElementById(b.dataset.target); t.hidden = !t.hidden;
-    b.setAttribute("aria-expanded", String(!t.hidden));
-    b.textContent = t.hidden ? label : "표 닫기";
-  };
+/* 표 (차트의 대체 수단): 스크린리더·키보드 사용자와 정확한 수치가 필요한 사람용 */
+function tableHTML(caption, cols, rows, numFrom = 1) {
+  return `<table><caption>${esc(caption)}</caption><thead><tr>${cols.map((c, i) => `<th scope="col"${i >= numFrom ? ' class="num"' : ""}>${esc(c)}</th>`).join("")}</tr></thead>` +
+    `<tbody>${rows.map(r => `<tr>${r.map((v, i) => i === 0 ? `<th scope="row">${v}</th>` : `<td${i >= numFrom ? ' class="num"' : ""}>${v}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+}
+// 차트(기준 요소) 바로 뒤에 '표로 보기' 버튼과 접힌 표 영역을 한 번만 만들고, 다시 그릴 때는 내용만 갱신한다
+function dataTable(anchorId, label, html) {
+  const id = anchorId + "_tbl";
+  let wrap = document.getElementById(id);
+  if (!wrap) {
+    const btn = document.createElement("button");
+    Object.assign(btn, {type: "button", className: "toggle-table", textContent: "표로 보기"});
+    btn.setAttribute("aria-expanded", "false"); btn.setAttribute("aria-controls", id);
+    btn.dataset.target = id; btn.setAttribute("aria-label", label + " 표 보기");
+    wrap = document.createElement("div");
+    Object.assign(wrap, {id, className: "scroll", hidden: true, tabIndex: 0});
+    wrap.setAttribute("role", "region"); wrap.setAttribute("aria-label", label + " 표");
+    document.getElementById(anchorId).after(btn, wrap);
+  }
+  wrap.innerHTML = html;
+}
+// 처음부터 있는 버튼과 나중에 만든 버튼 모두 처리 (위임)
+document.addEventListener("click", e => {
+  const b = e.target.closest(".toggle-table");
+  if (!b) return;
+  if (!b.dataset.label) b.dataset.label = b.textContent;
+  const t = document.getElementById(b.dataset.target); t.hidden = !t.hidden;
+  b.setAttribute("aria-expanded", String(!t.hidden));
+  b.textContent = t.hidden ? b.dataset.label : "표 닫기";
 });
 const themeBtn = document.getElementById("themeBtn");
 const isDark = () => { const r = document.documentElement; return r.dataset.theme ? r.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; };
