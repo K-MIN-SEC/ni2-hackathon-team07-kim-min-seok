@@ -88,8 +88,15 @@ h2 { font-size: 1.25rem; margin: 40px 0 6px; letter-spacing: -0.01em; }
 
 footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--grid); font-size: 0.8125rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 16px; justify-content: space-between; }
 
+.hero-card { padding: 24px; }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+.flow { margin: 6px 0 20px; padding-left: 1.3em; font-size: 0.9375rem; }
+.flow li { margin: 8px 0; color: var(--ink-2); }
+.flow b { color: var(--ink); margin-right: 4px; }
+.hero-card .btn { font-size: 1.0625rem; padding: 12px 22px; }
+.stats-cap { font-size: 0.8125rem; color: var(--ink-2); margin: 4px 0 8px; font-weight: 600; }
 @media (max-width: 760px) {
-  .cards, .grid3 { grid-template-columns: 1fr; }
+  .cards, .grid3, .hero-grid { grid-template-columns: 1fr; }
   .facts { grid-template-columns: 1fr; }
 }
 </style>
@@ -104,78 +111,59 @@ footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--grid);
     <p class="lead">모바일 게임 리뷰를 감성(긍정·부정·혼합)과 주제(과금, 버그, 콘텐츠 등)로 나눠 보여 줍니다. 운영 담당자와 기획자가 리뷰를 하나하나 읽지 않고도 반복되는 불만과 칭찬을 찾고, 근거가 된 원래 리뷰까지 바로 확인할 수 있습니다.</p>
     <ul class="facts" aria-label="과제 요약">
       <li><b>대상 사용자</b><span>게임 개발사·배급사의 운영 담당자와 기획자</span></li>
-      <li><b>대상 게임</b><span>에이블게임즈 「달토끼 키우기」, 「메이플 키우기」</span></li>
+      <li><b>대상 게임</b><span>에이블게임즈 「달토끼 키우기」 스토어 리뷰</span></li>
       <li><b>원칙</b><span>별점과 내용 감성은 따로 봅니다. 모든 숫자는 원래 리뷰로 이어집니다.</span></li>
     </ul>
   </header>
 
   <main id="main" tabindex="-1">
-    <h2>결과물</h2>
-    <p class="sub">두 가지 화면이 있습니다. 둘 다 브라우저에서 바로 열리고 서버나 외부 AI API를 쓰지 않습니다.</p>
+    <h2>리뷰 분석 대시보드</h2>
+    <p class="sub">라벨이 붙은 리뷰 CSV를 넣으면 브라우저 안에서 바로 다시 계산합니다. 서버나 외부 AI API를 쓰지 않고, 파일은 밖으로 전송되지 않습니다.</p>
 
-    <div class="cards">
-      <article class="card" aria-labelledby="c1">
-        <span class="tag">리뷰 단위 · 전량 분석</span>
-        <h3 id="c1">달토끼 키우기 리뷰 분석 대시보드</h3>
-        <p class="what">글이 있는 한국어 리뷰 전량을 감성·주제로 분류하고, 고쳐야 할 우선순위와 지켜야 할 장점을 계산했습니다.</p>
-        <div class="stats">
-          <div class="stat"><div class="v">6,349건</div><div class="l">분석한 리뷰 (Google Play 6,199 · App Store 150)</div></div>
-          <div class="stat"><div class="v"><span class="pos">69%</span> / <span class="neg">22%</span></div><div class="l">내용상 긍정 / 부정 또는 혼합</div></div>
-          <div class="stat"><div class="v">버그</div><div class="l">1순위로 고칠 주제 (키워드 1위 '업데이트 불가')</div></div>
-          <div class="stat"><div class="v">캐릭터/아트</div><div class="l">지켜야 할 장점 (언급의 96%가 긍정)</div></div>
+    <article class="card hero-card" aria-labelledby="c1">
+      <div class="hero-grid">
+        <div>
+          <span class="tag">CSV를 넣으면 바로 분석</span>
+          <h3 id="c1">파일을 넣을수록 결과가 쌓입니다</h3>
+          <ol class="flow">
+            <li><b>CSV 넣기</b> 감성·주제 라벨이 붙은 리뷰 파일을 선택하거나 끌어다 놓습니다.</li>
+            <li><b>누적 또는 교체</b> 파일을 더 넣으면 기존 자료에 더할지, 새 파일로 바꿀지 고릅니다.</li>
+            <li><b>바뀐 수치 확인</b> 요약 칸에 늘어난 건수와 비율 변화(%p)가 표시되고, 모든 차트가 다시 그려집니다.</li>
+            <li><b>근거 리뷰까지</b> 숫자·막대를 누르면 그 수치의 원래 리뷰 목록이 열립니다.</li>
+          </ol>
+          <div class="actions">
+            <a class="btn" href="review-analysis/dashboard/dashboard.html">CSV 넣고 분석 시작 →</a>
+            <span class="links"><a href="review-analysis/dashboard/dashboard.html?data=example">예시 자료로 바로 보기</a><a href="https://github.com/K-MIN-SEC/ni2-hackathon-team07-kim-min-seok/blob/main/review-analysis/README.md">설명</a></span>
+          </div>
         </div>
-        <ul class="points">
-          <li>주제별 긍정·부정, 감성×주제 키워드, 개선 우선순위, 버전별 추이</li>
-          <li>숫자·막대를 누르면 근거 리뷰 목록이 열립니다</li>
-          <li>CSV를 불러오면 같은 방식으로 다시 계산합니다 (파일은 외부로 전송되지 않음)</li>
-          <li>새 리뷰는 LLM 없이 규칙 + 머신러닝으로 분류합니다. 어려운 리뷰 감성 정확도 62.2% → 89.7% (5-겹 교차검증)</li>
-        </ul>
-        <p class="note">분류기는 로컬 서버(<code>review-analysis/server</code>)로 실행합니다. 이 사이트에는 분류가 끝난 결과만 올라가 있습니다.</p>
-        <div class="actions">
-          <a class="btn" href="review-analysis/dashboard/dashboard.html">대시보드 열기 →</a>
-          <span class="links"><a href="https://github.com/K-MIN-SEC/ni2-hackathon-team07-kim-min-seok/blob/main/review-analysis/README.md">설명</a><a href="https://github.com/K-MIN-SEC/ni2-hackathon-team07-kim-min-seok/blob/main/review-analysis/docs/IMPROVEMENT_REPORT.md">테스트·개선 보고서</a></span>
+        <div>
+          <p class="stats-cap">예시 자료(달토끼 키우기 리뷰 전체)를 넣었을 때의 결과</p>
+          <div class="stats">
+            <div class="stat"><div class="v">6,349건</div><div class="l">분석한 리뷰 (Google Play 6,199 · App Store 150)</div></div>
+            <div class="stat"><div class="v"><span class="pos">69%</span> / <span class="neg">22%</span></div><div class="l">내용상 긍정 / 부정 또는 혼합</div></div>
+            <div class="stat"><div class="v">버그</div><div class="l">1순위로 고칠 주제 (키워드 1위 '업데이트 불가')</div></div>
+            <div class="stat"><div class="v">캐릭터/아트</div><div class="l">지켜야 할 장점 (언급의 96%가 긍정)</div></div>
+          </div>
+          <p class="note">라벨은 LLM 없이 규칙 + 머신러닝 분류기(<code>review-analysis/scripts/ml_classify.py</code>)로 붙입니다. 어려운 리뷰 감성 정확도 62.2% → 89.7% (5-겹 교차검증). 분류기는 로컬에서 실행하고, 이 사이트는 분류가 끝난 CSV를 읽습니다.</p>
         </div>
-      </article>
-
-      <article class="card" aria-labelledby="c2">
-        <span class="tag">의견 단위 · 두 게임 비교</span>
-        <h3 id="c2">Game Voice Lab</h3>
-        <p class="what">리뷰 한 건을 의견 단위로 나눠, 한 리뷰 안에 섞인 칭찬과 불만을 따로 셉니다.</p>
-        <div class="stats">
-          <div class="stat"><div class="v">466건</div><div class="l">리뷰 (달토끼 436 · 메이플 30)</div></div>
-          <div class="stat"><div class="v">634건</div><div class="l">리뷰에서 나눈 의견</div></div>
-          <div class="stat"><div class="v">13종</div><div class="l">주제 카테고리</div></div>
-          <div class="stat"><div class="v">18/18</div><div class="l">자동 테스트 통과 (집계·필터·데이터 검증)</div></div>
-        </div>
-        <ul class="points">
-          <li>게임·스토어·기간·별점·카테고리·감성·키워드 필터</li>
-          <li>주제별 분석, 키워드 분석, 건의 사항, 의견 탐색</li>
-          <li>의견마다 40자 이하 발췌와 원래 리뷰 출처 링크</li>
-          <li>리뷰는 스토어 웹 화면을 열람해 모았습니다 (자동 수집 도구 미사용)</li>
-        </ul>
-        <p class="note">의견 라벨은 팀 검수 전입니다 (미검수 622건, 판단 보류 12건).</p>
-        <div class="actions">
-          <a class="btn" href="GameVoiceLab/">Game Voice Lab 열기 →</a>
-          <span class="links"><a href="https://github.com/K-MIN-SEC/ni2-hackathon-team07-kim-min-seok/blob/main/GameVoiceLab/README.md">설명</a><a href="https://github.com/K-MIN-SEC/ni2-hackathon-team07-kim-min-seok/blob/main/GameVoiceLab/docs/qa-report.md">QA 보고서</a></span>
-        </div>
-      </article>
-    </div>
+      </div>
+    </article>
 
     <h2>이렇게 만들었습니다</h2>
     <div class="grid3">
       <div class="box"><h3>1. 수집</h3><p>공개 스토어 리뷰를 모으고 출처(스토어, 작성일, 링크)를 함께 저장했습니다.</p></div>
       <div class="box"><h3>2. 분류</h3><p>규칙으로 확신하는 리뷰는 규칙으로, 애매한 리뷰는 AI가 판정 기준서에 따라 판정했습니다(별점은 숨김). 이 라벨로 새 리뷰용 분류기를 학습했습니다.</p></div>
-      <div class="box"><h3>3. 검증</h3><p>무작위 50건 검수에서 감성 50/50 일치. 분류기는 5-겹 교차검증으로, 화면은 집계·필터·잘못된 데이터 처리 자동 테스트로 확인했습니다.</p></div>
+      <div class="box"><h3>3. 검증</h3><p>무작위 50건 검수에서 감성 50/50 일치. 분류기는 5-겹 교차검증으로, 화면은 테스트 4종(핵심 동작, 잘못된 입력, 저장·새로고침, 모바일)으로 확인했습니다.</p></div>
     </div>
 
     <h2>자료와 한계</h2>
     <div class="limits">
       <ul>
         <li>공개 리뷰 일부로 만든 결과입니다. 전체 이용자의 의견으로 일반화하지 않습니다.</li>
-        <li>App Store 리뷰가 적어(150건) 리뷰 분석 대시보드의 결과는 사실상 Google Play 기준입니다.</li>
+        <li>App Store 리뷰가 적어(150건) 결과는 사실상 Google Play 기준입니다.</li>
         <li>최근 6개월 리뷰가 57건뿐이라 최근 추세는 표본이 작습니다.</li>
         <li>정답 라벨의 일부는 AI 판정입니다. 정확도 89.7%는 그 정답과의 일치도입니다.</li>
-        <li>실제 리뷰와 샘플 데이터를 섞지 않고, 화면에 데이터 유형을 표시합니다.</li>
+        <li>대시보드 위쪽에 지금 보이는 자료가 예시 자료인지, 불러온 파일인지 항상 표시합니다.</li>
       </ul>
     </div>
   </main>

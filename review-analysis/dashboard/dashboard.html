@@ -208,6 +208,48 @@ label.upload:focus-within { outline: 2px solid var(--accent); outline-offset: 2p
 .csv-help-body table { margin: 6px 0; }
 .csv-help-body code { background: var(--surface-2); padding: 0 4px; border-radius: 4px; font-size: 12px; }
 body.dragging .wrap { outline: 3px dashed var(--accent); outline-offset: -8px; }
+.upload-note:empty { display: none; }
+/* ---- 첫 화면: 파일 첨부 ---- */
+body.is-empty main, body.is-empty #printBtn, body.is-empty #resetBtn, body.is-empty #addBtn { display: none !important; }
+body:not(.is-empty) #emptyState { display: none; }
+#emptyState { margin: 8px 0 24px; }
+.drop { background: var(--surface); border: 2px dashed var(--accent); border-radius: 16px; padding: 40px 24px; text-align: center; }
+body.dragging .drop { background: var(--accent-wash); }
+.drop h2 { font-size: 1.5rem; margin: 0 0 8px; letter-spacing: -0.01em; }
+.drop .lead { color: var(--ink-2); margin: 0 auto 22px; max-width: 34em; font-size: 0.9375rem; }
+.drop label.big { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; background: var(--accent); color: #fff; border-radius: 10px;
+  padding: 14px 28px; font-size: 1.0625rem; font-weight: 700; box-shadow: 0 6px 18px rgba(40,112,204,.28); }
+.drop label.big:hover { filter: brightness(1.06); }
+.drop label.big:focus-within { outline: 3px solid var(--focus); outline-offset: 3px; }
+.drop .or { color: var(--muted); font-size: 0.8125rem; margin: 12px 0 0; }
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 26px auto 0; max-width: 720px; padding: 0; list-style: none; text-align: left; }
+.steps li { background: var(--page); border: 1px solid var(--grid); border-radius: 10px; padding: 10px 12px; font-size: 0.8125rem; color: var(--ink-2); }
+.steps b { display: block; color: var(--ink); font-size: 0.875rem; margin-bottom: 2px; }
+.drop .sub-actions { margin-top: 18px; display: flex; gap: 8px 16px; justify-content: center; flex-wrap: wrap; font-size: 0.8125rem; }
+@media (max-width: 640px) { .steps { grid-template-columns: 1fr; } .drop { padding: 28px 16px; } }
+/* ---- 불러온 파일 목록 ---- */
+.files { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 6px; }
+.files .f { background: var(--surface); border: 1px solid var(--ring); border-radius: 999px; padding: 1px 9px; font-size: 12px; }
+.files .f.new { border-color: var(--accent); background: var(--accent-wash); font-weight: 600; }
+/* ---- 누적 시 바뀐 값 강조 ---- */
+.delta { font-weight: 650; color: var(--accent); white-space: nowrap; }
+.tile .value .delta { font-size: 0.9375rem; margin-left: 8px; vertical-align: middle; letter-spacing: 0; }
+@keyframes flash { 0% { box-shadow: 0 0 0 3px var(--accent); } 100% { box-shadow: 0 0 0 0 rgba(0,0,0,0); } }
+.tile.changed { animation: flash 1.8s ease-out; }
+@media (prefers-reduced-motion: reduce) { .tile.changed { animation: none; } }
+/* ---- 누적/교체 선택 창 ---- */
+dialog#mergeDlg { border: 1px solid var(--ring); border-radius: 12px; padding: 0; width: min(460px, calc(100vw - 32px)); background: var(--page); color: var(--ink); box-shadow: 0 16px 48px rgba(0,0,0,.25); }
+dialog#mergeDlg::backdrop { background: rgba(0,0,0,.35); }
+#mergeDlg .body { padding: 18px 20px 8px; }
+#mergeDlg h3 { margin: 0 0 6px; font-size: 1.0625rem; }
+#mergeDlg p { margin: 0 0 8px; color: var(--ink-2); font-size: 0.875rem; }
+#mergeDlg .opts { display: grid; gap: 8px; padding: 8px 20px 18px; }
+#mergeDlg .opt { text-align: left; border: 1px solid var(--ring); background: var(--surface); color: var(--ink); border-radius: 10px; padding: 10px 14px; cursor: pointer; font: inherit; }
+#mergeDlg .opt b { display: block; font-size: 0.9375rem; }
+#mergeDlg .opt span { color: var(--ink-2); font-size: 0.8125rem; }
+#mergeDlg .opt.primary { border-color: var(--accent); background: var(--accent-wash); }
+#mergeDlg .opt:hover { border-color: var(--accent); }
+#mergeDlg .cancel { justify-self: end; background: none; border: 0; color: var(--ink-2); cursor: pointer; font: inherit; font-size: 0.8125rem; text-decoration: underline; }
 @media print {
   .drawer, .drawer-bg, .actions, .csv-help, .upload-note { display: none !important; }
   nav, #themeBtn, #printBtn, #toTop, .tip, .toggle-table, .seg { display: none !important; }
@@ -228,15 +270,44 @@ body.dragging .wrap { outline: 3px dashed var(--accent); outline-offset: -8px; }
       <p id="scope"></p>
     </header>
     <div class="actions">
-      <label class="theme upload" title="라벨이 붙은 리뷰 CSV를 불러오면 모든 비율·분포를 그 파일로 다시 계산합니다">
-        CSV 불러오기<input type="file" id="csvInput" accept=".csv,text/csv" hidden>
+      <label class="theme upload" id="addBtn" title="CSV를 더 넣으면 기존 자료에 누적할지, 교체할지 고를 수 있습니다">
+        CSV 추가<input type="file" id="csvInput" accept=".csv,text/csv" hidden>
       </label>
-      <button class="theme" id="exampleBtn" type="button" hidden>예시 자료로 돌아가기</button>
+      <button class="theme" id="resetBtn" type="button" title="불러온 자료를 모두 비우고 첫 화면으로">처음부터 다시</button>
+      <button class="theme" id="exampleBtn" type="button" hidden>예시 자료 보기</button>
       <button class="theme" id="printBtn" type="button" title="모든 접힌 리뷰를 펼친 상태로 인쇄/PDF 저장">인쇄·PDF</button>
       <button class="theme" id="themeBtn" type="button">테마 전환</button>
     </div>
   </div>
-  <div class="callout small upload-note" id="uploadNote"></div>
+  <div class="callout small upload-note" id="uploadNote" role="status" aria-live="polite"></div>
+  <section id="emptyState" aria-labelledby="h-empty">
+    <div class="drop">
+      <h2 id="h-empty">리뷰 CSV를 넣으면 바로 분석합니다</h2>
+      <p class="lead">감성·주제 라벨이 붙은 스토어 리뷰 파일을 넣으면, 주제별 긍정·부정과 고쳐야 할 우선순위, 지켜야 할 장점, 버전별 추이를 이 화면에서 바로 계산해 보여 줍니다.</p>
+      <label class="big">CSV 파일 선택<input type="file" id="csvInputBig" accept=".csv,text/csv" hidden></label>
+      <p class="or">또는 이 화면 아무 곳에나 파일을 끌어다 놓으세요 · 파일은 브라우저 밖으로 전송되지 않습니다</p>
+      <ol class="steps">
+        <li><b>1. 파일 넣기</b>파일을 여러 개 넣으면 누적할지 교체할지 고를 수 있습니다</li>
+        <li><b>2. 바로 집계</b>감성 분포, 주제별 긍정·부정, 키워드를 다시 계산합니다</li>
+        <li><b>3. 결과 확인</b>개선 우선순위와 장점, 숫자마다 근거 리뷰까지</li>
+      </ol>
+      <div class="sub-actions">
+        <button class="linkish count" type="button" id="exampleLink">예시 자료(달토끼 키우기 6,349건)로 보기</button>
+        <button class="linkish count" type="button" id="helpLink">CSV 형식 안내</button>
+      </div>
+    </div>
+  </section>
+  <dialog id="mergeDlg" aria-labelledby="mergeTitle">
+    <div class="body">
+      <h3 id="mergeTitle">새 파일을 어떻게 반영할까요?</h3>
+      <p id="mergeDesc"></p>
+    </div>
+    <div class="opts">
+      <button class="opt primary" type="button" data-v="add"><b>누적</b><span id="mergeAddDesc">지금 자료에 더해서 다시 계산</span></button>
+      <button class="opt" type="button" data-v="replace"><b>교체</b><span id="mergeRepDesc">새 파일만으로 다시 계산</span></button>
+      <button class="cancel" type="button" data-v="cancel">취소</button>
+    </div>
+  </dialog>
   <details class="small csv-help" id="csvHelp">
     <summary>CSV 형식 안내</summary>
     <div class="csv-help-body">
@@ -249,7 +320,7 @@ body.dragging .wrap { outline: 3px dashed var(--accent); outline-offset: -8px; }
         <tr><td><code>sentiment</code></td><td>필수</td><td>리뷰 전체 감성: 긍정·부정·중립·혼합</td></tr>
         <tr><td><code>sent_&lt;주제&gt;</code></td><td>필수(1개 이상)</td><td>주제별 감성. 예: <code>sent_과금</code>, <code>sent_버그</code>, <code>sent_일반</code>. 언급 없으면 빈칸</td></tr>
         <tr><td><code>keywords</code></td><td>선택</td><td><code>주제/키워드</code>를 <code>|</code>로 연결. 예: <code>버그/튕김|과금/뽑기</code></td></tr>
-        <tr><td><code>version</code>, <code>thumbs_up</code>, <code>store</code>, <code>title</code>, <code>review_id</code>, <code>topics</code>, <code>label_source</code></td><td>선택</td><td>버전별 분석·좋아요 가중치·스토어 구분 등에 사용</td></tr>
+        <tr><td><code>version</code>, <code>thumbs_up</code>, <code>store</code>, <code>title</code>, <code>review_id</code>, <code>topics</code>, <code>label_source</code></td><td>선택</td><td>버전별 분석·좋아요 가중치·스토어 구분 등에 사용. <code>review_id</code>가 있으면 파일을 누적할 때 같은 리뷰를 한 번만 셉니다. <code>label_source</code>: <code>rule</code>=규칙 판정, <code>manual</code>=AI 판정</td></tr>
       </table>
       <p class="muted">라벨이 없는 원본 리뷰는 먼저 <code>python scripts/ml_classify.py predict 원본.csv 결과.csv</code>로 분류한 뒤 결과 CSV를 불러오세요. 형식은 <code>data/reviews_labeled.csv</code>와 같습니다.</p>
       <button class="theme" type="button" id="templateBtn">빈 양식 CSV 내려받기</button>
@@ -587,7 +658,9 @@ function toRecords(table) {
     const ver = get(r, "version").trim(), mm = ver.match(/^(\d+\.\d+)/);
     const st = get(r, "store").trim();
     const topicsCol = get(r, "topics").trim();
-    out.push({i: get(r, "review_id") || String(line), s: st === "google_play" ? "g" : st === "app_store" ? "a" : (st || "o"),
+    const rid = get(r, "review_id").trim();
+    out.push({_k: rid ? st + "|" + rid : d + "|" + get(r, "content"),   // 누적할 때 같은 리뷰를 한 번만 세기 위한 키
+      i: rid || String(line), s: st === "google_play" ? "g" : st === "app_store" ? "a" : (st || "o"),
       d, r: rating, v: ver, mi: mm ? mm[1] : "", th: parseInt(get(r, "thumbs_up"), 10) || 0, ti: get(r, "title").trim(),
       t: get(r, "content"), se, ts, k: get(r, "keywords").split("|").map(x => x.trim()).filter(Boolean), ls: get(r, "label_source").trim(),
       nt: topicsCol ? topicsCol.split("|").length : Math.max(Object.keys(ts).length, 1)});
@@ -754,7 +827,7 @@ function drRender() {
     const topics = Object.entries(r.ts).filter(([t]) => t !== "일반").map(([t, c]) => `<span class="pill"><span class="dot" style="background:var(${SVAR[SC[c]]})"></span>${esc(t)} <b>${SC[c]}</b></span>`).join("");
     return `<article class="rv"><div class="top"><span class="stars" aria-label="별점 ${r.r}">${STARS(r.r)}</span>${sentBadge(r.se)}` +
       `<span>${r.d.slice(0, 10)}</span><span>${r.s === "g" ? "Google Play" : "App Store"}</span>${r.v ? `<span>v${esc(r.v)}</span>` : ""}` +
-      `${r.s === "g" ? `<span title="좋아요">👍 ${fmt(r.th)}</span>` : ""}<span class="muted" title="판정 방식">${r.ls === "manual" ? (DS.kind === "example" ? "AI 판정" : "manual 라벨") : r.ls === "rule" ? "규칙 판정" : esc(r.ls || "라벨 출처 없음")}</span></div>` +
+      `${r.s === "g" ? `<span title="좋아요">👍 ${fmt(r.th)}</span>` : ""}<span class="muted" title="판정 방식">${r.ls === "manual" ? "AI 판정" : r.ls === "rule" ? "규칙 판정" : esc(r.ls || "라벨 출처 없음")}</span></div>` +
       (r.ti ? `<div class="ttl">${hl(r.ti, words)}</div>` : "") +
       `<div class="tx">${hl(r.t, words)}</div><button type="button" class="exp" data-exp hidden>전체 보기</button>` +
       (topics ? `<div class="tp">${topics}</div>` : "") + `</article>`;
@@ -813,14 +886,18 @@ function header() {
   document.getElementById("exampleBtn").hidden = DS.kind === "example";
   const so = D.sentiment_overall, n = m.n;
   const negmix = (so["부정"] + so["혼합"]) / n;
+  // 누적했을 때만: 직전 대비 바뀐 값 (파란 글씨)
+  const P = DS.prev;
+  const dCount = (a, b) => P && a !== b ? ` <span class="delta">${a > b ? "+" : "−"}${fmt(Math.abs(a - b))}건</span>` : "";
+  const dPct = (a, b) => { if (!P) return ""; const d = (a - b) * 100; return Math.abs(d) < 0.05 ? ` <span class="delta">변화 없음</span>` : ` <span class="delta">${d > 0 ? "▲" : "▼"}${Math.abs(d).toFixed(1)}%p</span>`; };
   const tiles = [
-    {cls: "hero", label: "분석한 리뷰", value: fmt(n), note: `평균 별점 ${m.avg_rating}` + (m.label_source.manual ? (DS.kind === "example" ? ` · AI가 판정 기준서로 판정 ${fmt(m.label_source.manual)}건` : ` · manual 라벨 ${fmt(m.label_source.manual)}건`) : ""), sel: SEL.all()},
-    {label: "내용상 긍정", value: pct(so["긍정"] / n), note: `${fmt(so["긍정"])}건`, sel: SEL.sent("긍정")},
-    {label: "부정 또는 혼합", value: pct(negmix), note: `부정 ${fmt(so["부정"])} · 혼합 ${fmt(so["혼합"])}`, sel: SEL.negmix()},
-    {label: "최근 6개월 리뷰", value: fmt(m.recent_n), note: `${m.recent_start} 이후 · 최근 30일 ${m.last30_n}건`, sel: SEL.recent()},
+    {cls: "hero", label: "분석한 리뷰", value: fmt(n), delta: P && dCount(n, P.n), note: `평균 별점 ${m.avg_rating}` + (m.label_source.manual ? ` · AI가 판정 기준서로 판정 ${fmt(m.label_source.manual)}건` : ""), sel: SEL.all()},
+    {label: "내용상 긍정", value: pct(so["긍정"] / n), delta: P && dPct(so["긍정"] / n, P.pos), note: `${fmt(so["긍정"])}건`, sel: SEL.sent("긍정")},
+    {label: "부정 또는 혼합", value: pct(negmix), delta: P && dPct(negmix, P.negmix), note: `부정 ${fmt(so["부정"])} · 혼합 ${fmt(so["혼합"])}`, sel: SEL.negmix()},
+    {label: "최근 6개월 리뷰", value: fmt(m.recent_n), delta: P && dCount(m.recent_n, P.recent), note: `${m.recent_start} 이후 · 최근 30일 ${m.last30_n}건`, sel: SEL.recent()},
   ];
   document.getElementById("kpis").innerHTML = tiles.map(t =>
-    `<div class="card tile clk ${t.cls || ""}" tabindex="0" role="button" title="클릭하면 해당 리뷰 보기" ${selAttr(t.sel)}><div class="label">${t.label}</div><div class="value">${t.value}</div><div class="note">${t.note} <span style="color:var(--accent)">· 리뷰 보기 →</span></div></div>`).join("");
+    `<div class="card tile clk ${t.cls || ""}${t.delta ? " changed" : ""}" tabindex="0" role="button" title="클릭하면 해당 리뷰 보기" ${selAttr(t.sel)}><div class="label">${t.label}</div><div class="value">${t.value}${t.delta || ""}</div><div class="note">${t.note} <span style="color:var(--accent)">· 리뷰 보기 →</span></div></div>`).join("");
   document.getElementById("sentLegend").innerHTML = SENTS.map(s => `<li><i style="background:var(${SVAR[s]})" aria-hidden="true"></i>${s}</li>`).join("");
 }
 
@@ -1263,6 +1340,7 @@ try { const t = localStorage.getItem("dt-theme"); if (t) document.documentElemen
 syncThemeBtn();
 matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => { syncThemeBtn(); render(); });
 function render() {
+  if (!D) return;                       // 첫 화면(자료 없음)에서는 그릴 것이 없다
   SELS = [];
   ["topicChart", "overallChart", "kwChart", "termChart", "verVolChart", "smallMultiples", "verChart"].forEach(id => document.getElementById(id).innerHTML = "");
   header(); topicChart(); overallChart(); ratingNote(); kwControls(); prio(); good(); versions(); method(); summary();
@@ -1271,35 +1349,109 @@ function render() {
 
 /* ---------- 데이터셋: 예시 자료 / CSV 불러오기 ---------- */
 const EXAMPLE_TOPICS = ["과금", "버그", "콘텐츠", "운영", "밸런스/성장", "UI/편의성", "캐릭터/아트", "광고"];
+// 불러온 파일들 (누적용): 파일 목록 + 리뷰 키 → 레코드
+let LOADED = {files: [], map: new Map(), topics: [], hasGeneral: false};
+function showEmpty() {
+  D = null; LOADED = {files: [], map: new Map(), topics: [], hasGeneral: false};
+  DS = {kind: "empty", name: "", audit: null};
+  closeDrawer(); hideTip();
+  document.body.classList.add("is-empty");
+  const b = document.getElementById("dsBadge"); b.className = "ds-badge"; b.textContent = "자료 없음";
+  document.getElementById("scope").textContent = "라벨이 붙은 리뷰 CSV를 넣으면 이곳에 스토어별 건수와 기간이 표시됩니다.";
+  document.getElementById("exampleBtn").hidden = true;
+  note("");
+  scrollTo({top: 0});
+}
+function showResults() { document.body.classList.remove("is-empty"); }
 function useExample() {
+  LOADED = {files: [], map: new Map(), topics: [], hasGeneral: false};
   loadDataset(EMBED.reviews, {kind: "example", name: "달토끼 키우기", audit: EMBED.audit || null, topics: EXAMPLE_TOPICS, hasGeneral: true});
-  syncData(); kwState.topic = null; render();
-  note(`지금 보이는 수치는 <b>예시 자료</b>(달토끼 키우기 스토어 리뷰 ${fmt(D.meta.n)}건)입니다. 오른쪽 위 <b>CSV 불러오기</b>로 다른 리뷰 파일을 넣으면 모든 비율·분포가 그 파일 기준으로 바뀝니다. 파일을 화면에 끌어다 놓아도 됩니다.`);
+  syncData(); kwState.topic = null; closeDrawer(); showResults(); render(); scrollTo({top: 0});
+  note(`지금 보이는 수치는 <b>예시 자료</b>(달토끼 키우기 스토어 리뷰 ${fmt(D.meta.n)}건 전체)입니다. 오른쪽 위 <b>CSV 추가</b>로 다른 리뷰 파일을 넣으면 그 파일 기준으로 다시 계산합니다.`);
 }
 function note(html, err) { const n = document.getElementById("uploadNote"); n.innerHTML = html; n.classList.toggle("err", !!err); }
+// 지금 수치를 기억해 두었다가, 누적 후 요약 칸에 바뀐 만큼 표시
+function snap() {
+  if (!D) return null;
+  const so = D.sentiment_overall, n = D.meta.n;
+  return {n, pos: so["긍정"] / n, negmix: (so["부정"] + so["혼합"]) / n, recent: D.meta.recent_n};
+}
+// 누적·교체 선택 창. 결과: "add" | "replace" | "cancel"
+function askMerge(fileName, nNew, nDup) {
+  const dlg = document.getElementById("mergeDlg");
+  const cur = D.meta.n;
+  document.getElementById("mergeDesc").innerHTML =
+    `지금 <b>${fmt(cur)}건</b>(${LOADED.files.length}개 파일)이 들어 있습니다. <b>${esc(fileName)}</b>에는 리뷰 <b>${fmt(nNew)}건</b>이 있습니다.`;
+  document.getElementById("mergeAddDesc").textContent =
+    `지금 자료에 더해 ${fmt(cur + nNew - nDup)}건으로 다시 계산` + (nDup ? ` (이미 있는 리뷰 ${fmt(nDup)}건은 한 번만 셈)` : "");
+  document.getElementById("mergeRepDesc").textContent = `지금 자료를 비우고 새 파일 ${fmt(nNew)}건만으로 다시 계산`;
+  return new Promise(resolve => {
+    const done = v => { dlg.removeEventListener("close", onClose); dlg.onclick = null; if (dlg.open) dlg.close(); resolve(v); };
+    const onClose = () => done("cancel");                         // Esc로 닫으면 취소
+    dlg.addEventListener("close", onClose);
+    dlg.onclick = e => { const b = e.target.closest("button[data-v]"); if (b) done(b.dataset.v); };
+    dlg.showModal();
+    dlg.querySelector(".opt.primary").focus();
+  });
+}
+function filesHTML(newName) {
+  if (!LOADED.files.length) return "";
+  return `<div class="files"><span class="small muted">불러온 파일:</span>` +
+    LOADED.files.map(f => `<span class="f${f.name === newName ? " new" : ""}">${esc(f.name)} · ${fmt(f.added)}건</span>`).join("") + `</div>`;
+}
 async function readFile(file) {
   const buf = await file.arrayBuffer();
   let text = new TextDecoder("utf-8").decode(buf);
   if (text.includes("�")) { try { text = new TextDecoder("euc-kr").decode(buf); } catch (e) {} }   // 엑셀 저장 CSV(CP949) 대응
   return text;
 }
+let busy = false;
 async function useFile(file) {
-  if (!file) return;
+  if (!file || busy) return;
+  busy = true;
   note(`'${esc(file.name)}' 읽는 중…`);
   try {
     const parsed = toRecords(parseCSV(await readFile(file)));
-    loadDataset(parsed.rows, {kind: "user", name: file.name, audit: null, topics: parsed.topics, hasGeneral: parsed.hasGeneral, skipped: parsed.skipped});
-    syncData(); kwState.topic = null; closeDrawer(); render(); scrollTo({top: 0});
-    note(`<b>${esc(file.name)}</b> 리뷰 ${fmt(D.meta.n)}건으로 다시 계산했습니다.` +
+    const nDup = parsed.rows.filter(r => LOADED.map.has(r._k)).length;
+    // 이미 불러온 파일이 있으면 누적/교체를 묻는다 (예시 자료나 첫 화면에서는 그냥 새로 시작)
+    let mode = "replace";
+    if (DS.kind === "user" && LOADED.files.length) {
+      note("");
+      mode = await askMerge(file.name, parsed.rows.length, nDup);
+      if (mode === "cancel") { note(`'${esc(file.name)}' 반영을 취소했습니다. 화면은 그대로입니다.` + filesHTML()); return; }
+    }
+    const prev = mode === "add" ? snap() : null;
+    if (mode === "replace") LOADED = {files: [], map: new Map(), topics: [], hasGeneral: false};
+    if (mode === "add" && nDup === parsed.rows.length) {
+      note(`<b>${esc(file.name)}</b>의 리뷰 ${fmt(nDup)}건은 이미 모두 들어 있어서 새로 더해진 리뷰가 없습니다. 화면은 그대로입니다.` + filesHTML());
+      return;
+    }
+    let added = 0;
+    parsed.rows.forEach(r => { if (!LOADED.map.has(r._k)) { LOADED.map.set(r._k, r); added++; } });
+    LOADED.files.push({name: file.name, added, total: parsed.rows.length});
+    LOADED.topics = [...new Set(LOADED.topics.concat(parsed.topics))];
+    LOADED.hasGeneral = LOADED.hasGeneral || parsed.hasGeneral;
+    const label = LOADED.files.length === 1 ? file.name : `${LOADED.files[0].name} 외 ${LOADED.files.length - 1}개`;
+    loadDataset([...LOADED.map.values()], {kind: "user", name: label, audit: null, topics: LOADED.topics, hasGeneral: LOADED.hasGeneral, skipped: parsed.skipped});
+    DS.prev = prev;
+    syncData(); kwState.topic = null; closeDrawer(); showResults(); render(); scrollTo({top: 0});
+    const dupNote = parsed.rows.length - added ? ` 이미 있던 리뷰 ${fmt(parsed.rows.length - added)}건은 한 번만 셌습니다.` : "";
+    note((mode === "add"
+        ? `<b>${esc(file.name)}</b>의 리뷰 ${fmt(added)}건을 더해 <b>${fmt(D.meta.n)}건</b>으로 다시 계산했습니다.${dupNote} 요약 칸의 파란 숫자가 바뀐 만큼입니다.`
+        : `<b>${esc(file.name)}</b> 리뷰 <b>${fmt(D.meta.n)}건</b>으로 계산했습니다. 파일을 더 넣으면 누적할지 교체할지 고를 수 있습니다.`) +
       (parsed.skipped ? ` 날짜·별점·감성 값을 읽을 수 없는 ${fmt(parsed.skipped)}행은 제외했습니다(예: ${parsed.errs.join(", ")}).` : "") +
-      ` <button class="linkish count" type="button" onclick="useExample()">예시 자료로 돌아가기</button>`);
+      filesHTML(file.name));
   } catch (e) {
-    note(`<b>'${esc(file.name)}'을(를) 불러오지 못했습니다.</b> ${esc(e.message)} 화면은 이전 자료를 그대로 보여줍니다. "CSV 형식 안내"를 확인하세요.`, true);
+    note(`<b>'${esc(file.name)}'을(를) 불러오지 못했습니다.</b> ${esc(e.message)} ` +
+      (D ? "화면은 이전 자료를 그대로 보여줍니다. " : "") + `"CSV 형식 안내"를 확인하세요.` + filesHTML(), true);
     document.getElementById("csvHelp").open = true;
-  }
+  } finally { busy = false; }
 }
-document.getElementById("csvInput").addEventListener("change", ev => { useFile(ev.target.files[0]); ev.target.value = ""; });
+["csvInput", "csvInputBig"].forEach(id => document.getElementById(id).addEventListener("change", ev => { useFile(ev.target.files[0]); ev.target.value = ""; }));
 document.getElementById("exampleBtn").onclick = useExample;
+document.getElementById("exampleLink").onclick = useExample;
+document.getElementById("helpLink").onclick = () => { const h = document.getElementById("csvHelp"); h.open = true; h.scrollIntoView({block: "nearest"}); h.querySelector("summary").focus(); };
+document.getElementById("resetBtn").onclick = showEmpty;
 addEventListener("dragover", ev => { ev.preventDefault(); document.body.classList.add("dragging"); });
 addEventListener("dragleave", ev => { if (!ev.relatedTarget) document.body.classList.remove("dragging"); });
 addEventListener("drop", ev => { ev.preventDefault(); document.body.classList.remove("dragging"); const f = ev.dataTransfer.files[0]; if (f) useFile(f); });
@@ -1314,7 +1466,8 @@ document.getElementById("templateBtn").onclick = () => {
   a.href = URL.createObjectURL(new Blob([csv], {type: "text/csv;charset=utf-8"}));
   a.download = "review_template.csv"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 };
-useExample();
+// 첫 화면: 파일 첨부. 주소에 ?data=example 이 있으면 예시 자료로 바로 시작
+if (new URLSearchParams(location.search).get("data") === "example") useExample(); else showEmpty();
 
 /* ---------- 탐색 편의: 섹션 번호·링크, 현재 위치 표시, 맨 위로, 인쇄 ---------- */
 (function navHelpers() {

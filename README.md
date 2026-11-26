@@ -2,7 +2,7 @@
 
 2026 NI2.0 AID 해커톤 7팀 **카페인 중독** (서일대학교 AI게임융합학과) 저장소입니다. 배정 기업은 ㈜에이블게임즈입니다.
 
-**사이트:** https://k-min-sec.github.io/ni2-hackathon-team07-kim-min-seok/ (첫 화면 `index.html`에서 두 결과물로 이동)
+**사이트:** https://k-min-sec.github.io/ni2-hackathon-team07-kim-min-seok/ (첫 화면 `index.html` → 리뷰 분석 대시보드. 시연은 대시보드의 CSV 불러오기 중심이며, `GameVoiceLab/`은 사이트에서 빼 두었습니다)
 
 > 현재 상태(2026-11-26): **초기 작업 단계**입니다. 팀원별 시제품이 각 폴더에 있으며, 최종 결과물과 통합 방식은 아직 정하지 않았습니다.
 
