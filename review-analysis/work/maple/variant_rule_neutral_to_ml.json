@@ -1,0 +1,6 @@
+{
+ "ml_all_acc": 0.9066666666666666,
+ "variant_acc": 0.91,
+ "variant_easy_acc": 0.9135802469135802,
+ "n_switched": 26
+}

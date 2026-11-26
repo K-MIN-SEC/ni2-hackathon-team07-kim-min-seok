@@ -1,0 +1,10 @@
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights:  14%|█▍        | 28/199 [00:00<00:00, 226.17it/s]Loading weights:  40%|████      | 80/199 [00:00<00:00, 357.51it/s]Loading weights:  59%|█████▉    | 117/199 [00:00<00:00, 360.70it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 578.97it/s]
+모델 상태: 미세조정 모델 사용 중
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights:  29%|██▊       | 57/199 [00:00<00:00, 450.02it/s]Loading weights:  52%|█████▏    | 103/199 [00:00<00:00, 351.43it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 563.45it/s]
+모델(서버와 같은 경로) 전체 {'n': 300, 'sentiment_acc': 0.88, 'sentiment_acc_3way': 0.89, 'topics_exact': 0.707}
+모델(서버와 같은 경로) 쉬움 {'n': 162, 'sentiment_acc': 0.858, 'sentiment_acc_3way': 0.858, 'topics_exact': 0.907}
+모델(서버와 같은 경로) 어려움 {'n': 138, 'sentiment_acc': 0.906, 'sentiment_acc_3way': 0.928, 'topics_exact': 0.471}
+규칙 단독 전체 {'n': 300, 'sentiment_acc': 0.75, 'sentiment_acc_3way': 0.797, 'topics_exact': 0.66}
+규칙 단독 쉬움 {'n': 162, 'sentiment_acc': 0.858, 'sentiment_acc_3way': 0.858, 'topics_exact': 0.907}
+규칙 단독 어려움 {'n': 138, 'sentiment_acc': 0.623, 'sentiment_acc_3way': 0.725, 'topics_exact': 0.37}
+별점 기준선 감성 정확도 0.783

@@ -2,6 +2,7 @@
 
 동작 방식 (메인 세션의 '규칙 + AI 수동 판정'에서 AI 자리를 ML 모델로 바꾼 구조)
 - 규칙이 확신하는 리뷰(classify.py의 애매 플래그가 없는 리뷰)는 규칙 판정을 그대로 쓴다.
+  단, 규칙이 '중립'이라고 한 리뷰는 확신하더라도 ML로 넘긴다(NEUTRAL_TO_ML).
 - 애매한 리뷰는 ML 모델 3개로 판정한다.
   1) 전체 감성 (긍정/부정/중립/혼합)
   2) 주제 (복수 선택, 주제마다 이진 분류기)
@@ -58,6 +59,11 @@ CW_SENT, CW_TOPIC, CW_PAIR = None, None, None
 C_SENT, C_TOPIC, C_PAIR = 4.0, 4.0, 2.0   # 로지스틱 회귀 규제 강도의 역수 (클수록 학습 데이터에 더 맞춤)
 TOPIC_THR = 0.4                            # 주제 확률이 이 값 이상이면 그 주제로 판정
 FALLBACK_THR = 0.2                         # 주제가 하나도 안 걸릴 때 최상위 주제를 채택하는 확률 기준
+# 규칙이 확신하더라도 '중립'이라고 판정한 리뷰는 ML로 넘긴다. 규칙 사전에 없는 단어로 쓴 짧은 리뷰
+# ("과금 미쳣음", "조작겜")를 규칙이 중립으로 확신하던 문제 때문이다. 다른 게임(메이플 키우기) 300건에서
+# 감성 정확도 88.0% → 91.0% (docs/MAPLE_CROSS_GAME_TEST.md). 달토끼 교차검증(evaluate)은 쉬운 리뷰의
+# 정답이 규칙 판정 그 자체라 이 효과를 잴 수 없으므로, 기록된 수치를 재현하도록 evaluate에서는 끈다.
+NEUTRAL_TO_ML = True
 HARD_W = 5.0                               # 학습 때 애매한(규칙이 확신 못 한) 리뷰에 주는 가중치
 # 주제별 감성 일관성: 정답 라벨에서 전체 감성이 긍정/부정/중립이면 주제별 감성도 98%가 같았다.
 # 그래서 주제별 감성 모델은 '혼합' 리뷰에만 쓰고, 나머지는 전체 감성을 그대로 따른다.
@@ -352,10 +358,14 @@ def ml_predict(rm: ReviewModel, pm: PairModel, df: pd.DataFrame, rf: pd.DataFram
     return s_ml, ts_ml
 
 
-def hybrid_predict(rm: ReviewModel, pm: PairModel, df: pd.DataFrame, rf: pd.DataFrame):
+def hybrid_predict(rm: ReviewModel, pm: PairModel, df: pd.DataFrame, rf: pd.DataFrame,
+                   neutral_to_ml: bool = NEUTRAL_TO_ML):
     """규칙 확신 건은 규칙, 애매 건은 ML. (sentiment, {topic: sentiment}, source) 목록.
-    ML(임베딩 포함)은 애매한 리뷰에만 돌린다. 규칙 확신 건까지 돌리면 결과는 같고 시간만 몇 배 든다."""
+    ML(임베딩 포함)은 애매한 리뷰에만 돌린다. 규칙 확신 건까지 돌리면 결과는 같고 시간만 몇 배 든다.
+    neutral_to_ml이면 규칙이 확신한 '중립'도 ML로 판정한다(NEUTRAL_TO_ML 설명 참고)."""
     hard = ~rf.rule_confident.values.astype(bool)
+    if neutral_to_ml:
+        hard |= rf.rule_sentiment.values == "중립"
     ml_res = {}
     if hard.any():
         s_ml, ts_ml = ml_predict(rm, pm, df[hard].reset_index(drop=True), rf[hard].reset_index(drop=True))
@@ -437,7 +447,7 @@ def evaluate():
         rm = ReviewModel().fit(dtr, rtr, dtr.sentiment.values, [g_topics[i] for i in tr], w)
         Ptr = pair_rows(dtr, [g_topics[i] for i in tr], dtr.sentiment.values, rtr.rule_topic_sentiments.values)
         pm = PairModel().fit(Ptr, [s for i in tr for s in g_sents[i]])
-        hp = hybrid_predict(rm, pm, dte, rte)
+        hp = hybrid_predict(rm, pm, dte, rte, neutral_to_ml=False)  # 기록된 수치 재현용 (NEUTRAL_TO_ML 설명)
         for j, i in enumerate(te):
             oof[i] = hp[j]
         # ML 단독(규칙 확신 건도 ML로) — 참고용
