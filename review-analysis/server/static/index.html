@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>리뷰 자동 분류</title>
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7; --surface: #fcfcfb; --surface-2: #f3f2ee;
+  --ink: #0b0b0b; --ink-2: #52514e; --muted: #6b6a64; --ring: rgba(11,11,11,0.18);
+  --accent: #2870cc; --on-accent: #ffffff; --focus: #2870cc;
+  --pos: #1d5fae; --neg: #b3261e; --mix: #8a5a00; --neu: #52514e; --err-bg: #fdecea;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --surface-2: #232321;
+    --ink: #f0efec; --ink-2: #c3c2b7; --muted: #939290; --ring: rgba(255,255,255,0.18);
+    --accent: #3987e5; --on-accent: #0b0b0b; --focus: #6aa8f0;
+    --pos: #7fb2f0; --neg: #f28b82; --mix: #e0a840; --neu: #c3c2b7; --err-bg: #3a1714;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 1rem/1.6 system-ui, -apple-system, "Segoe UI", "Malgun Gothic", sans-serif; }
+.wrap { max-width: 720px; margin: 0 auto; padding: 24px 16px 64px; }
+h1 { font-size: 1.5rem; margin: 0 0 4px; }
+.sub { color: var(--ink-2); margin: 0 0 20px; font-size: 0.9375rem; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.card { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 16px; }
+label, legend { font-weight: 600; display: block; margin-bottom: 6px; }
+textarea { width: 100%; min-height: 120px; font: inherit; padding: 10px; border-radius: 8px; border: 1px solid var(--ink-2); background: var(--page); color: var(--ink); resize: vertical; }
+.hint { color: var(--muted); font-size: 0.875rem; margin: 4px 0 0; }
+fieldset { border: 0; padding: 0; margin: 16px 0 0; }
+.stars { display: flex; gap: 6px; flex-wrap: wrap; }
+.stars label { font-weight: 400; display: inline-flex; align-items: center; gap: 4px; padding: 6px 10px; border: 1px solid var(--ring); border-radius: 8px; cursor: pointer; margin: 0; min-height: 44px; }
+.stars input:checked + span { font-weight: 700; text-decoration: underline; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+button { font: inherit; border-radius: 8px; padding: 10px 16px; cursor: pointer; min-height: 44px; }
+button.primary { background: var(--accent); color: var(--on-accent); border: 0; font-weight: 600; }
+button.secondary { background: var(--surface); color: var(--ink); border: 1px solid var(--ring); }
+button[disabled] { opacity: 0.6; cursor: wait; }
+.status { margin: 12px 0 0; color: var(--ink-2); font-size: 0.875rem; }
+.error { background: var(--err-bg); color: var(--ink); border-left: 4px solid var(--neg); padding: 10px 12px; border-radius: 6px; margin-top: 16px; }
+.error:empty { display: none; }
+#result { margin-top: 20px; }
+#result h2 { font-size: 1.125rem; margin: 0 0 8px; }
+dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 0; }
+dt { color: var(--ink-2); }
+dd { margin: 0; }
+.s-긍정 { color: var(--pos); } .s-부정 { color: var(--neg); } .s-혼합 { color: var(--mix); } .s-중립 { color: var(--neu); }
+.sent { font-weight: 700; }
+ul.topics { margin: 0; padding-left: 1.2em; }
+.note { color: var(--muted); font-size: 0.875rem; margin-top: 10px; }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <h1>리뷰 자동 분류</h1>
+  <p class="sub">리뷰 내용과 별점을 넣으면 감성(긍정·부정·혼합·중립)과 주제를 판정합니다. AI(LLM) 없이 규칙과 머신러닝 모델로 판정하며, 자동 분류라 틀릴 수 있습니다.</p>
+
+  <form class="card" id="form" novalidate>
+    <label for="content">리뷰 내용</label>
+    <textarea id="content" name="content" required aria-describedby="content-hint" maxlength="20000"></textarea>
+    <p class="hint" id="content-hint">2,000자를 넘으면 앞부분만 판정합니다.</p>
+
+    <fieldset aria-describedby="rating-hint">
+      <legend>별점 (필수)</legend>
+      <div class="stars" id="stars"></div>
+      <p class="hint" id="rating-hint">별점도 판정에 쓰입니다.</p>
+    </fieldset>
+
+    <div class="actions">
+      <button type="submit" class="primary" id="submit">분류하기</button>
+      <button type="button" class="secondary" id="example">예시 넣기</button>
+    </div>
+    <p class="status" id="health" aria-live="polite">서버 상태 확인 중…</p>
+  </form>
+
+  <div class="error" id="error" role="alert"></div>
+  <section id="result" aria-live="polite" tabindex="-1"></section>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+$("stars").innerHTML = [1, 2, 3, 4, 5].map(k =>
+  `<label><input type="radio" name="rating" value="${k}" required><span>★${k}</span></label>`).join("");
+
+async function checkHealth() {
+  try {
+    const r = await fetch("/api/health"), h = await r.json();
+    if (h.status === "ok") {
+      $("health").textContent = `서버 준비됨 (모델 로딩 ${h.load_seconds}초)` + (h.model && !h.model.finetuned ? " · 주의: " + h.model.note : "");
+      return;
+    }
+    $("health").textContent = h.status === "loading" ? "모델을 불러오는 중입니다… (약 10초)" : "모델을 불러오지 못했습니다: " + h.error;
+    if (h.status === "loading") setTimeout(checkHealth, 2000);
+  } catch (e) { $("health").textContent = "서버에 연결할 수 없습니다"; }
+}
+checkHealth();
+
+$("example").onclick = () => {
+  $("content").value = "캐릭터는 귀엽고 재밌는데 업데이트하고 나서 접속이 안 되고 튕겨요. 빨리 고쳐주세요";
+  document.querySelector('input[name=rating][value="3"]').checked = true;
+  $("content").focus();
+};
+
+$("form").onsubmit = async e => {
+  e.preventDefault();
+  $("error").textContent = "";
+  const content = $("content").value.trim();
+  const rating = document.querySelector("input[name=rating]:checked");
+  if (!content) { $("error").textContent = "리뷰 내용을 입력하세요."; $("content").setAttribute("aria-invalid", "true"); $("content").focus(); return; }
+  $("content").removeAttribute("aria-invalid");
+  if (!rating) { $("error").textContent = "별점을 선택하세요."; document.querySelector("input[name=rating]").focus(); return; }
+  const btn = $("submit"); btn.disabled = true; btn.textContent = "분류 중…";
+  try {
+    const r = await fetch("/api/classify", {method: "POST", headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({reviews: [{content, rating: Number(rating.value)}]})});
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || `오류 (${r.status})`);
+    const x = data.results[0];
+    const topics = Object.entries(x.topics).map(([t, s]) => `<li>${esc(t)}: <span class="sent s-${esc(s)}">${esc(s)}</span></li>`).join("");
+    $("result").innerHTML = `<div class="card"><h2>분류 결과</h2><dl>` +
+      `<dt>전체 감성</dt><dd><span class="sent s-${esc(x.sentiment)}">${esc(x.sentiment)}</span></dd>` +
+      `<dt>주제별 감성</dt><dd><ul class="topics">${topics}</ul></dd>` +
+      `<dt>판정 방식</dt><dd>${x.source === "rule" ? "규칙 (짧고 분명한 리뷰)" : "머신러닝 모델"}</dd></dl>` +
+      (x.truncated ? `<p class="note">2,000자를 넘어서 앞부분만 판정했습니다.</p>` : "") +
+      (data.model && !data.model.finetuned ? `<p class="note">주의: 미세조정 모델 없이 기존 모델로만 판정했습니다. 어려운 리뷰는 정확도가 낮을 수 있습니다.</p>` : "") +
+      `<p class="note">처리 시간 ${data.elapsed_ms}ms</p></div>`;
+    $("result").focus();
+  } catch (err) {
+    $("error").textContent = "분류하지 못했습니다: " + err.message;
+  } finally {
+    btn.disabled = false; btn.textContent = "분류하기";
+  }
+};
+</script>
+</body>
+</html>

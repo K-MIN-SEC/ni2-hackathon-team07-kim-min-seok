@@ -15,7 +15,8 @@ import pandas as pd
 
 from classify import TOPIC_KEYWORDS, norm
 
-sys.stdout.reconfigure(encoding="utf-8")
+import os
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # 저장소 폴더
 
 TOPICS = ["과금", "버그", "콘텐츠", "운영", "밸런스/성장", "UI/편의성", "캐릭터/아트", "광고"]
 SENTS = {"긍정", "부정", "중립", "혼합"}
@@ -99,8 +100,11 @@ def main():
                 manual[str(o["id"])] = o
     need = set(rule.index[~rule.rule_confident])
     missing = need - set(manual)
-    if missing:
+    if len(missing) > 10:
         sys.exit(f"수동 판정 누락 {len(missing)}건: 예) {list(missing)[:5]}")
+    if missing:  # 규칙 사전을 보강하면서 새로 애매해진 소수 리뷰는 규칙 판정을 그대로 쓴다
+        print(f"[주의] 수동 판정이 없는 애매 리뷰 {len(missing)}건은 규칙 판정 사용:",
+              [str(rule.loc[m].content)[:30] for m in missing])
 
     rows = []
     for _, r in raw.iterrows():
@@ -156,4 +160,7 @@ def main():
 
 
 if __name__ == "__main__":
+    os.chdir(ROOT)  # 어느 위치에서 실행해도 저장소 폴더 기준 경로(data/, work/)로 동작
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     main()

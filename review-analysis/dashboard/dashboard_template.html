@@ -8,36 +8,50 @@
 :root {
   color-scheme: light;
   --page: #f9f9f7; --surface: #fcfcfb; --surface-2: #f3f2ee;
-  --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
-  --grid: #e1e0d9; --axis: #c3c2b7; --ring: rgba(11,11,11,0.10);
-  --pos: #2a78d6; --mix: #eda100; --neu: #b9b8b2; --neg: #e34948;
-  --accent: #2a78d6; --accent-wash: rgba(42,120,214,0.10);
-  --good-text: #006300;
+  --ink: #0b0b0b; --ink-2: #52514e; --muted: #6b6a64;
+  --grid: #e1e0d9; --axis: #8f8e88; --ring: rgba(11,11,11,0.10);
+  --pos: #2870cc; --mix: #bd7d00; --neu: #8a8983; --neg: #e34948;
+  --accent: #2870cc; --accent-wash: rgba(40,112,204,0.12);
+  --good-text: #006300; --focus: #2870cc;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
     --page: #0d0d0d; --surface: #1a1a19; --surface-2: #232321;
-    --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
-    --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+    --ink: #f0efec; --ink-2: #c3c2b7; --muted: #939290;
+    --grid: #2c2c2a; --axis: #6b6a64; --ring: rgba(255,255,255,0.14);
     --pos: #3987e5; --mix: #c98500; --neu: #6b6a64; --neg: #e66767;
-    --accent: #3987e5; --accent-wash: rgba(57,135,229,0.14);
-    --good-text: #0ca30c;
+    --accent: #3987e5; --accent-wash: rgba(57,135,229,0.18);
+    --good-text: #0ca30c; --focus: #6aa8f0;
   }
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
   --page: #0d0d0d; --surface: #1a1a19; --surface-2: #232321;
-  --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
-  --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10);
+  --ink: #f0efec; --ink-2: #c3c2b7; --muted: #939290;
+  --grid: #2c2c2a; --axis: #6b6a64; --ring: rgba(255,255,255,0.14);
   --pos: #3987e5; --mix: #c98500; --neu: #6b6a64; --neg: #e66767;
-  --accent: #3987e5; --accent-wash: rgba(57,135,229,0.14);
-  --good-text: #0ca30c;
+  --accent: #3987e5; --accent-wash: rgba(57,135,229,0.18);
+  --good-text: #0ca30c; --focus: #6aa8f0;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
-body { background: var(--page); color: var(--ink); font: 14px/1.55 system-ui, -apple-system, "Segoe UI", "Malgun Gothic", sans-serif; }
+/* 글자 크기는 rem 단위: 브라우저의 '글꼴 크기' 설정을 따른다 */
+body { background: var(--page); color: var(--ink); font: 0.875rem/1.55 system-ui, -apple-system, "Segoe UI", "Malgun Gothic", sans-serif; }
 .wrap { max-width: 1180px; margin: 0 auto; padding: 24px 16px 64px; }
+/* ---- 접근성 (WCAG 2.2 AA: 색 대비·키보드·스크린리더) ---- */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.skip { position: absolute; left: 8px; top: -48px; background: var(--surface); color: var(--ink); padding: 8px 12px; border-radius: 6px; border: 2px solid var(--focus); z-index: 100; }
+.skip:focus { top: 8px; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+main:focus { outline: none; }
+section :focus { scroll-margin-top: 110px; }
+.grid > *, .sm-grid > * { min-width: 0; }  /* 안의 넓은 표가 칸을 밀어내지 않고, 표 영역 안에서 가로 스크롤되게 */
+caption { text-align: left; color: var(--ink-2); font-size: 0.75rem; padding: 2px 0 6px; }
+.scroll[hidden] { display: none; }
+/* 선택 상태는 색만이 아니라 굵기·밑줄로도 표시 (aria-pressed로 스크린리더에도 전달) */
+.seg button[aria-pressed="true"] { background: var(--accent-wash); color: var(--ink); font-weight: 650; text-decoration: underline; text-underline-offset: 3px; }
+.seg button:focus-visible { outline-offset: -3px; }
 header h1 { font-size: 24px; margin: 0 0 4px; font-weight: 650; letter-spacing: -0.01em; }
 header p { margin: 0; color: var(--ink-2); }
 .toolbar { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 18px; }
@@ -65,7 +79,7 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-sp
 .scroll { overflow-x: auto; }
 #prioTable { min-width: 560px; } #prioTable tr:not(.qrow) td { border-bottom: 0; } #verTable { min-width: 720px; } #prioTopicTable, #topicTable table { min-width: 460px; }
 td.item { min-width: 130px; }
-.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--ink-2); margin: 4px 0 10px; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--ink-2); margin: 4px 0 10px; padding: 0; list-style: none; }
 .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
 .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
 .chart text { fill: var(--ink-2); font-size: 11px; font-family: inherit; }
@@ -96,7 +110,7 @@ details > summary { cursor: pointer; color: var(--ink-2); font-size: 12px; margi
 .toggle-table { font-size: 12px; color: var(--ink-2); background: none; border: 0; cursor: pointer; padding: 0; text-decoration: underline; margin-top: 6px; }
 .sm-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 @media (max-width: 860px) { .sm-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
-.sm-title { font-size: 12px; color: var(--ink-2); font-weight: 600; margin-bottom: 2px; }
+.sm-title { font-size: 12px; color: var(--ink-2); font-weight: 600; margin: 0 0 2px; }
 
 /* ---- 가독성·편의성 개선 (2026-11-26) ---- */
 nav a.active { background: var(--accent-wash); color: var(--ink); font-weight: 600; }
@@ -206,6 +220,7 @@ body.dragging .wrap { outline: 3px dashed var(--accent); outline-offset: -8px; }
 </style>
 </head>
 <body>
+<a class="skip" href="#main">본문 바로가기</a>
 <div class="wrap">
   <div class="toolbar">
     <header>
@@ -241,7 +256,11 @@ body.dragging .wrap { outline: 3px dashed var(--accent); outline-offset: -8px; }
     </div>
   </details>
 
-  <div class="grid g4" id="kpis"></div>
+  <main id="main" tabindex="-1">
+  <section id="s-summary" aria-labelledby="h-kpis" style="margin-top:0">
+    <h2 id="h-kpis" class="sr-only">핵심 수치</h2>
+    <div class="grid g4" id="kpis"></div>
+  </section>
 
   <div class="card summary" id="summaryCard">
     <h2>한눈에 보기</h2>
@@ -249,7 +268,7 @@ body.dragging .wrap { outline: 3px dashed var(--accent); outline-offset: -8px; }
     <p class="hint">요약은 아래 각 섹션의 계산 결과에서 자동으로 뽑은 문장입니다. 근거는 "자세히"를 눌러 해당 섹션에서 확인하세요.</p>
   </div>
 
-  <nav id="secNav">
+  <nav id="secNav" aria-label="섹션 바로가기">
     <a href="#s-topic"><span class="n">1</span>주제별 감성</a><a href="#s-kw"><span class="n">2</span>키워드</a><a href="#s-prio"><span class="n">3</span>개선 우선순위</a>
     <a href="#s-good"><span class="n">4</span>지켜야 할 장점</a><a href="#s-ver"><span class="n">5</span>버전별 추이</a><a href="#s-method"><span class="n">6</span>방법·검수</a>
   </nav>
@@ -258,18 +277,18 @@ body.dragging .wrap { outline: 3px dashed var(--accent); outline-offset: -8px; }
     <h2>주제별 긍정·부정 비율</h2>
     <p class="sub">각 리뷰가 언급한 주제마다 따로 매긴 감성입니다. 리뷰 하나가 여러 주제에 들어갈 수 있습니다. 막대 오른쪽 숫자는 그 주제를 언급한 리뷰 수와 전체 대비 비중입니다.</p>
     <div class="card">
-      <div class="legend" id="sentLegend"></div>
+      <ul class="legend" id="sentLegend" aria-label="색 범례"></ul>
       <div class="chart" id="topicChart"></div>
-      <button class="toggle-table" data-target="topicTable">표로 보기</button>
-      <div class="scroll" id="topicTable" hidden></div>
+      <button class="toggle-table" type="button" data-target="topicTable" aria-expanded="false" aria-controls="topicTable">표로 보기</button>
+      <div class="scroll" id="topicTable" hidden tabindex="0" role="region" aria-label="주제별 감성 표"></div>
     </div>
     <div class="grid g2" style="margin-top:12px">
       <div class="card">
-        <div class="sm-title">리뷰 전체 감성 (내용 기준)</div>
+        <h3 class="sm-title">리뷰 전체 감성 (내용 기준)</h3>
         <div class="chart" id="overallChart"></div>
       </div>
       <div class="card">
-        <div class="sm-title">별점과 내용 감성의 차이</div>
+        <h3 class="sm-title">별점과 내용 감성의 차이</h3>
         <div id="ratingNote" class="small"></div>
       </div>
     </div>
@@ -279,11 +298,14 @@ body.dragging .wrap { outline: 3px dashed var(--accent); outline-offset: -8px; }
     <h2>감성 × 주제별 키워드 분포</h2>
     <p class="sub">선택한 주제·감성 리뷰 중 각 키워드를 언급한 리뷰의 비율입니다(한 리뷰가 여러 키워드를 언급할 수 있어 합계가 100%를 넘을 수 있음). 키워드는 커뮤니티 표현을 묶은 대표어입니다. 예를 들어 '튕김'에는 튕김·팅김·강제종료가 들어갑니다.</p>
     <div class="card">
-      <div class="controls"><div class="seg" id="kwTopic"></div><div class="seg" id="kwSent"></div></div>
-      <div id="kwHead" class="small muted" style="margin-bottom:6px"></div>
+      <div class="controls">
+        <div class="seg" id="kwTopic" role="group" aria-label="주제 선택"></div>
+        <div class="seg" id="kwSent" role="group" aria-label="감성 선택"></div>
+      </div>
+      <div id="kwHead" class="small muted" style="margin-bottom:6px" aria-live="polite"></div>
       <div class="grid g2">
-        <div><div class="sm-title">대표 키워드</div><div class="chart" id="kwChart"></div></div>
-        <div><div class="sm-title">자주 나온 표현 (원문 단어)</div><div class="chart" id="termChart"></div>
+        <div><h3 class="sm-title">대표 키워드</h3><div class="chart" id="kwChart"></div></div>
+        <div><h3 class="sm-title">자주 나온 표현 (원문 단어)</h3><div class="chart" id="termChart"></div>
           <p class="hint">원문 단어를 그대로 센 값이라 "하지", "스킬도"처럼 의미가 약한 단어가 섞일 수 있습니다. 해석은 왼쪽 대표 키워드를 기준으로 하세요.</p></div>
       </div>
     </div>
@@ -294,11 +316,11 @@ body.dragging .wrap { outline: 3px dashed var(--accent); outline-offset: -8px; }
     <p class="sub" id="prioSub"></p>
     <div class="card">
       <div class="callout small" id="formula"></div>
-      <div class="scroll" style="margin-top:10px"><table id="prioTable"></table></div>
+      <div class="scroll" style="margin-top:10px" tabindex="0" role="region" aria-label="키워드 단위 우선순위 표 (가로 스크롤)"><table id="prioTable"></table></div>
     </div>
     <div class="card" style="margin-top:12px">
-      <div class="sm-title">주제 단위 요약 점수 (같은 산식, 주제 전체 기준)</div>
-      <div class="scroll"><table id="prioTopicTable"></table></div>
+      <h3 class="sm-title">주제 단위 요약 점수 (같은 산식, 주제 전체 기준)</h3>
+      <div class="scroll" tabindex="0" role="region" aria-label="주제 단위 우선순위 표 (가로 스크롤)"><table id="prioTopicTable"></table></div>
     </div>
   </section>
 
@@ -312,21 +334,21 @@ body.dragging .wrap { outline: 3px dashed var(--accent); outline-offset: -8px; }
     <h2>버전별 추이</h2>
     <p class="sub" id="verSub">리뷰를 쓴 시점의 앱 버전(마이너 버전, 예: v1.32.x) 기준입니다. 막대·점을 클릭하면 그 버전의 리뷰를 볼 수 있습니다.</p>
     <div class="grid g2">
-      <div class="card"><div class="sm-title">버전별 리뷰 수 <span class="muted">(전체 버전)</span></div><div class="chart" id="verVolChart"></div></div>
-      <div class="card"><div class="sm-title">버전별 부정·혼합 리뷰 비율 <span class="muted" id="verMinNote"></span></div><div class="chart" id="verChart"></div></div>
+      <div class="card"><h3 class="sm-title">버전별 리뷰 수 <span class="muted">(전체 버전)</span></h3><div class="chart" id="verVolChart"></div></div>
+      <div class="card"><h3 class="sm-title">버전별 부정·혼합 리뷰 비율 <span class="muted" id="verMinNote"></span></h3><div class="chart" id="verChart"></div></div>
     </div>
     <div class="card" style="margin-top:12px">
-      <div class="sm-title">버전별 주제별 부정·혼합 언급 수</div>
+      <h3 class="sm-title">버전별 주제별 부정·혼합 언급 수</h3>
       <p class="small muted" style="margin:0 0 8px">작은 차트마다 세로축 척도가 다릅니다. 어느 버전에서 튀었는지 모양을 보는 용도입니다(리뷰가 충분한 버전만).</p>
       <div class="sm-grid" id="smallMultiples"></div>
     </div>
     <div class="card" style="margin-top:12px">
-      <div class="sm-title">직전 버전 대비 변화가 컸던 업데이트</div>
-      <div class="scroll"><table id="verTable"></table></div>
+      <h3 class="sm-title">직전 버전 대비 변화가 컸던 업데이트</h3>
+      <div class="scroll" tabindex="0" role="region" aria-label="버전별 변화 표 (가로 스크롤)"><table id="verTable"></table></div>
     </div>
     <div class="card" style="margin-top:12px">
-      <button class="toggle-table" data-target="verListTable" style="margin-top:0">버전별 수치 표로 보기</button>
-      <div class="scroll" id="verListTable" hidden></div>
+      <button class="toggle-table" type="button" data-target="verListTable" aria-expanded="false" aria-controls="verListTable" style="margin-top:0">버전별 수치 표로 보기</button>
+      <div class="scroll" id="verListTable" hidden tabindex="0" role="region" aria-label="버전별 수치 표"></div>
     </div>
   </section>
 
@@ -337,9 +359,10 @@ body.dragging .wrap { outline: 3px dashed var(--accent); outline-offset: -8px; }
       <div class="card small" id="auditCard"></div>
     </div>
   </section>
+  </main>
 </div>
 <button class="theme" id="toTop" type="button" aria-label="맨 위로">▲ 맨 위로</button>
-<div class="tip" id="tip"></div>
+<div class="tip" id="tip" aria-hidden="true"></div>
 <div class="drawer-bg" id="drawerBg"></div>
 <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drTitle">
   <div class="dr-head">
@@ -585,6 +608,16 @@ function el(tag, attrs = {}, parent) {
   if (parent) parent.appendChild(e);
   return e;
 }
+// 막대 위 글자색: 검정·흰색 중 막대 색과 대비가 더 큰 쪽 (WCAG 상대 휘도 기준)
+function lum(hex) {
+  const h = hex.replace("#", ""), c = [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16) / 255)
+    .map(x => x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4));
+  return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+}
+function labelColor(varName) {
+  const L = lum(css(varName) || "#888888");
+  return (L + 0.05) / 0.0534 >= 1.05 / (L + 0.05) ? "#0b0b0b" : "#ffffff";
+}
 const tip = document.getElementById("tip");
 function showTip(ev, html) {
   tip.innerHTML = html; tip.style.display = "block";
@@ -592,7 +625,7 @@ function showTip(ev, html) {
   let x = ev.clientX + pad, y = ev.clientY + pad;
   if (x + w > innerWidth - 8) x = ev.clientX - w - pad;
   if (y + h > innerHeight - 8) y = ev.clientY - h - pad;
-  tip.style.left = x + "px"; tip.style.top = y + "px";
+  tip.style.left = Math.max(8, x) + "px"; tip.style.top = Math.max(8, y) + "px";
 }
 const hideTip = () => tip.style.display = "none";
 const CLICK_HINT = `<div class="act">클릭하면 해당 리뷰를 볼 수 있습니다</div>`;
@@ -609,6 +642,8 @@ function bindTip(node, fn, onClick) {
   }
 }
 document.addEventListener("click", hideTip);
+addEventListener("scroll", hideTip, {passive: true});
+addEventListener("keydown", e => { if (e.key === "Escape") hideTip(); });
 function clickable(node, onClick, label) {
   node.classList.add("clk"); node.setAttribute("tabindex", "0"); node.setAttribute("role", "button");
   if (label) node.setAttribute("aria-label", label);
@@ -690,8 +725,8 @@ function openSel(sel) {
 function closeDrawer() { $("drawer").classList.remove("open"); $("drawerBg").classList.remove("open"); document.body.style.overflow = ""; }
 const STARS = n => "★★★★★".slice(0, n) + "☆☆☆☆☆".slice(0, 5 - n);
 function sentBadge(c) {
-  const s = SC[c], dark = c === "M" || c === "N";
-  return `<span class="sb" style="background:var(${SVAR[s]});color:${dark ? "#0b0b0b" : "#fff"}">${s}</span>`;
+  const s = SC[c];
+  return `<span class="sb" style="background:var(${SVAR[s]});color:${labelColor(SVAR[s])}">${s}</span>`;
 }
 function hl(text, words) {
   let h = esc(text);
@@ -781,7 +816,7 @@ function header() {
   ];
   document.getElementById("kpis").innerHTML = tiles.map(t =>
     `<div class="card tile clk ${t.cls || ""}" tabindex="0" role="button" title="클릭하면 해당 리뷰 보기" ${selAttr(t.sel)}><div class="label">${t.label}</div><div class="value">${t.value}</div><div class="note">${t.note} <span style="color:var(--accent)">· 리뷰 보기 →</span></div></div>`).join("");
-  document.getElementById("sentLegend").innerHTML = SENTS.map(s => `<span><i style="background:var(${SVAR[s]})"></i>${s}</span>`).join("");
+  document.getElementById("sentLegend").innerHTML = SENTS.map(s => `<li><i style="background:var(${SVAR[s]})" aria-hidden="true"></i>${s}</li>`).join("");
 }
 
 /* ---------- 주제별 100% 누적 막대 ---------- */
@@ -811,7 +846,7 @@ function topicChart() {
       if (w > 34) {
         const t = el("text", {x: x + 6, y: y + barH / 2 + 4}, svg);
         t.textContent = pct(r[s + "_pct"]);
-        t.style.fill = (s === "혼합" || s === "중립") ? "#0b0b0b" : "#ffffff";
+        t.style.fill = labelColor(SVAR[s]);
         t.style.fontSize = "11px"; t.style.pointerEvents = "none";
       }
       bindTip(p, () => `<b>${r.topic} · ${s}</b><div class="row"><span>${fmt(r[s])}건</span><span>${pct(r[s + "_pct"], 1)}</span></div>`,
@@ -842,7 +877,7 @@ function overallChart() {
     if (w > 60) {
       const t = el("text", {x: x + 7, y: 26.5}, svg);
       t.textContent = `${s} ${pct(so[s] / n)}`;
-      t.style.fill = (s === "혼합" || s === "중립") ? "#0b0b0b" : "#fff"; t.style.fontSize = "12px"; t.style.pointerEvents = "none";
+      t.style.fill = labelColor(SVAR[s]); t.style.fontSize = "12px"; t.style.pointerEvents = "none";
     }
     x += w;
   });
@@ -898,15 +933,15 @@ function kwControls() {
   const topics = [...new Set(D.keywords.map(k => k.topic))];
   if (!topics.includes(kwState.topic)) kwState.topic = topics[0];
   const tBox = document.getElementById("kwTopic"), sBox = document.getElementById("kwSent");
-  tBox.innerHTML = topics.map(t => `<button type="button" data-v="${t}">${t}</button>`).join("");
-  sBox.innerHTML = ["부정", "긍정", "혼합"].map(s => `<button type="button" data-v="${s}">${s}</button>`).join("");
+  tBox.innerHTML = topics.map(t => `<button type="button" data-v="${esc(t)}" aria-pressed="false">${esc(t)}</button>`).join("");
+  sBox.innerHTML = ["부정", "긍정", "혼합"].map(s => `<button type="button" data-v="${s}" aria-pressed="false">${s}</button>`).join("");
   const sync = () => {
-    tBox.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.v === kwState.topic));
-    sBox.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.v === kwState.sent));
+    tBox.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === kwState.topic)));
+    sBox.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === kwState.sent)));
     kwRender();
   };
-  tBox.onclick = e => { if (e.target.dataset.v) { kwState.topic = e.target.dataset.v; sync(); } };
-  sBox.onclick = e => { if (e.target.dataset.v) { kwState.sent = e.target.dataset.v; sync(); } };
+  tBox.onclick = e => { const b = e.target.closest("button"); if (b) { kwState.topic = b.dataset.v; sync(); } };
+  sBox.onclick = e => { const b = e.target.closest("button"); if (b) { kwState.sent = b.dataset.v; sync(); } };
   sync();
 }
 
@@ -953,7 +988,8 @@ function prio() {
   }
   const maxS = items.length ? items[0].score : 1;
   document.getElementById("prioTable").innerHTML =
-    `<tr><th>#</th><th>항목</th><th class="num">점수</th><th class="num">N</th><th class="num">좋아요 합</th><th class="num">최근 6개월</th><th class="num">추세 r</th></tr>` +
+    `<caption class="sr-only">고쳐야 할 우선순위 상위 ${items.length}개 (키워드 단위). 각 항목 아래에 대표 리뷰가 있습니다.</caption>` +
+    `<tr><th scope="col">순위</th><th scope="col">항목</th><th scope="col" class="num">점수</th><th scope="col" class="num">N</th><th scope="col" class="num">좋아요 합</th><th scope="col" class="num">최근 6개월</th><th scope="col" class="num">추세 r</th></tr>` +
     items.map((it, i) => {
       const trend = it.ratio >= 1.15 ? "▲ 증가" : it.ratio <= 0.85 ? "▼ 감소" : "– 유지";
       const qs = it.quotes.map(quoteHTML).join("");
@@ -964,7 +1000,8 @@ function prio() {
         `<tr class="qrow"><td></td><td colspan="6" style="padding-top:0">${quotesBlock(it.quotes)} <button type="button" class="allbtn" ${selAttr(SEL.prio(it))}>리뷰 ${fmt(it.n)}건 모두 보기</button></td></tr>`;
     }).join("");
   document.getElementById("prioTopicTable").innerHTML =
-    `<tr><th>주제</th><th class="num">점수</th><th class="num">부정·혼합 리뷰</th><th class="num">최근 6개월</th><th class="num">추세 r</th></tr>` +
+    `<caption class="sr-only">주제 단위 요약 점수. 행을 누르면 그 주제의 부정·혼합 리뷰를 봅니다.</caption>` +
+    `<tr><th scope="col">주제</th><th scope="col" class="num">점수</th><th scope="col" class="num">부정·혼합 리뷰</th><th scope="col" class="num">최근 6개월</th><th scope="col" class="num">추세 r</th></tr>` +
     D.priority_topics.map(t => `<tr class="clk" tabindex="0" title="부정·혼합 리뷰 ${t.n}건 보기" ${selAttr(SEL.prioTopic(t))}><td>${t.topic}</td><td class="num">${t.score.toFixed(1)}</td><td class="num">${fmt(t.n)}</td><td class="num">${t.recent_n}</td><td class="num">${t.ratio.toFixed(2)}</td></tr>`).join("");
 }
 
@@ -1102,10 +1139,11 @@ function versions() {
     });
   });
   document.getElementById("verTable").innerHTML =
-    `<tr><th>업데이트</th><th class="num">부정·혼합 비율</th><th class="num">변화</th><th>가장 많이 바뀐 주제</th><th>근거 리뷰</th></tr>` +
+    `<caption class="sr-only">직전 버전 대비 부정·혼합 비율 변화가 컸던 업데이트</caption>` +
+    `<tr><th scope="col">업데이트</th><th scope="col" class="num">부정·혼합 비율</th><th scope="col" class="num">변화</th><th scope="col">가장 많이 바뀐 주제</th><th scope="col">근거 리뷰</th></tr>` +
     D.version_changes.map(c => `<tr><td>v${c.from} → <b>v${c.to}</b><div class="small muted">${c.to_first}~ · <button class="linkish count" title="v${c.to}.x 리뷰 보기" ${selAttr(SEL.minor(c.to, c.n))}>${c.n}건</button></div></td>` +
       `<td class="num">${pct(c.from_share)} → ${pct(c.to_share)}</td>` +
-      `<td class="num" style="color:${c.diff > 0 ? "var(--ink)" : "var(--good-text)"}">${c.diff > 0 ? "▲" : "▼"} ${(Math.abs(c.diff) * 100).toFixed(1)}%p</td>` +
+      `<td class="num" style="color:${c.diff > 0 ? "var(--ink)" : "var(--good-text)"}">${c.diff > 0 ? "▲ 증가" : "▼ 감소"} ${(Math.abs(c.diff) * 100).toFixed(1)}%p</td>` +
       `<td>${c.top_topic_changes.map(t => `<span class="pill">${t.topic} ${t.diff > 0 ? "+" : ""}${(t.diff * 100).toFixed(1)}%p</span>`).join("")}</td>` +
       `<td style="min-width:260px">${quotesBlock(c.quotes, "원문")}</td></tr>`).join("");
   document.getElementById("verListTable").innerHTML =
@@ -1164,17 +1202,27 @@ function method() {
 }
 
 /* ---------- 공통 ---------- */
-document.querySelectorAll(".toggle-table").forEach(b => b.onclick = () => {
-  const t = document.getElementById(b.dataset.target); t.hidden = !t.hidden; b.textContent = t.hidden ? "표로 보기" : "표 닫기";
+document.querySelectorAll(".toggle-table").forEach(b => {
+  const label = b.textContent;
+  b.onclick = () => {
+    const t = document.getElementById(b.dataset.target); t.hidden = !t.hidden;
+    b.setAttribute("aria-expanded", String(!t.hidden));
+    b.textContent = t.hidden ? label : "표 닫기";
+  };
 });
-document.getElementById("themeBtn").onclick = () => {
+const themeBtn = document.getElementById("themeBtn");
+const isDark = () => { const r = document.documentElement; return r.dataset.theme ? r.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; };
+const syncThemeBtn = () => { themeBtn.textContent = isDark() ? "라이트 모드로 보기" : "다크 모드로 보기"; };
+themeBtn.onclick = () => {
   const r = document.documentElement;
-  const dark = r.dataset.theme ? r.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-  r.dataset.theme = dark ? "light" : "dark";
+  r.dataset.theme = isDark() ? "light" : "dark";
   try { localStorage.setItem("dt-theme", r.dataset.theme); } catch (e) {}
+  syncThemeBtn();
   render();
 };
 try { const t = localStorage.getItem("dt-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+syncThemeBtn();
+matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => { syncThemeBtn(); render(); });
 function render() {
   SELS = [];
   ["topicChart", "overallChart", "kwChart", "termChart", "verVolChart", "smallMultiples", "verChart"].forEach(id => document.getElementById(id).innerHTML = "");
@@ -1258,7 +1306,9 @@ useExample();
   addEventListener("afterprint", () => { opened.forEach(d => d.open = false); opened = []; });
   document.getElementById("printBtn").onclick = () => print();
 })();
-let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(render, 150); });
+// 폭이 바뀔 때만 다시 그린다 (모바일에서 스크롤로 주소창 높이가 바뀌어도 포커스·펼친 상세가 유지되게)
+let rz, lastW = innerWidth;
+addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (innerWidth !== lastW) { lastW = innerWidth; render(); } }, 150); });
 </script>
 </body>
 </html>

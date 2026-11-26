@@ -151,13 +151,17 @@ def collect_ios(app_id: str, max_n: int, since: datetime | None) -> list[dict]:
     return out
 
 
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # 저장소 폴더
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--gp", help="Google Play 패키지 ID")
     ap.add_argument("--ios", help="App Store 숫자 ID")
     ap.add_argument("--max", type=int, default=5000, help="스토어당 최대 건수 (기본 5000)")
     ap.add_argument("--since", help="이 날짜 이후 리뷰만 (YYYY-MM-DD)")
-    ap.add_argument("--out", default="data/reviews.csv")
+    ap.add_argument("--out", default=os.path.join(ROOT, "data", "reviews.csv"),
+                    help="출력 CSV (기본: 저장소의 data/reviews.csv)")
     ap.add_argument("--force", action="store_true", help="기존 출력 파일 덮어쓰기 허용")
     args = ap.parse_args()
     if not args.gp and not args.ios:
