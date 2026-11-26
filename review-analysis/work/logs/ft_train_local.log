@@ -1,0 +1,10 @@
+﻿# python scripts/finetune.py train — 다른 PC에서 재현 (2026-11-27, Windows 11, Python 3.13, torch 2.15.0+cpu)
+# 경고(HF 토큰 없음, Windows 심볼릭 링크 미지원)와 로컬 경로는 제외함
+    step 50/372 loss 0.923 (108s)
+    step 100/372 loss 0.484 (211s)
+    step 150/372 loss 0.441 (306s)
+    step 200/372 loss 0.320 (407s)
+    step 250/372 loss 0.372 (511s)
+    step 300/372 loss 0.275 (614s)
+    step 350/372 loss 0.253 (712s)
+저장 work/ft/model (config.json, heads.pt, model.safetensors 442,494,816 B, tokenizer.json, tokenizer_config.json)
