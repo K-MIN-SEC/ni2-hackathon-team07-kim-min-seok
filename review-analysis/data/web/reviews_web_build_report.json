@@ -1,0 +1,34 @@
+{
+  "files": {
+    "gp_newest.keys.json": {
+      "entries": 200,
+      "matched": 200,
+      "manual_verified": 0,
+      "unmatched": 0
+    },
+    "gp_rating1.keys.json": {
+      "entries": 150,
+      "matched": 150,
+      "manual_verified": 0,
+      "unmatched": 0
+    },
+    "gp_rating2.keys.json": {
+      "entries": 118,
+      "matched": 118,
+      "manual_verified": 0,
+      "unmatched": 0
+    },
+    "ios_web.keys.json": {
+      "entries": 10,
+      "matched": 10,
+      "manual_verified": 1,
+      "unmatched": 0
+    }
+  },
+  "unmatched": [],
+  "unique_reviews": 436,
+  "by_store": {
+    "google_play": 426,
+    "app_store": 10
+  }
+}

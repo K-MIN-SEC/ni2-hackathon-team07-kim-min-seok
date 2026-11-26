@@ -1,0 +1,12 @@
+{
+  "input_rows": 6349,
+  "raw_rows": 6349,
+  "removed_duplicate_review_id": 0,
+  "removed_empty": 0,
+  "cleaned_rows": 6349,
+  "pii_masked_reviews": 21,
+  "pii_masked_total": 25,
+  "non_korean_reviews": 168,
+  "text_duplicate_groups": 207,
+  "text_duplicate_extra_rows": 1789
+}

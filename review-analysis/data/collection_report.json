@@ -1,0 +1,4473 @@
+{
+  "generated_for": "달토끼 키우기 업데이트별 리뷰 데이터셋",
+  "status": "PASS",
+  "errors": [],
+  "warnings": [],
+  "preprocess": {
+    "input_rows": 6349,
+    "raw_rows": 6349,
+    "removed_duplicate_review_id": 0,
+    "removed_empty": 0,
+    "cleaned_rows": 6349,
+    "pii_masked_reviews": 21,
+    "pii_masked_total": 25,
+    "non_korean_reviews": 168,
+    "text_duplicate_groups": 207,
+    "text_duplicate_extra_rows": 1789
+  },
+  "platforms": {
+    "App Store": {
+      "raw": 150,
+      "cleaned": 150,
+      "actual_version": 150,
+      "date_estimated": 0,
+      "unmatched": 0,
+      "rating_dist": {
+        "1": 20,
+        "2": 3,
+        "3": 7,
+        "4": 21,
+        "5": 99
+      },
+      "date_range": [
+        "2022-06-26",
+        "2026-10-31"
+      ],
+      "collection_group": [
+        "ios_rss_most_recent"
+      ]
+    },
+    "Google Play": {
+      "raw": 6199,
+      "cleaned": 6199,
+      "actual_version": 5722,
+      "date_estimated": 0,
+      "unmatched": 477,
+      "rating_dist": {
+        "1": 556,
+        "2": 129,
+        "3": 268,
+        "4": 613,
+        "5": 4633
+      },
+      "date_range": [
+        "2021-06-26",
+        "2026-11-17"
+      ],
+      "collection_group": [
+        "gp_newest_all"
+      ]
+    }
+  },
+  "updates": {
+    "total": 349,
+    "by_status": {
+      "Google Play | observed_in_reviews": 239,
+      "App Store | observed_in_reviews": 68,
+      "App Store | official_store_history": 25,
+      "Google Play | observed_in_reviews; notes_from_other_platform_same_version": 17
+    },
+    "official_count": 25
+  },
+  "mapping": {
+    "actual_version": 5872,
+    "date_estimated": 0,
+    "unmatched": 477,
+    "unmatched_reasons": {
+      "no_app_version_and_no_official_release_dates_for_platform": 477
+    }
+  },
+  "missing": {
+    "app_version_null": 477,
+    "helpful_count_null": 0,
+    "collected_at_null": 6349,
+    "rating_null": 0
+  },
+  "labeling": {
+    "proxy_sentiment": {
+      "positive": 5366,
+      "unlabeled": 275,
+      "negative": 708
+    },
+    "split_hint": {
+      "temporal_test": 72,
+      "train_candidate": 6277
+    },
+    "korean_non_duplicate": 4480
+  },
+  "official_update_table": [
+    {
+      "version": "1.154.2",
+      "platform": "App Store",
+      "release_date": "2026-10-29",
+      "update_type": "major",
+      "update_group": "v1.154.2",
+      "patch_summary": "1. 니아 신규 등급 무기 추가 2. 신규 아티팩트 2종 추가 3. 달의 시험 신규 시즌 4. 성장 마블 이벤트 5. 기타 개선 및 오류 수정",
+      "reviews": 1,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 1,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.153.0",
+      "platform": "App Store",
+      "release_date": "2026-10-15",
+      "update_type": "major",
+      "update_group": "v1.153.0",
+      "patch_summary": "1. 신규 마법탄 2종 추가 2. 길드 대격돌 3. 할로윈 이벤트 4. 7일 이벤트 출석부 5. 이벤트 보스 6. 기타 개선 및 오류 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 1,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 1
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.152.0",
+      "platform": "App Store",
+      "release_date": "2026-09-29",
+      "update_type": "major",
+      "update_group": "v1.152.0",
+      "patch_summary": "1. 신규 레이드 : 엔키 2. 신규 시스템 : 배지 3. 신규 스타 스킬 1종 추가 4. 신규 펫 2종 추가 5. 달의 시험 신규 시즌 시작 6. 기타 개선 및 오류 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 1,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 1,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.151.0",
+      "platform": "App Store",
+      "release_date": "2026-09-15",
+      "update_type": "major",
+      "update_group": "v1.151.0",
+      "patch_summary": "1. 콘텐츠 단계 확장 2. 성장 레이스 이벤트 3. 길드 대격돌 4. 등불 축제 이벤트 5. 등불 축제 신규 코스튬 6. 기타 개선 및 오류 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 1,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 1,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.150.2",
+      "platform": "App Store",
+      "release_date": "2026-08-30",
+      "update_type": "hotfix",
+      "update_group": "v1.149.0",
+      "patch_summary": "bug_fix",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 4,
+          "rating_dist": {
+            "1": 1,
+            "2": 0,
+            "3": 1,
+            "4": 0,
+            "5": 2
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.150.1",
+      "platform": "App Store",
+      "release_date": "2026-08-27",
+      "update_type": "hotfix",
+      "update_group": "v1.149.0",
+      "patch_summary": "bug_fix",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.149.0",
+      "platform": "App Store",
+      "release_date": "2026-08-13",
+      "update_type": "major",
+      "update_group": "v1.149.0",
+      "patch_summary": "1. 신규 스타 반지 추가 2. 성장 레이스 이벤트 3. 신규 이벤트 코스튬 4. 기타 개선 및 오류 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 7,
+          "rating_dist": {
+            "1": 2,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 5
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.148.2",
+      "platform": "App Store",
+      "release_date": "2026-08-01",
+      "update_type": "hotfix",
+      "update_group": "v1.148.1",
+      "patch_summary": "bug_fix",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 5,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 5
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.148.1",
+      "platform": "App Store",
+      "release_date": "2026-07-30",
+      "update_type": "major",
+      "update_group": "v1.148.1",
+      "patch_summary": "1. 콘텐츠 단계 확장 2. 동료 영입 시스템 개편 3. 동료 성장 및 밸런스 개편 4. 달의 시험 신규 시즌 5. 이벤트 보스 : 영혼이 뒤바뀐 엘리디아스 6. 기타 개선 및 오류 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 1,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 1
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.147.2",
+      "platform": "App Store",
+      "release_date": "2026-07-14",
+      "update_type": "hotfix",
+      "update_group": "v1.146.0",
+      "patch_summary": "bug_fix",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 2,
+          "rating_dist": {
+            "1": 1,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 1
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.146.1",
+      "platform": "App Store",
+      "release_date": "2026-06-27",
+      "update_type": "hotfix",
+      "update_group": "v1.146.0",
+      "patch_summary": "bug_fix",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 3,
+          "rating_dist": {
+            "1": 1,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 2
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.146.0",
+      "platform": "App Store",
+      "release_date": "2026-06-25",
+      "update_type": "major",
+      "update_group": "v1.146.0",
+      "patch_summary": "1. 린 신규 등급 무기 추가 2. 무기 뽑기 레벨 확장 3. 달의 시험 신규 시즌 시작 4. 5주년 이벤트 : 달키POP 5. 달키 서바이벌 이벤트 6. 기타 개선 및 버그 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.145.1",
+      "platform": "App Store",
+      "release_date": "2026-06-11",
+      "update_type": "major",
+      "update_group": "v1.145.1",
+      "patch_summary": "1. 콘텐츠 단계 확장 2. 성물 소환 단계 및 레벨 확장 3. 신수의 기운 단계 확장 4. 길드 대격돌 5. 5주년 이벤트 : 일러스트 퍼즐 6. 기타 개선 및 버그 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 5,
+          "rating_dist": {
+            "1": 1,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 4
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.144.3",
+      "platform": "App Store",
+      "release_date": "2026-05-29",
+      "update_type": "hotfix",
+      "update_group": "v1.144.1",
+      "patch_summary": "bug fix",
+      "reviews": 1,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 1,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 6,
+          "rating_dist": {
+            "1": 1,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 5
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.144.2",
+      "platform": "App Store",
+      "release_date": "2026-05-28",
+      "update_type": "hotfix",
+      "update_group": "v1.144.1",
+      "patch_summary": "bug fix",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 2,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 2
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.144.1",
+      "platform": "App Store",
+      "release_date": "2026-05-28",
+      "update_type": "major",
+      "update_group": "v1.144.1",
+      "patch_summary": "1. 신규 시스템 : 스타 스킬 2. 신규 콘텐츠 : 몽환의 경계 3. 달의 시험 신규 시즌 시작 4. 5주년 파티 코스튬 5. 5주년 이벤트 5-1. 칵테일 파티 5-2. 마구마구 뽑기 5-3. 스킬 각성 이벤트 5-4. 출석 이벤트 5-5. 접속 이벤트 6. 기타 개선 및 버그 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.143.0",
+      "platform": "App Store",
+      "release_date": "2026-05-11",
+      "update_type": "major",
+      "update_group": "v1.143.0",
+      "patch_summary": "1. 길드 총력전 시즌 종료 및 파이널 리그 시작 2. 길드 대격돌 3. 상품 구매 방식 개선 4. 마일리지 상점 개선 5. 기타 개선 및 버그 수정",
+      "reviews": 1,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "actual_version": 1,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 1,
+          "rating_dist": {
+            "1": 1,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.142.0",
+      "platform": "App Store",
+      "release_date": "2026-04-29",
+      "update_type": "major",
+      "update_group": "v1.142.0",
+      "patch_summary": "1. 실라 신규 등급 무기 추가 2. 수호자의 길 개편 3. 달의 시험 신규 시즌 시작 4. 월간 이용권 개선 5. 기타 개선 및 버그 수정",
+      "reviews": 1,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "actual_version": 1,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.141.0",
+      "platform": "App Store",
+      "release_date": "2026-04-15",
+      "update_type": "major",
+      "update_group": "v1.141.0",
+      "patch_summary": "1. 프로필 인터페이스 개선 2. 길드 토벌전 신규 시즌 시작 3. 길드 대격돌 4. 신규 이벤트 코스튬 5. 기타 개선 및 버그 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 2,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 1,
+            "4": 0,
+            "5": 1
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.140.3",
+      "platform": "App Store",
+      "release_date": "2026-04-07",
+      "update_type": "hotfix",
+      "update_group": "v1.140.0",
+      "patch_summary": "bug fix",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.140.2",
+      "platform": "App Store",
+      "release_date": "2026-04-03",
+      "update_type": "hotfix",
+      "update_group": "v1.140.0",
+      "patch_summary": "bug fix",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 1,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 1
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.140.1",
+      "platform": "App Store",
+      "release_date": "2026-04-02",
+      "update_type": "hotfix",
+      "update_group": "v1.140.0",
+      "patch_summary": "bug fix",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.140.0",
+      "platform": "App Store",
+      "release_date": "2026-04-02",
+      "update_type": "major",
+      "update_group": "v1.140.0",
+      "patch_summary": "1. 디펜스 리뉴얼 재오픈 2. 신규 시스템 : 펫 보물 3. 펫 각성도 확장 4. 달의 시험 신규 시즌 시작 5. 버닝 서버 종료 및 통합 6. 기타 개선 및 버그 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.139.2",
+      "platform": "App Store",
+      "release_date": "2026-03-18",
+      "update_type": "hotfix",
+      "update_group": "v1.139.1",
+      "patch_summary": "bugfix",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 6,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 1,
+            "4": 1,
+            "5": 4
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.139.1",
+      "platform": "App Store",
+      "release_date": "2026-03-12",
+      "update_type": "major",
+      "update_group": "v1.139.1",
+      "patch_summary": "1. 신규 마법탄 추가 2. 길드 대격돌 3. 신규 이벤트 코스튬 4. 기타 개선 및 버그 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 2,
+          "rating_dist": {
+            "1": 0,
+            "2": 1,
+            "3": 1,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    }
+  ],
+  "update_groups": [
+    {
+      "platform": "Google Play",
+      "update_group": "v1.154.x",
+      "reviews": 3,
+      "actual_version": 3,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 0,
+        "5": 2
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.153.0",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "same_version_string_on_App_Store"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.152.0",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 0,
+        "5": 0
+      },
+      "group_basis": [
+        "same_version_string_on_App_Store"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.151.0",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 0,
+        "5": 0
+      },
+      "group_basis": [
+        "same_version_string_on_App_Store"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.149.0",
+      "reviews": 11,
+      "actual_version": 11,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 3,
+        "2": 0,
+        "3": 1,
+        "4": 0,
+        "5": 7
+      },
+      "group_basis": [
+        "same_version_string_on_App_Store"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.148.1",
+      "reviews": 6,
+      "actual_version": 6,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 6
+      },
+      "group_basis": [
+        "same_version_string_on_App_Store"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.146.0",
+      "reviews": 5,
+      "actual_version": 5,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 3
+      },
+      "group_basis": [
+        "same_version_string_on_App_Store"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.145.1",
+      "reviews": 5,
+      "actual_version": 5,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 4
+      },
+      "group_basis": [
+        "same_version_string_on_App_Store"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.144.1",
+      "reviews": 8,
+      "actual_version": 8,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 7
+      },
+      "group_basis": [
+        "same_version_string_on_App_Store"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.143.0",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "group_basis": [
+        "same_version_string_on_App_Store"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.141.0",
+      "reviews": 2,
+      "actual_version": 2,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "same_version_string_on_App_Store"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.140.0",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "same_version_string_on_App_Store"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.139.1",
+      "reviews": 8,
+      "actual_version": 8,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 1,
+        "3": 2,
+        "4": 1,
+        "5": 4
+      },
+      "group_basis": [
+        "same_version_string_on_App_Store"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.138.x",
+      "reviews": 3,
+      "actual_version": 3,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 3
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.137.x",
+      "reviews": 6,
+      "actual_version": 6,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 3
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.136.x",
+      "reviews": 10,
+      "actual_version": 10,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 4,
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 5
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.135.x",
+      "reviews": 3,
+      "actual_version": 3,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 0,
+        "5": 2
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.134.x",
+      "reviews": 5,
+      "actual_version": 5,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 3
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.133.x",
+      "reviews": 2,
+      "actual_version": 2,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 2
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.132.x",
+      "reviews": 5,
+      "actual_version": 5,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 5
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.131.x",
+      "reviews": 7,
+      "actual_version": 7,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 1,
+        "4": 2,
+        "5": 3
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.130.x",
+      "reviews": 3,
+      "actual_version": 3,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 1,
+        "3": 0,
+        "4": 0,
+        "5": 2
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.128.x",
+      "reviews": 10,
+      "actual_version": 10,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 1,
+        "4": 0,
+        "5": 7
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.127.x",
+      "reviews": 3,
+      "actual_version": 3,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 3
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.126.x",
+      "reviews": 2,
+      "actual_version": 2,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 2,
+        "4": 0,
+        "5": 0
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.125.x",
+      "reviews": 3,
+      "actual_version": 3,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 0,
+        "5": 2
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.124.x",
+      "reviews": 2,
+      "actual_version": 2,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 2
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.123.x",
+      "reviews": 3,
+      "actual_version": 3,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 3
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.122.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 0
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.121.x",
+      "reviews": 8,
+      "actual_version": 8,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 7
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.120.x",
+      "reviews": 75,
+      "actual_version": 75,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 11,
+        "2": 4,
+        "3": 3,
+        "4": 4,
+        "5": 53
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.119.x",
+      "reviews": 2,
+      "actual_version": 2,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.118.x",
+      "reviews": 10,
+      "actual_version": 10,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 4,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 6
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.117.x",
+      "reviews": 3,
+      "actual_version": 3,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 3
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.116.x",
+      "reviews": 4,
+      "actual_version": 4,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 3
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.115.x",
+      "reviews": 10,
+      "actual_version": 10,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 2,
+        "5": 8
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.114.x",
+      "reviews": 3,
+      "actual_version": 3,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 3
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.113.x",
+      "reviews": 6,
+      "actual_version": 6,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 1,
+        "4": 0,
+        "5": 4
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.112.x",
+      "reviews": 10,
+      "actual_version": 10,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 3,
+        "2": 0,
+        "3": 1,
+        "4": 0,
+        "5": 6
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.111.x",
+      "reviews": 2,
+      "actual_version": 2,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 2
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.110.x",
+      "reviews": 4,
+      "actual_version": 4,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 0,
+        "5": 3
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.109.x",
+      "reviews": 8,
+      "actual_version": 8,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 0,
+        "4": 2,
+        "5": 4
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.108.x",
+      "reviews": 4,
+      "actual_version": 4,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 4
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.107.x",
+      "reviews": 3,
+      "actual_version": 3,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.106.x",
+      "reviews": 4,
+      "actual_version": 4,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 2
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.105.x",
+      "reviews": 6,
+      "actual_version": 6,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 4
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.104.x",
+      "reviews": 13,
+      "actual_version": 13,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 10
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.103.x",
+      "reviews": 20,
+      "actual_version": 20,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 1,
+        "3": 1,
+        "4": 4,
+        "5": 12
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.102.x",
+      "reviews": 14,
+      "actual_version": 14,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 13
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.101.x",
+      "reviews": 13,
+      "actual_version": 13,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 11
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.100.x",
+      "reviews": 22,
+      "actual_version": 22,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 2,
+        "5": 19
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.99.x",
+      "reviews": 27,
+      "actual_version": 27,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 3,
+        "4": 2,
+        "5": 20
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.98.x",
+      "reviews": 29,
+      "actual_version": 29,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 2,
+        "4": 2,
+        "5": 24
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.97.x",
+      "reviews": 56,
+      "actual_version": 56,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 7,
+        "2": 1,
+        "3": 3,
+        "4": 7,
+        "5": 38
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.96.x",
+      "reviews": 92,
+      "actual_version": 92,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 6,
+        "2": 4,
+        "3": 0,
+        "4": 4,
+        "5": 78
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.95.x",
+      "reviews": 12,
+      "actual_version": 12,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 2,
+        "5": 9
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.94.x",
+      "reviews": 14,
+      "actual_version": 14,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 1,
+        "4": 0,
+        "5": 12
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.93.x",
+      "reviews": 12,
+      "actual_version": 12,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 9
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.92.x",
+      "reviews": 16,
+      "actual_version": 16,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 1,
+        "4": 2,
+        "5": 11
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.91.x",
+      "reviews": 17,
+      "actual_version": 17,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 1,
+        "3": 0,
+        "4": 1,
+        "5": 13
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.90.x",
+      "reviews": 21,
+      "actual_version": 21,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 18
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.89.x",
+      "reviews": 29,
+      "actual_version": 29,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 27
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.88.x",
+      "reviews": 11,
+      "actual_version": 11,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 7
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.87.x",
+      "reviews": 21,
+      "actual_version": 21,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 3,
+        "4": 1,
+        "5": 15
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.86.x",
+      "reviews": 43,
+      "actual_version": 43,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 2,
+        "4": 4,
+        "5": 35
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.85.x",
+      "reviews": 14,
+      "actual_version": 14,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 3,
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 10
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.84.x",
+      "reviews": 14,
+      "actual_version": 14,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 4,
+        "2": 0,
+        "3": 1,
+        "4": 2,
+        "5": 7
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.83.x",
+      "reviews": 9,
+      "actual_version": 9,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 9
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.82.x",
+      "reviews": 23,
+      "actual_version": 23,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 1,
+        "3": 1,
+        "4": 3,
+        "5": 16
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.81.x",
+      "reviews": 14,
+      "actual_version": 14,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 2,
+        "5": 11
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.80.x",
+      "reviews": 26,
+      "actual_version": 26,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 3,
+        "3": 2,
+        "4": 3,
+        "5": 18
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.79.x",
+      "reviews": 10,
+      "actual_version": 10,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 1,
+        "4": 2,
+        "5": 5
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.78.x",
+      "reviews": 17,
+      "actual_version": 17,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 0,
+        "4": 3,
+        "5": 12
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.77.x",
+      "reviews": 28,
+      "actual_version": 28,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 5,
+        "4": 3,
+        "5": 20
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.76.x",
+      "reviews": 20,
+      "actual_version": 20,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 2,
+        "5": 17
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.75.x",
+      "reviews": 24,
+      "actual_version": 24,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 6,
+        "2": 0,
+        "3": 1,
+        "4": 0,
+        "5": 17
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.74.x",
+      "reviews": 42,
+      "actual_version": 42,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 1,
+        "3": 1,
+        "4": 6,
+        "5": 32
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.73.x",
+      "reviews": 65,
+      "actual_version": 65,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 1,
+        "3": 3,
+        "4": 4,
+        "5": 55
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.72.x",
+      "reviews": 22,
+      "actual_version": 22,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 1,
+        "3": 1,
+        "4": 3,
+        "5": 15
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.71.x",
+      "reviews": 32,
+      "actual_version": 32,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 3,
+        "4": 4,
+        "5": 25
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.70.x",
+      "reviews": 21,
+      "actual_version": 21,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 3,
+        "5": 17
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.69.x",
+      "reviews": 29,
+      "actual_version": 29,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 1,
+        "3": 0,
+        "4": 4,
+        "5": 22
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.68.x",
+      "reviews": 27,
+      "actual_version": 27,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 3,
+        "2": 1,
+        "3": 0,
+        "4": 2,
+        "5": 21
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.67.x",
+      "reviews": 78,
+      "actual_version": 78,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 3,
+        "2": 1,
+        "3": 6,
+        "4": 11,
+        "5": 57
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.66.x",
+      "reviews": 34,
+      "actual_version": 34,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 2,
+        "3": 1,
+        "4": 4,
+        "5": 26
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.65.x",
+      "reviews": 33,
+      "actual_version": 33,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 7,
+        "5": 26
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.64.x",
+      "reviews": 51,
+      "actual_version": 51,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 2,
+        "3": 3,
+        "4": 6,
+        "5": 38
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.63.x",
+      "reviews": 46,
+      "actual_version": 46,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 2,
+        "4": 3,
+        "5": 40
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.62.x",
+      "reviews": 43,
+      "actual_version": 43,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 3,
+        "2": 0,
+        "3": 5,
+        "4": 3,
+        "5": 32
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.61.x",
+      "reviews": 33,
+      "actual_version": 33,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 4,
+        "2": 0,
+        "3": 0,
+        "4": 4,
+        "5": 25
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.60.x",
+      "reviews": 127,
+      "actual_version": 127,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 6,
+        "2": 1,
+        "3": 5,
+        "4": 12,
+        "5": 103
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.59.x",
+      "reviews": 41,
+      "actual_version": 41,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 2,
+        "3": 2,
+        "4": 6,
+        "5": 29
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.58.x",
+      "reviews": 36,
+      "actual_version": 36,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 3,
+        "2": 0,
+        "3": 0,
+        "4": 6,
+        "5": 27
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.57.x",
+      "reviews": 18,
+      "actual_version": 18,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 2,
+        "4": 1,
+        "5": 13
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.56.x",
+      "reviews": 53,
+      "actual_version": 53,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 3,
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 45
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.55.x",
+      "reviews": 72,
+      "actual_version": 72,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 4,
+        "2": 0,
+        "3": 5,
+        "4": 8,
+        "5": 55
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.54.x",
+      "reviews": 60,
+      "actual_version": 60,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 1,
+        "4": 10,
+        "5": 47
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.53.x",
+      "reviews": 28,
+      "actual_version": 28,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 3,
+        "2": 2,
+        "3": 0,
+        "4": 2,
+        "5": 21
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.52.x",
+      "reviews": 107,
+      "actual_version": 107,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 14,
+        "2": 2,
+        "3": 3,
+        "4": 12,
+        "5": 76
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.51.x",
+      "reviews": 22,
+      "actual_version": 22,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 4,
+        "5": 17
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.50.x",
+      "reviews": 42,
+      "actual_version": 42,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 0,
+        "4": 6,
+        "5": 34
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.49.x",
+      "reviews": 39,
+      "actual_version": 39,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 34
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.48.x",
+      "reviews": 49,
+      "actual_version": 49,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 3,
+        "4": 8,
+        "5": 36
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.47.x",
+      "reviews": 31,
+      "actual_version": 31,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 27
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.46.x",
+      "reviews": 46,
+      "actual_version": 46,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 6,
+        "2": 2,
+        "3": 1,
+        "4": 7,
+        "5": 30
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.45.x",
+      "reviews": 62,
+      "actual_version": 62,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 1,
+        "3": 2,
+        "4": 8,
+        "5": 51
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.44.x",
+      "reviews": 35,
+      "actual_version": 35,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 1,
+        "4": 2,
+        "5": 30
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.43.x",
+      "reviews": 110,
+      "actual_version": 110,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 7,
+        "2": 1,
+        "3": 6,
+        "4": 13,
+        "5": 83
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.42.x",
+      "reviews": 39,
+      "actual_version": 39,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 4,
+        "2": 1,
+        "3": 1,
+        "4": 4,
+        "5": 29
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.41.x",
+      "reviews": 127,
+      "actual_version": 127,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 7,
+        "2": 4,
+        "3": 5,
+        "4": 23,
+        "5": 88
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.40.x",
+      "reviews": 28,
+      "actual_version": 28,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 2,
+        "3": 3,
+        "4": 4,
+        "5": 17
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.39.x",
+      "reviews": 70,
+      "actual_version": 70,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 7,
+        "2": 3,
+        "3": 0,
+        "4": 8,
+        "5": 52
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.38.x",
+      "reviews": 44,
+      "actual_version": 44,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 1,
+        "3": 1,
+        "4": 3,
+        "5": 39
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.37.x",
+      "reviews": 58,
+      "actual_version": 58,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 3,
+        "3": 3,
+        "4": 4,
+        "5": 47
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.36.x",
+      "reviews": 85,
+      "actual_version": 85,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 6,
+        "2": 2,
+        "3": 5,
+        "4": 9,
+        "5": 63
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.35.x",
+      "reviews": 63,
+      "actual_version": 63,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 4,
+        "2": 1,
+        "3": 2,
+        "4": 7,
+        "5": 49
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.34.x",
+      "reviews": 122,
+      "actual_version": 122,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 8,
+        "2": 2,
+        "3": 3,
+        "4": 11,
+        "5": 98
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.33.x",
+      "reviews": 114,
+      "actual_version": 114,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 4,
+        "2": 4,
+        "3": 7,
+        "4": 12,
+        "5": 87
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.32.x",
+      "reviews": 240,
+      "actual_version": 240,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 13,
+        "2": 2,
+        "3": 2,
+        "4": 21,
+        "5": 202
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.31.x",
+      "reviews": 251,
+      "actual_version": 251,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 13,
+        "2": 3,
+        "3": 7,
+        "4": 24,
+        "5": 204
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.30.x",
+      "reviews": 156,
+      "actual_version": 156,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 7,
+        "2": 2,
+        "3": 10,
+        "4": 14,
+        "5": 123
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.29.x",
+      "reviews": 236,
+      "actual_version": 236,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 12,
+        "2": 5,
+        "3": 6,
+        "4": 20,
+        "5": 193
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.28.x",
+      "reviews": 76,
+      "actual_version": 76,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 6,
+        "2": 1,
+        "3": 5,
+        "4": 6,
+        "5": 58
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.27.x",
+      "reviews": 87,
+      "actual_version": 87,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 4,
+        "2": 3,
+        "3": 4,
+        "4": 8,
+        "5": 68
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.26.x",
+      "reviews": 37,
+      "actual_version": 37,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 3,
+        "2": 0,
+        "3": 0,
+        "4": 5,
+        "5": 29
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.25.x",
+      "reviews": 28,
+      "actual_version": 28,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 1,
+        "3": 0,
+        "4": 6,
+        "5": 19
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.24.x",
+      "reviews": 29,
+      "actual_version": 29,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 1,
+        "4": 4,
+        "5": 22
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.23.x",
+      "reviews": 26,
+      "actual_version": 26,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 4,
+        "2": 0,
+        "3": 1,
+        "4": 3,
+        "5": 18
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.22.x",
+      "reviews": 20,
+      "actual_version": 20,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 6,
+        "5": 14
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.21.x",
+      "reviews": 46,
+      "actual_version": 46,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 3,
+        "2": 2,
+        "3": 2,
+        "4": 3,
+        "5": 36
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.20.x",
+      "reviews": 63,
+      "actual_version": 63,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 5,
+        "2": 0,
+        "3": 3,
+        "4": 10,
+        "5": 45
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.19.x",
+      "reviews": 40,
+      "actual_version": 40,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 4,
+        "2": 1,
+        "3": 2,
+        "4": 7,
+        "5": 26
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.18.x",
+      "reviews": 42,
+      "actual_version": 42,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 1,
+        "3": 1,
+        "4": 5,
+        "5": 33
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.17.x",
+      "reviews": 52,
+      "actual_version": 52,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 4,
+        "2": 0,
+        "3": 3,
+        "4": 4,
+        "5": 41
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.16.x",
+      "reviews": 63,
+      "actual_version": 63,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 4,
+        "2": 0,
+        "3": 2,
+        "4": 6,
+        "5": 51
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.15.x",
+      "reviews": 69,
+      "actual_version": 69,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 7,
+        "5": 52
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.14.x",
+      "reviews": 331,
+      "actual_version": 331,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 30,
+        "2": 7,
+        "3": 14,
+        "4": 37,
+        "5": 243
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.13.x",
+      "reviews": 32,
+      "actual_version": 32,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 1,
+        "3": 3,
+        "4": 3,
+        "5": 23
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.12.x",
+      "reviews": 82,
+      "actual_version": 82,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 6,
+        "2": 2,
+        "3": 4,
+        "4": 7,
+        "5": 63
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.11.x",
+      "reviews": 87,
+      "actual_version": 87,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 10,
+        "2": 1,
+        "3": 2,
+        "4": 6,
+        "5": 68
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.10.x",
+      "reviews": 219,
+      "actual_version": 219,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 24,
+        "2": 1,
+        "3": 10,
+        "4": 21,
+        "5": 163
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.9.x",
+      "reviews": 30,
+      "actual_version": 30,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 2,
+        "4": 1,
+        "5": 25
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.8.x",
+      "reviews": 5,
+      "actual_version": 5,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 2
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.7.x",
+      "reviews": 13,
+      "actual_version": 13,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 3,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 7
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.6.x",
+      "reviews": 14,
+      "actual_version": 14,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 10
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.5.x",
+      "reviews": 17,
+      "actual_version": 17,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 3,
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 10
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.4.x",
+      "reviews": 39,
+      "actual_version": 39,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 6,
+        "2": 0,
+        "3": 4,
+        "4": 4,
+        "5": 25
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.3.x",
+      "reviews": 2,
+      "actual_version": 2,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 2
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.2.x",
+      "reviews": 16,
+      "actual_version": 16,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 1,
+        "3": 1,
+        "4": 0,
+        "5": 12
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.1.x",
+      "reviews": 15,
+      "actual_version": 15,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 0,
+        "5": 14
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "Google Play",
+      "update_group": "v1.0.x",
+      "reviews": 11,
+      "actual_version": 11,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 11
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.154.2",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "group_basis": [
+        "self_major"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.144.1",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "group_basis": [
+        "preceding_major_same_platform",
+        "self_major"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.143.0",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "self_major"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.142.0",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "self_major"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.136.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.134.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 0
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.131.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.128.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 0
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.124.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.120.x",
+      "reviews": 4,
+      "actual_version": 4,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 2,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.119.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.118.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.117.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.102.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 0
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.101.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.100.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.99.x",
+      "reviews": 3,
+      "actual_version": 3,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 2
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.97.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.96.x",
+      "reviews": 6,
+      "actual_version": 6,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 4
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.95.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.94.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.92.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.90.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.87.x",
+      "reviews": 3,
+      "actual_version": 3,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 2
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.86.x",
+      "reviews": 4,
+      "actual_version": 4,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.85.x",
+      "reviews": 3,
+      "actual_version": 3,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 3
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.84.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.80.x",
+      "reviews": 2,
+      "actual_version": 2,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.79.x",
+      "reviews": 2,
+      "actual_version": 2,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.78.x",
+      "reviews": 3,
+      "actual_version": 3,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 2
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.77.x",
+      "reviews": 3,
+      "actual_version": 3,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 3
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.76.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.75.x",
+      "reviews": 2,
+      "actual_version": 2,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 2
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.74.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.73.x",
+      "reviews": 6,
+      "actual_version": 6,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 0,
+        "5": 5
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.71.x",
+      "reviews": 2,
+      "actual_version": 2,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.68.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.67.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.65.x",
+      "reviews": 4,
+      "actual_version": 4,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 1,
+        "3": 0,
+        "4": 0,
+        "5": 3
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.64.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.63.x",
+      "reviews": 4,
+      "actual_version": 4,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.62.x",
+      "reviews": 2,
+      "actual_version": 2,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 2,
+        "4": 0,
+        "5": 0
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.60.x",
+      "reviews": 9,
+      "actual_version": 9,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 1,
+        "3": 0,
+        "4": 1,
+        "5": 7
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.59.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.58.x",
+      "reviews": 2,
+      "actual_version": 2,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 2
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.57.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.56.x",
+      "reviews": 3,
+      "actual_version": 3,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 1,
+        "3": 0,
+        "4": 0,
+        "5": 2
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.55.x",
+      "reviews": 3,
+      "actual_version": 3,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 3
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.54.x",
+      "reviews": 3,
+      "actual_version": 3,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 2
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.53.x",
+      "reviews": 2,
+      "actual_version": 2,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 0
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.52.x",
+      "reviews": 6,
+      "actual_version": 6,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 3,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 3
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.51.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.50.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.49.x",
+      "reviews": 3,
+      "actual_version": 3,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 2
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.48.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 0
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.47.x",
+      "reviews": 4,
+      "actual_version": 4,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 3
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.46.x",
+      "reviews": 1,
+      "actual_version": 1,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.45.x",
+      "reviews": 14,
+      "actual_version": 14,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 2,
+        "5": 11
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    },
+    {
+      "platform": "App Store",
+      "update_group": "v1.44.x",
+      "reviews": 16,
+      "actual_version": 16,
+      "date_estimated": 0,
+      "rating_dist": {
+        "1": 2,
+        "2": 0,
+        "3": 1,
+        "4": 3,
+        "5": 10
+      },
+      "group_basis": [
+        "minor_version_heuristic"
+      ]
+    }
+  ]
+}

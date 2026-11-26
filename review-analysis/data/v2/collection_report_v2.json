@@ -1,0 +1,559 @@
+{
+  "generated_at": "2026-11-26",
+  "status": "OK",
+  "per_source_viewed": {
+    "v2/gp_newest_ext.keys.json": {
+      "phase": "v2",
+      "group": "gp_web_newest_ext",
+      "viewed": 1000,
+      "matched": 1000,
+      "unmatched": 0
+    },
+    "v2/gp_newest_full.keys.json": {
+      "phase": "v2",
+      "group": "gp_web_newest_full",
+      "viewed": 5718,
+      "matched": 5718,
+      "unmatched": 0
+    },
+    "v2/gp_rating3.keys.json": {
+      "phase": "v2",
+      "group": "gp_web_rating3_supplement",
+      "viewed": 250,
+      "matched": 250,
+      "unmatched": 0
+    },
+    "v2/gp_rating4.keys.json": {
+      "phase": "v2",
+      "group": "gp_web_rating4_supplement",
+      "viewed": 400,
+      "matched": 400,
+      "unmatched": 0
+    },
+    "v2/gp_rating5.keys.json": {
+      "phase": "v2",
+      "group": "gp_web_rating5_supplement",
+      "viewed": 300,
+      "matched": 300,
+      "unmatched": 0
+    },
+    "v2/gp_relevance.keys.json": {
+      "phase": "v2",
+      "group": "gp_web_relevance",
+      "viewed": 300,
+      "matched": 300,
+      "unmatched": 0
+    },
+    "v1/gp_newest.keys.json": {
+      "phase": "v1",
+      "group": "gp_web_newest",
+      "viewed": 200,
+      "matched": 200,
+      "unmatched": 0
+    },
+    "v1/gp_rating1.keys.json": {
+      "phase": "v1",
+      "group": "gp_web_rating1_supplement",
+      "viewed": 150,
+      "matched": 150,
+      "unmatched": 0
+    },
+    "v1/gp_rating2.keys.json": {
+      "phase": "v1",
+      "group": "gp_web_rating2_supplement",
+      "viewed": 118,
+      "matched": 118,
+      "unmatched": 0
+    }
+  },
+  "foreign_sources": {
+    "gp_en_us_newest": {
+      "viewed_loaded": 200,
+      "transcribed": 100,
+      "verified": 100
+    },
+    "ios_web_us": {
+      "viewed": 10,
+      "verified": 0,
+      "note": "DOM 추출값을 그대로 저장. 지문 재확인 요청이 HTTP 429로 거부됨"
+    },
+    "ios_web_gb": {
+      "viewed": 3,
+      "verified": 3
+    },
+    "ios_web_ca": {
+      "viewed": 6,
+      "verified": 6
+    },
+    "ios_web_au": {
+      "viewed": 2,
+      "verified": 2
+    },
+    "ios_web_jp": {
+      "viewed": 10,
+      "verified": 10
+    },
+    "ios_web_tw": {
+      "viewed": 10,
+      "verified": 10
+    }
+  },
+  "dedup": {
+    "rows_before": 5869,
+    "duplicate_platform_review_id_removed": 0,
+    "unique": 5869,
+    "text_duplicate_groups": 200,
+    "text_duplicate_extra_rows": 1659
+  },
+  "unique_by_platform_country": {
+    "Google Play|US": 100,
+    "Google Play|KR": 5718,
+    "App Store|US": 10,
+    "App Store|TW": 10,
+    "App Store|KR": 10,
+    "App Store|JP": 10,
+    "App Store|GB": 3,
+    "App Store|CA": 6,
+    "App Store|AU": 2
+  },
+  "new_in_v2": {
+    "total": 5433,
+    "by_platform_country": {
+      "Google Play|US": 100,
+      "Google Play|KR": 5292,
+      "App Store|US": 10,
+      "App Store|TW": 10,
+      "App Store|JP": 10,
+      "App Store|GB": 3,
+      "App Store|CA": 6,
+      "App Store|AU": 2
+    },
+    "kr_by_group_first_seen": {
+      "gp_web_newest_ext": 689,
+      "gp_web_newest_full": 4603
+    },
+    "rating_dist": {
+      "1": 390,
+      "2": 9,
+      "3": 240,
+      "4": 567,
+      "5": 4227
+    },
+    "language_dist": {
+      "ar": 2,
+      "bn": 1,
+      "ja": 10,
+      "ko": 5154,
+      "latin": 217,
+      "und": 38,
+      "zh": 11
+    }
+  },
+  "datasets": {
+    "reviews_additional.csv": 5433,
+    "reviews_analytics.csv": {
+      "rows": 5728,
+      "rating_dist": {
+        "1": 515,
+        "2": 118,
+        "3": 251,
+        "4": 567,
+        "5": 4277
+      },
+      "by_platform": {
+        "App Store": 10,
+        "Google Play": 5718
+      },
+      "date_range": [
+        "2021-06-26",
+        "2026-11-17"
+      ]
+    },
+    "reviews_rating_supplement.csv": {
+      "rows": 0,
+      "rating_dist": {}
+    },
+    "reviews_foreign.csv": {
+      "rows": 141,
+      "by_country": {
+        "AU": 2,
+        "CA": 6,
+        "GB": 3,
+        "JP": 10,
+        "TW": 10,
+        "US": 110
+      },
+      "language_dist": {
+        "ar": 1,
+        "bn": 1,
+        "ja": 10,
+        "latin": 117,
+        "und": 1,
+        "zh": 11
+      },
+      "rating_dist": {
+        "1": 25,
+        "2": 9,
+        "3": 6,
+        "4": 13,
+        "5": 88
+      }
+    },
+    "reviews_training.csv": {
+      "rows": 3970,
+      "proxy_sentiment": {
+        "negative": 598,
+        "positive": 3166,
+        "unlabeled": 206
+      },
+      "split_rule": "published_date < 2026-03-12"
+    },
+    "reviews_validation.csv": {
+      "rows": 50,
+      "proxy_sentiment": {
+        "negative": 16,
+        "positive": 28,
+        "unlabeled": 6
+      },
+      "split_rule": "published_date >= 2026-03-12"
+    },
+    "community_feedback.csv": 0,
+    "updates_official.csv": {
+      "rows": 26,
+      "by_platform": {
+        "App Store": 25,
+        "Google Play": 1
+      }
+    },
+    "updates_observed.csv": 0
+  },
+  "rating_dist_all_unique": {
+    "1": 540,
+    "2": 127,
+    "3": 257,
+    "4": 580,
+    "5": 4365
+  },
+  "language_dist_all_unique": {
+    "ar": 2,
+    "bn": 1,
+    "ja": 10,
+    "ko": 5585,
+    "latin": 219,
+    "und": 41,
+    "zh": 11
+  },
+  "korean_flag_dist": {
+    "False": 284,
+    "True": 5585
+  },
+  "mapping": {
+    "by_type": {
+      "official_date_estimated": 21,
+      "unmatched": 5848
+    },
+    "by_type_platform_country": {
+      "official_date_estimated|Google Play|US": 16,
+      "unmatched|Google Play|US": 84,
+      "official_date_estimated|Google Play|KR": 3,
+      "unmatched|Google Play|KR": 5715,
+      "unmatched|App Store|US": 10,
+      "unmatched|App Store|TW": 10,
+      "unmatched|App Store|KR": 10,
+      "official_date_estimated|App Store|JP": 2,
+      "unmatched|App Store|JP": 8,
+      "unmatched|App Store|GB": 3,
+      "unmatched|App Store|CA": 6,
+      "unmatched|App Store|AU": 2
+    },
+    "unmatched_reasons": {
+      "no_official_release_dates_before_review_date;no_third_party_observations_available": 5848
+    },
+    "update_relation": {
+      "period_only": 20,
+      "not_applicable": 5848,
+      "mentions_update_generic": 1
+    }
+  },
+  "per_update": [
+    {
+      "update_id": "ios-1.139.1",
+      "platform": "App Store",
+      "version": "1.139.1",
+      "applied_date": "2026-03-12",
+      "reviews": 0
+    },
+    {
+      "update_id": "ios-1.139.2",
+      "platform": "App Store",
+      "version": "1.139.2",
+      "applied_date": "2026-03-18",
+      "reviews": 0
+    },
+    {
+      "update_id": "ios-1.140.0",
+      "platform": "App Store",
+      "version": "1.140.0",
+      "applied_date": "2026-04-02",
+      "reviews": 0
+    },
+    {
+      "update_id": "ios-1.140.1",
+      "platform": "App Store",
+      "version": "1.140.1",
+      "applied_date": "2026-04-02",
+      "reviews": 0
+    },
+    {
+      "update_id": "ios-1.140.2",
+      "platform": "App Store",
+      "version": "1.140.2",
+      "applied_date": "2026-04-03",
+      "reviews": 0
+    },
+    {
+      "update_id": "ios-1.140.3",
+      "platform": "App Store",
+      "version": "1.140.3",
+      "applied_date": "2026-04-07",
+      "reviews": 0
+    },
+    {
+      "update_id": "ios-1.141.0",
+      "platform": "App Store",
+      "version": "1.141.0",
+      "applied_date": "2026-04-15",
+      "reviews": 0
+    },
+    {
+      "update_id": "ios-1.142.0",
+      "platform": "App Store",
+      "version": "1.142.0",
+      "applied_date": "2026-04-29",
+      "reviews": 0
+    },
+    {
+      "update_id": "ios-1.143.0",
+      "platform": "App Store",
+      "version": "1.143.0",
+      "applied_date": "2026-05-11",
+      "reviews": 0
+    },
+    {
+      "update_id": "ios-1.144.1",
+      "platform": "App Store",
+      "version": "1.144.1",
+      "applied_date": "2026-05-28",
+      "reviews": 0
+    },
+    {
+      "update_id": "ios-1.144.2",
+      "platform": "App Store",
+      "version": "1.144.2",
+      "applied_date": "2026-05-28",
+      "reviews": 0
+    },
+    {
+      "update_id": "ios-1.144.3",
+      "platform": "App Store",
+      "version": "1.144.3",
+      "applied_date": "2026-05-29",
+      "reviews": 0
+    },
+    {
+      "update_id": "ios-1.145.1",
+      "platform": "App Store",
+      "version": "1.145.1",
+      "applied_date": "2026-06-11",
+      "reviews": 0
+    },
+    {
+      "update_id": "ios-1.146.0",
+      "platform": "App Store",
+      "version": "1.146.0",
+      "applied_date": "2026-06-25",
+      "reviews": 0
+    },
+    {
+      "update_id": "ios-1.146.1",
+      "platform": "App Store",
+      "version": "1.146.1",
+      "applied_date": "2026-06-27",
+      "reviews": 1,
+      "by_country": {
+        "JP": 1
+      },
+      "rating_dist": {
+        "1": 1
+      },
+      "in_newest_sample": 0,
+      "rating_supplement_only": 0,
+      "update_relation": {
+        "mentions_update_generic": 1
+      },
+      "boundary_day": 0
+    },
+    {
+      "update_id": "ios-1.147.2",
+      "platform": "App Store",
+      "version": "1.147.2",
+      "applied_date": "2026-07-14",
+      "reviews": 0
+    },
+    {
+      "update_id": "ios-1.148.1",
+      "platform": "App Store",
+      "version": "1.148.1",
+      "applied_date": "2026-07-30",
+      "reviews": 0
+    },
+    {
+      "update_id": "ios-1.148.2",
+      "platform": "App Store",
+      "version": "1.148.2",
+      "applied_date": "2026-08-01",
+      "reviews": 1,
+      "by_country": {
+        "JP": 1
+      },
+      "rating_dist": {
+        "2": 1
+      },
+      "in_newest_sample": 0,
+      "rating_supplement_only": 0,
+      "update_relation": {
+        "period_only": 1
+      },
+      "boundary_day": 1
+    },
+    {
+      "update_id": "ios-1.149.0",
+      "platform": "App Store",
+      "version": "1.149.0",
+      "applied_date": "2026-08-13",
+      "reviews": 0
+    },
+    {
+      "update_id": "ios-1.150.1",
+      "platform": "App Store",
+      "version": "1.150.1",
+      "applied_date": "2026-08-27",
+      "reviews": 0
+    },
+    {
+      "update_id": "ios-1.150.2",
+      "platform": "App Store",
+      "version": "1.150.2",
+      "applied_date": "2026-08-30",
+      "reviews": 0
+    },
+    {
+      "update_id": "ios-1.151.0",
+      "platform": "App Store",
+      "version": "1.151.0",
+      "applied_date": "2026-09-15",
+      "reviews": 0
+    },
+    {
+      "update_id": "ios-1.152.0",
+      "platform": "App Store",
+      "version": "1.152.0",
+      "applied_date": "2026-09-29",
+      "reviews": 0
+    },
+    {
+      "update_id": "ios-1.153.0",
+      "platform": "App Store",
+      "version": "1.153.0",
+      "applied_date": "2026-10-15",
+      "reviews": 0
+    },
+    {
+      "update_id": "ios-1.154.2",
+      "platform": "App Store",
+      "version": "1.154.2",
+      "applied_date": "2026-10-29",
+      "reviews": 0
+    },
+    {
+      "update_id": "gp-1.154.3",
+      "platform": "Google Play",
+      "version": "1.154.3",
+      "applied_date": "2026-10-29",
+      "reviews": 19,
+      "by_country": {
+        "KR": 3,
+        "US": 16
+      },
+      "rating_dist": {
+        "1": 4,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 12
+      },
+      "in_newest_sample": 3,
+      "rating_supplement_only": 0,
+      "update_relation": {
+        "period_only": 19
+      },
+      "boundary_day": 2
+    }
+  ],
+  "access_failures": [
+    {
+      "source": "appdashboard.app",
+      "purpose": "제3자 버전 관측 47개",
+      "result": "Cloudflare 봇 확인(HTTP 403)",
+      "action": "우회하지 않음"
+    },
+    {
+      "source": "appbrain.com",
+      "purpose": "리뷰·버전",
+      "result": "Cloudflare 봇 확인(HTTP 403)",
+      "action": "우회하지 않음"
+    },
+    {
+      "source": "apkpure.net",
+      "purpose": "리뷰·버전",
+      "result": "Cloudflare 봇 확인(HTTP 403)",
+      "action": "우회하지 않음"
+    },
+    {
+      "source": "taptap.io",
+      "purpose": "리뷰",
+      "result": "페이지 열림, 9 평점, 리뷰 본문 0건 표시",
+      "action": "수집할 데이터 없음"
+    },
+    {
+      "source": "game.naver.com/lounge",
+      "purpose": "공식 패치노트",
+      "result": "브라우저 안전 정책 차단, 웹 가져오기 도구 차단, 검색 색인 없음",
+      "action": "우회하지 않음"
+    },
+    {
+      "source": "apps.apple.com/us",
+      "purpose": "US 리뷰 지문 재확인",
+      "result": "HTTP 429 요청 제한",
+      "action": "재시도하지 않음(US 10건 지문 미검증)"
+    }
+  ],
+  "lounge_patchnotes": {
+    "input_file": null,
+    "imported_rows": 0,
+    "imported_posts": 0
+  },
+  "pending_official_patch_notes": [
+    "https://game.naver.com/lounge/DalToKi/board/detail/442423",
+    "https://game.naver.com/lounge/DalToKi/board/detail/509464",
+    "https://game.naver.com/lounge/DalToKi/board/detail/517798",
+    "https://game.naver.com/lounge/DalToKi/board/detail/689095",
+    "https://game.naver.com/lounge/DalToKi/board/detail/1764765",
+    "https://game.naver.com/lounge/DalToKi/board/detail/3338846",
+    "https://game.naver.com/lounge/DalToKi/board/detail/3423833",
+    "https://game.naver.com/lounge/DalToKi/board/detail/4834780",
+    "https://game.naver.com/lounge/DalToKi/board/detail/5289552",
+    "https://game.naver.com/lounge/DalToKi/board/detail/5441141",
+    "https://game.naver.com/lounge/DalToKi/board/detail/5753796"
+  ]
+}

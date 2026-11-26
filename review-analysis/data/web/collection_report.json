@@ -1,0 +1,903 @@
+{
+  "generated_for": "달토끼 키우기 업데이트별 리뷰 데이터셋",
+  "status": "PASS",
+  "errors": [],
+  "warnings": [],
+  "preprocess": {
+    "input_rows": 436,
+    "raw_rows": 436,
+    "removed_duplicate_review_id": 0,
+    "removed_empty": 0,
+    "cleaned_rows": 436,
+    "pii_masked_reviews": 7,
+    "pii_masked_total": 7,
+    "non_korean_reviews": 5,
+    "text_duplicate_groups": 10,
+    "text_duplicate_extra_rows": 25
+  },
+  "platforms": {
+    "App Store": {
+      "raw": 10,
+      "cleaned": 10,
+      "actual_version": 0,
+      "date_estimated": 0,
+      "unmatched": 10,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 2,
+        "5": 7
+      },
+      "date_range": [
+        "2022-06-13",
+        "2025-05-17"
+      ],
+      "collection_group": [
+        "ios_web_default"
+      ]
+    },
+    "Google Play": {
+      "raw": 426,
+      "cleaned": 426,
+      "actual_version": 0,
+      "date_estimated": 0,
+      "unmatched": 426,
+      "rating_dist": {
+        "1": 150,
+        "2": 118,
+        "3": 16,
+        "4": 11,
+        "5": 131
+      },
+      "date_range": [
+        "2021-06-28",
+        "2026-11-17"
+      ],
+      "collection_group": [
+        "gp_web_newest",
+        "gp_web_newest;gp_web_rating1_supplement",
+        "gp_web_newest;gp_web_rating2_supplement",
+        "gp_web_rating1_supplement",
+        "gp_web_rating2_supplement"
+      ]
+    }
+  },
+  "updates": {
+    "total": 25,
+    "by_status": {
+      "App Store | official_store_history": 25
+    },
+    "official_count": 25
+  },
+  "mapping": {
+    "actual_version": 0,
+    "date_estimated": 0,
+    "unmatched": 436,
+    "unmatched_reasons": {
+      "no_app_version_and_no_official_release_dates_for_platform": 426,
+      "no_app_version_and_date_before_official_history": 10
+    }
+  },
+  "missing": {
+    "app_version_null": 436,
+    "helpful_count_null": 10,
+    "collected_at_null": 0,
+    "rating_null": 0
+  },
+  "labeling": {
+    "proxy_sentiment": {
+      "positive": 151,
+      "unlabeled": 17,
+      "negative": 268
+    },
+    "split_hint": {
+      "temporal_test": 65,
+      "train_candidate": 371
+    },
+    "korean_non_duplicate": 406
+  },
+  "official_update_table": [
+    {
+      "version": "1.154.2",
+      "platform": "App Store",
+      "release_date": "2026-10-29",
+      "update_type": "major",
+      "update_group": "v1.154.2",
+      "patch_summary": "1. 니아 신규 등급 무기 추가 2. 신규 아티팩트 2종 추가 3. 달의 시험 신규 시즌 4. 성장 마블 이벤트 5. 기타 개선 및 오류 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.153.0",
+      "platform": "App Store",
+      "release_date": "2026-10-15",
+      "update_type": "major",
+      "update_group": "v1.153.0",
+      "patch_summary": "1. 신규 마법탄 2종 추가 2. 길드 대격돌 3. 할로윈 이벤트 4. 7일 이벤트 출석부 5. 이벤트 보스 6. 기타 개선 및 오류 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.152.0",
+      "platform": "App Store",
+      "release_date": "2026-09-29",
+      "update_type": "major",
+      "update_group": "v1.152.0",
+      "patch_summary": "1. 신규 레이드 : 엔키 2. 신규 시스템 : 배지 3. 신규 스타 스킬 1종 추가 4. 신규 펫 2종 추가 5. 달의 시험 신규 시즌 시작 6. 기타 개선 및 오류 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.151.0",
+      "platform": "App Store",
+      "release_date": "2026-09-15",
+      "update_type": "major",
+      "update_group": "v1.151.0",
+      "patch_summary": "1. 콘텐츠 단계 확장 2. 성장 레이스 이벤트 3. 길드 대격돌 4. 등불 축제 이벤트 5. 등불 축제 신규 코스튬 6. 기타 개선 및 오류 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.150.2",
+      "platform": "App Store",
+      "release_date": "2026-08-30",
+      "update_type": "hotfix",
+      "update_group": "v1.149.0",
+      "patch_summary": "bug_fix",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.150.1",
+      "platform": "App Store",
+      "release_date": "2026-08-27",
+      "update_type": "hotfix",
+      "update_group": "v1.149.0",
+      "patch_summary": "bug_fix",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.149.0",
+      "platform": "App Store",
+      "release_date": "2026-08-13",
+      "update_type": "major",
+      "update_group": "v1.149.0",
+      "patch_summary": "1. 신규 스타 반지 추가 2. 성장 레이스 이벤트 3. 신규 이벤트 코스튬 4. 기타 개선 및 오류 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.148.2",
+      "platform": "App Store",
+      "release_date": "2026-08-01",
+      "update_type": "hotfix",
+      "update_group": "v1.148.1",
+      "patch_summary": "bug_fix",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.148.1",
+      "platform": "App Store",
+      "release_date": "2026-07-30",
+      "update_type": "major",
+      "update_group": "v1.148.1",
+      "patch_summary": "1. 콘텐츠 단계 확장 2. 동료 영입 시스템 개편 3. 동료 성장 및 밸런스 개편 4. 달의 시험 신규 시즌 5. 이벤트 보스 : 영혼이 뒤바뀐 엘리디아스 6. 기타 개선 및 오류 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.147.2",
+      "platform": "App Store",
+      "release_date": "2026-07-14",
+      "update_type": "hotfix",
+      "update_group": "v1.146.0",
+      "patch_summary": "bug_fix",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.146.1",
+      "platform": "App Store",
+      "release_date": "2026-06-27",
+      "update_type": "hotfix",
+      "update_group": "v1.146.0",
+      "patch_summary": "bug_fix",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.146.0",
+      "platform": "App Store",
+      "release_date": "2026-06-25",
+      "update_type": "major",
+      "update_group": "v1.146.0",
+      "patch_summary": "1. 린 신규 등급 무기 추가 2. 무기 뽑기 레벨 확장 3. 달의 시험 신규 시즌 시작 4. 5주년 이벤트 : 달키POP 5. 달키 서바이벌 이벤트 6. 기타 개선 및 버그 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.145.1",
+      "platform": "App Store",
+      "release_date": "2026-06-11",
+      "update_type": "major",
+      "update_group": "v1.145.1",
+      "patch_summary": "1. 콘텐츠 단계 확장 2. 성물 소환 단계 및 레벨 확장 3. 신수의 기운 단계 확장 4. 길드 대격돌 5. 5주년 이벤트 : 일러스트 퍼즐 6. 기타 개선 및 버그 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.144.3",
+      "platform": "App Store",
+      "release_date": "2026-05-29",
+      "update_type": "hotfix",
+      "update_group": "v1.144.1",
+      "patch_summary": "bug fix",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.144.2",
+      "platform": "App Store",
+      "release_date": "2026-05-28",
+      "update_type": "hotfix",
+      "update_group": "v1.144.1",
+      "patch_summary": "bug fix",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.144.1",
+      "platform": "App Store",
+      "release_date": "2026-05-28",
+      "update_type": "major",
+      "update_group": "v1.144.1",
+      "patch_summary": "1. 신규 시스템 : 스타 스킬 2. 신규 콘텐츠 : 몽환의 경계 3. 달의 시험 신규 시즌 시작 4. 5주년 파티 코스튬 5. 5주년 이벤트 5-1. 칵테일 파티 5-2. 마구마구 뽑기 5-3. 스킬 각성 이벤트 5-4. 출석 이벤트 5-5. 접속 이벤트 6. 기타 개선 및 버그 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.143.0",
+      "platform": "App Store",
+      "release_date": "2026-05-11",
+      "update_type": "major",
+      "update_group": "v1.143.0",
+      "patch_summary": "1. 길드 총력전 시즌 종료 및 파이널 리그 시작 2. 길드 대격돌 3. 상품 구매 방식 개선 4. 마일리지 상점 개선 5. 기타 개선 및 버그 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.142.0",
+      "platform": "App Store",
+      "release_date": "2026-04-29",
+      "update_type": "major",
+      "update_group": "v1.142.0",
+      "patch_summary": "1. 실라 신규 등급 무기 추가 2. 수호자의 길 개편 3. 달의 시험 신규 시즌 시작 4. 월간 이용권 개선 5. 기타 개선 및 버그 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.141.0",
+      "platform": "App Store",
+      "release_date": "2026-04-15",
+      "update_type": "major",
+      "update_group": "v1.141.0",
+      "patch_summary": "1. 프로필 인터페이스 개선 2. 길드 토벌전 신규 시즌 시작 3. 길드 대격돌 4. 신규 이벤트 코스튬 5. 기타 개선 및 버그 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.140.3",
+      "platform": "App Store",
+      "release_date": "2026-04-07",
+      "update_type": "hotfix",
+      "update_group": "v1.140.0",
+      "patch_summary": "bug fix",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.140.2",
+      "platform": "App Store",
+      "release_date": "2026-04-03",
+      "update_type": "hotfix",
+      "update_group": "v1.140.0",
+      "patch_summary": "bug fix",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.140.1",
+      "platform": "App Store",
+      "release_date": "2026-04-02",
+      "update_type": "hotfix",
+      "update_group": "v1.140.0",
+      "patch_summary": "bug fix",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.140.0",
+      "platform": "App Store",
+      "release_date": "2026-04-02",
+      "update_type": "major",
+      "update_group": "v1.140.0",
+      "patch_summary": "1. 디펜스 리뉴얼 재오픈 2. 신규 시스템 : 펫 보물 3. 펫 각성도 확장 4. 달의 시험 신규 시즌 시작 5. 버닝 서버 종료 및 통합 6. 기타 개선 및 버그 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.139.2",
+      "platform": "App Store",
+      "release_date": "2026-03-18",
+      "update_type": "hotfix",
+      "update_group": "v1.139.1",
+      "patch_summary": "bugfix",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    },
+    {
+      "version": "1.139.1",
+      "platform": "App Store",
+      "release_date": "2026-03-12",
+      "update_type": "major",
+      "update_group": "v1.139.1",
+      "patch_summary": "1. 신규 마법탄 추가 2. 길드 대격돌 3. 신규 이벤트 코스튬 4. 기타 개선 및 버그 수정",
+      "reviews": 0,
+      "rating_dist": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "actual_version": 0,
+      "date_estimated": 0,
+      "other_platform_same_version_string": {
+        "Google Play": {
+          "reviews": 0,
+          "rating_dist": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0
+          }
+        }
+      },
+      "source_url": "https://apps.apple.com/kr/app/id1599684924?see-all=version-history",
+      "status": "공식 출처 확인(App Store, official_store_history)"
+    }
+  ],
+  "update_groups": []
+}

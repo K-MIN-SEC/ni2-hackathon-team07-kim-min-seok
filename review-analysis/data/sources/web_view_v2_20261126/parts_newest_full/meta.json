@@ -1,0 +1,11 @@
+{
+  "platform": "Google Play",
+  "collection_group": "gp_web_newest_full",
+  "source": "Google Play 웹 스토어 > 리뷰 모두 보기 (기기: 전화, 정렬: 최신, 별표 평점: 전체), 목록 끝까지 스크롤해 표시된 5,718건 전체(가장 오래된 화면 날짜 2021-06-26). 브라우저에서 1,100~1,500건씩 5개 조각으로 지문을 옮기고 조각별·전체 digest로 확인",
+  "source_url": "https://play.google.com/store/apps/details?id=com.AbleGames.DalToKi&hl=ko&gl=KR",
+  "rating_filter": null,
+  "sort": "newest",
+  "captured_at": "2026-11-26",
+  "expected_total": 5718,
+  "check_digest": "ed63f53482a1"
+}
