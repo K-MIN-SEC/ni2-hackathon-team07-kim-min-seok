@@ -557,10 +557,15 @@ function normDate(s) {
   s = String(s || "").trim().replace(/\//g, "-").replace("T", " ").replace(/Z$|[+-]\d\d:?\d\d$/, "");
   const m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
   if (!m) return null;
+  // 2026-13-45, 2026-02-30처럼 없는 날짜·시각은 읽을 수 없는 값으로 본다 (그대로 두면 집계에서 오류)
+  const [Y, M, Dd, h = 0, mi = 0, sc = 0] = m.slice(1).map(v => Number(v || 0));
+  const dt = new Date(Date.UTC(Y, M - 1, Dd, h, mi, sc));
+  if (dt.getUTCFullYear() !== Y || dt.getUTCMonth() !== M - 1 || dt.getUTCDate() !== Dd || h > 23 || mi > 59 || sc > 59) return null;
   const p = n => String(n || 0).padStart(2, "0");
   return `${m[1]}-${p(m[2])}-${p(m[3])} ${p(m[4])}:${p(m[5])}:${p(m[6])}`;
 }
 function toRecords(table) {
+  if (!table.length) throw new Error("파일이 비어 있습니다.");
   const head = table[0].map(h => h.replace(/^﻿/, "").trim());
   const col = name => head.indexOf(name);
   const need = ["content", "date", "rating", "sentiment"].filter(c => col(c) < 0);
@@ -749,7 +754,7 @@ function drRender() {
     const topics = Object.entries(r.ts).filter(([t]) => t !== "일반").map(([t, c]) => `<span class="pill"><span class="dot" style="background:var(${SVAR[SC[c]]})"></span>${esc(t)} <b>${SC[c]}</b></span>`).join("");
     return `<article class="rv"><div class="top"><span class="stars" aria-label="별점 ${r.r}">${STARS(r.r)}</span>${sentBadge(r.se)}` +
       `<span>${r.d.slice(0, 10)}</span><span>${r.s === "g" ? "Google Play" : "App Store"}</span>${r.v ? `<span>v${esc(r.v)}</span>` : ""}` +
-      `${r.s === "g" ? `<span title="좋아요">👍 ${fmt(r.th)}</span>` : ""}<span class="muted" title="판정 방식">${r.ls === "manual" ? "사람 판정" : "규칙 판정"}</span></div>` +
+      `${r.s === "g" ? `<span title="좋아요">👍 ${fmt(r.th)}</span>` : ""}<span class="muted" title="판정 방식">${r.ls === "manual" ? (DS.kind === "example" ? "AI 판정" : "manual 라벨") : r.ls === "rule" ? "규칙 판정" : esc(r.ls || "라벨 출처 없음")}</span></div>` +
       (r.ti ? `<div class="ttl">${hl(r.ti, words)}</div>` : "") +
       `<div class="tx">${hl(r.t, words)}</div><button type="button" class="exp" data-exp hidden>전체 보기</button>` +
       (topics ? `<div class="tp">${topics}</div>` : "") + `</article>`;
@@ -809,7 +814,7 @@ function header() {
   const so = D.sentiment_overall, n = m.n;
   const negmix = (so["부정"] + so["혼합"]) / n;
   const tiles = [
-    {cls: "hero", label: "분석한 리뷰", value: fmt(n), note: `평균 별점 ${m.avg_rating}` + (m.label_source.manual ? ` · 사람이 읽고 판정 ${fmt(m.label_source.manual)}건` : ""), sel: SEL.all()},
+    {cls: "hero", label: "분석한 리뷰", value: fmt(n), note: `평균 별점 ${m.avg_rating}` + (m.label_source.manual ? (DS.kind === "example" ? ` · AI가 판정 기준서로 판정 ${fmt(m.label_source.manual)}건` : ` · manual 라벨 ${fmt(m.label_source.manual)}건`) : ""), sel: SEL.all()},
     {label: "내용상 긍정", value: pct(so["긍정"] / n), note: `${fmt(so["긍정"])}건`, sel: SEL.sent("긍정")},
     {label: "부정 또는 혼합", value: pct(negmix), note: `부정 ${fmt(so["부정"])} · 혼합 ${fmt(so["혼합"])}`, sel: SEL.negmix()},
     {label: "최근 6개월 리뷰", value: fmt(m.recent_n), note: `${m.recent_start} 이후 · 최근 30일 ${m.last30_n}건`, sel: SEL.recent()},
@@ -1199,7 +1204,7 @@ function method() {
     `<b>분류 절차</b><ol style="padding-left:18px;margin:6px 0">` +
     `<li>키워드 규칙을 1차로 적용했습니다(커뮤니티 표현 포함: 현질·가챠·확률·뽑기 → 과금, 튕김·렉·접속불가·버벅 → 버그 등). 부정어 처리도 넣었습니다("렉 없음" → 긍정).</li>` +
     `<li>짧고 감성이 하나뿐이라 규칙으로 확신할 수 있는 <b>${fmt(ls.rule || 0)}건</b>은 규칙 판정을 그대로 썼습니다.</li>` +
-    `<li>나머지 <b>${fmt(ls.manual || 0)}건</b>은 내용을 읽고 판정했습니다. 대상은 길거나, 주제가 여럿이거나, 긍·부정이 섞였거나, 별점과 내용이 어긋난 리뷰입니다.</li></ol>` +
+    `<li>나머지 <b>${fmt(ls.manual || 0)}건</b>은 AI가 판정 기준서(work/manual/RUBRIC.md)에 따라 내용을 읽고 판정했습니다(별점은 보여 주지 않음). 대상은 길거나, 주제가 여럿이거나, 긍·부정이 섞였거나, 별점과 내용이 어긋난 리뷰입니다.</li></ol>` +
     `<b>감성</b> 별점이 아니라 내용으로 판정했습니다. 문의형 리뷰는 구체적 문제가 보이면 부정, 애매하면 중립입니다.<br>` +
     `<b>주제</b> 과금·버그·콘텐츠 + 데이터를 보고 추가한 운영·밸런스/성장·UI/편의성·캐릭터/아트·광고. 기타 처리: ${other}. 주제 없는 전반 평가는 '일반'.<br>` +
     `<b>데이터</b> Google Play는 스토어 표기 리뷰 수와 거의 같은 전량, App Store는 공개 RSS 피드의 전량(150건)입니다.`;
