@@ -330,7 +330,7 @@ dialog#mergeDlg::backdrop { background: rgba(0,0,0,.35); }
     </header>
     <div class="actions">
       <label class="theme upload" id="addBtn" title="CSV를 더 넣으면 기존 자료에 누적할지, 교체할지 고를 수 있습니다">
-        CSV 추가<input type="file" id="csvInput" accept=".csv,text/csv" multiple hidden>
+        CSV 추가<input type="file" id="csvInput" multiple hidden>
       </label>
       <button class="theme" id="resetBtn" type="button" title="불러온 자료를 모두 비우고 첫 화면으로">처음부터 다시</button>
       <button class="theme" id="exampleBtn" type="button" hidden>예시 자료 보기</button>
@@ -343,7 +343,7 @@ dialog#mergeDlg::backdrop { background: rgba(0,0,0,.35); }
     <div class="drop">
       <h2 id="h-empty">리뷰 CSV를 넣어 주세요</h2>
       <p class="lead">감성·주제 라벨이 붙은 리뷰 파일 → 바로 집계</p>
-      <label class="big">CSV 파일 선택<input type="file" id="csvInputBig" accept=".csv,text/csv" multiple hidden></label>
+      <label class="big">CSV 파일 선택<input type="file" id="csvInputBig" multiple hidden></label>
       <p class="or">여러 개 한 번에 선택 가능 · 끌어다 놓기 · 파일은 외부로 전송되지 않음</p>
       <ol class="steps">
         <li><b>1. CSV 넣기</b></li>
@@ -1469,8 +1469,23 @@ function filesHTML(newNames = []) {
   return `<div class="files">` +
     LOADED.files.map(f => `<span class="f${newNames.includes(f.name) ? " new" : ""}">${esc(f.name)} · ${fmt(f.added)}건</span>`).join("") + `</div>`;
 }
+// 고른 파일이 CSV(텍스트)인지 먼저 확인한다. 모바일에서는 파일 선택 창이 모든 파일을 보여 주므로(아래 accept 설명),
+// 엑셀·사진·압축 파일 등을 고르면 여기서 이유와 함께 거절한다.
+const NOT_CSV = {xlsx: "엑셀", xls: "엑셀", xlsm: "엑셀", ods: "스프레드시트", numbers: "Numbers", hwp: "한글", docx: "워드", pdf: "PDF",
+  jpg: "사진", jpeg: "사진", png: "사진", heic: "사진", gif: "이미지", zip: "압축"};
+function checkCsvFile(file, buf) {
+  const ext = (file.name.match(/\.([^.]+)$/) || [])[1]?.toLowerCase();
+  const kind = NOT_CSV[ext];
+  if (kind === "엑셀" || kind === "스프레드시트" || kind === "Numbers") throw new Error(`${kind} 파일입니다. '다른 이름으로 저장' → CSV(UTF-8)로 저장한 뒤 넣어 주세요`);
+  if (kind) throw new Error(`${kind} 파일은 넣을 수 없습니다. 리뷰 CSV 파일을 골라 주세요`);
+  const head = new Uint8Array(buf.slice(0, 4096));
+  if (head[0] === 0x50 && head[1] === 0x4b) throw new Error("CSV가 아닌 압축 형식 파일입니다(엑셀 .xlsx 등). CSV로 저장한 뒤 넣어 주세요");
+  if (head.includes(0)) throw new Error("CSV(텍스트) 파일이 아닙니다. 리뷰 CSV 파일을 골라 주세요");
+  if (!buf.byteLength) throw new Error("빈 파일입니다");
+}
 async function readFile(file) {
   const buf = await file.arrayBuffer();
+  checkCsvFile(file, buf);
   let text = new TextDecoder("utf-8").decode(buf);
   if (text.includes("�")) { try { text = new TextDecoder("euc-kr").decode(buf); } catch (e) {} }   // 엑셀 저장 CSV(CP949) 대응
   return text;
@@ -1530,7 +1545,16 @@ async function useFiles(list) {
   } finally { busy = false; }
 }
 const useFile = file => useFiles([file]);
-["csvInput", "csvInputBig"].forEach(id => document.getElementById(id).addEventListener("change", ev => { const fs = [...ev.target.files]; ev.target.value = ""; useFiles(fs); }));
+// 파일 형식 제한(accept): 마우스를 쓰는 PC에서만 건다. 안드로이드 등 모바일의 파일 선택 창은 확장자가 아니라 파일 형식(MIME)으로
+// 거르는데, 메신저·메일·다운로드로 받은 CSV는 text/comma-separated-values, application/vnd.ms-excel,
+// application/octet-stream 등으로 기록되는 일이 많아 목록에서 아예 사라졌다. 터치 기기에서는 모든 파일을 보여 주고 checkCsvFile로 거른다.
+const CSV_ACCEPT = ".csv,text/csv,text/comma-separated-values,application/csv,application/vnd.ms-excel";
+const touchDevice = matchMedia("(pointer: coarse)").matches || navigator.maxTouchPoints > 0;
+["csvInput", "csvInputBig"].forEach(id => {
+  const input = document.getElementById(id);
+  if (!touchDevice) input.accept = CSV_ACCEPT;
+  input.addEventListener("change", ev => { const fs = [...ev.target.files]; ev.target.value = ""; useFiles(fs); });
+});
 document.getElementById("exampleBtn").onclick = useExample;
 document.getElementById("exampleLink").onclick = useExample;
 document.getElementById("resetBtn").onclick = showEmpty;
